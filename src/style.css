@@ -97,3 +97,7 @@
   .stat-list .stat-list__item .stat-list__item-value {
     float: right;
   }
+
+  .stat-list .tabs {
+    margin-top: 5px
+  }
