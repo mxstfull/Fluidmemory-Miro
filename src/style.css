@@ -40,7 +40,6 @@
     font-weight: bold;
     height: 44px;
     padding: 8px 0 0 12px;
-    margin-bottom: 20px;
     font-family: Formular, sans-serif;
     font-size: 24px;
     font-weight: 500;
@@ -99,5 +98,58 @@
   }
 
   .stat-list .tabs {
-    margin-top: 5px
+    margin-bottom: 10px
+  }
+
+  .stat-list .metismenu {
+    list-style: none;
+    padding: 0;
+  }
+  .stat-list .metismenu ul {
+    list-style: none;
+    padding-left: 22px;
+    background-color: rgba(216,216,216,0.3);
+  }
+  .stat-list .metismenu .action {
+    position: absolute;
+    right: 40px;
+    top: 0;
+  }
+  .stat-list .metismenu .action a {
+    margin-right: 9px;
+  }
+  .stat-list .cluster::after {
+    content: 'C';
+    width: 24px;
+    height: 24px;
+    line-height: 38px;
+  }
+  .stat-list .bookmark::after {
+    content: 'B';
+    width: 24px;
+    height: 24px;
+    line-height: 38px;
+  }
+  .stat-list .copy::after {
+    content: 'D';
+    width: 24px;
+    height: 24px;
+    line-height: 38px;
+  }
+  .stat-list .metismenu li {
+    position: relative;
+  }
+  .stat-list .metismenu li > a {
+    box-sizing: border-box;
+    width: 100%;
+    display: block;
+    padding: 10px;
+    color: black !important;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 19px;
+    text-decoration: none;
+  }
+  .stat-list .metismenu a .item-badge {
+    font-weight: normal;
   }

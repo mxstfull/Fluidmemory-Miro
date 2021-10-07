@@ -62,3 +62,5 @@ function showStatistics(selection) {
     })
     miro.board.selection.get().then(showStatistics)
   })
+  
+  $("#metismenu").metisMenu();
