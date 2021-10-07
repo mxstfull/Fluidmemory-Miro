@@ -29,6 +29,7 @@
     min-width: 0;
     min-height: 0;
     height: 100%;
+    padding: 10px 15px;
   }
   
   .stat-list {
