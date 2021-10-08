@@ -108,8 +108,9 @@ miro.onReady(() => {
     // });
     // miro.board.selection.get().then(showStatistics);
 
-    tags = loadTags();
-    addTagSelectOptions(tags);
+    loadTags().then(tags => {
+		addTagSelectOptions(tags);
+	});    
 });
 
 $('#metismenu').metisMenu();
