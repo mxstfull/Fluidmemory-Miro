@@ -54,55 +54,74 @@
 //     return new Map([...map.entries()].sort((a, b) => b[1] - a[1]));
 // }
 
+function randomColor() {
+    return '#' + Math.floor(Math.random() * 16777215).toString(16);
+}
 async function loadTags() {
     widgets = await miro.board.widgets.get({
         type: 'STICKER',
     });
-    allTags = [];
 
-    await miro.board.widgets.update(
-        widgets.map((widget) => {
-            var text = widget.text;
-            var tags = widget.tags;
+    for (widget of widgets) {
+        var text = widget.text;
+        var tags = widget.tags.map((tag) => tag.title);
 
-			if (widget.metadata) {
-				var metaIds = Object.keys(widget.metadata);
+        if (widget.metadata) {
+            var metaIds = Object.keys(widget.metadata);
 
-				if (metaIds.length) {
-					// Check metaData to know tags are existed
-					tags = [];
-					metaIds.map((index) => {
-						if (widget.metadata[index].tag && widget.metadata[index].tagName) tags.push(widget.metadata[index].tag.tagName);
-					});
+            if (metaIds.length) {
+                // Check metaData to know tags are existed
+                tags = [];
+                metaIds.map((index) => {
+                    if (widget.metadata[index].tag && widget.metadata[index].tag.tagName) {
+                        tags.push(widget.metadata[index].tag.tagName);
+                    }
+                });
 
-					splitArray = widget.text.split('Tag: ');
-					splitArray.pop();
-					text = splitArray.join('Tag: '); // Split Tag: part from the text
-				}
-			}
-
-            tags.forEach((tag) => {
-                if (allTags.indexOf(tag) == -1) {
-                    allTags.push(tag);
+                splitArray = widget.text.split('Tag: ');
+                if (splitArray.length > 1) {
+                    splitArray.pop();
+                    text = splitArray.join('Tag: '); // Split Tag: part from the text
                 }
-            });
+            }
+        }
 
-			widget.text = text;
-			widget.tags = tags;
-			delete widget.createdUserId;
-			delete widget.lastModifiedUserId;
+        registeredTags = await miro.board.tags.get(); // get existed tags in board
 
-			return widget;
-        })
-    );
+		for ( tag of tags ) {
+			index = registeredTags.findIndex((item) => item.title == tag);
 
-    return allTags;
+            if (index !== -1) {
+                // If the tag is registered, update it. Unless, create a new tag.
+                if (registeredTags[index].widgetIds.indexOf(widget.id) == -1) {
+                    registeredTags[index].widgetIds.push(widget.id.toString());
+                    await miro.board.tags.update(registeredTags[index]);
+                }
+            } else {
+                await miro.board.tags.create({
+                    color: randomColor(),
+                    title: tag,
+                    widgetIds: [widget.id],
+                });
+            }
+		}
+
+        widget.text = text;
+        widget.tags = tags;
+        delete widget.createdUserId;
+        delete widget.lastModifiedUserId;
+        delete widget.metadata;
+
+        miro.board.widgets.update(widget);
+    }
 }
 
-function addTagSelectOptions(tags) {
-    tags.forEach((tag) => {
-        $('#tag-select').html('');
-        $('#tag-select').append(`<option value='${tags}'>${tag}</option>`);
+function addTagSelectOptions() {
+    miro.board.tags.get().then((tags) => {
+        tags.forEach((tag) => {
+            $('#tag-select').html('');
+            $('#tag-select').append(`<option value='${tags}'>${tag}</option>`);
+        });
     });
 }
 
@@ -112,9 +131,9 @@ miro.onReady(() => {
     // });
     // miro.board.selection.get().then(showStatistics);
 
-    loadTags().then(tags => {
-		addTagSelectOptions(tags);
-	});    
+    loadTags().then(() => {
+        addTagSelectOptions();
+    });
 });
 
 $('#metismenu').metisMenu();
