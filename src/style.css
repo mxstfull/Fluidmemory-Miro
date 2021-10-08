@@ -115,6 +115,7 @@
     position: absolute;
     right: 40px;
     top: 0;
+    display: flex;
   }
   .stat-list .metismenu .action a {
     margin-right: 9px;
