@@ -84,9 +84,12 @@ async function loadTags() {
                 }
             });
 
-			widget.tags = tags;
 			widget.text = text;
-            return widget;
+			widget.tags = tags;
+			delete widget.createdUserId;
+			delete widget.lastModifiedUserId;
+
+			return widget;
         })
     );
 
