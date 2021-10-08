@@ -154,3 +154,9 @@
   .stat-list .metismenu a .item-badge {
     font-weight: normal;
   }
+  .stat-list .tab-panel {
+    display: none;
+  }
+  .stat-list .tab-panel.active {
+    display: inherit;
+  }
