@@ -120,7 +120,7 @@ function addTagSelectOptions() {
     miro.board.tags.get().then((tags) => {
         tags.forEach((tag) => {
             $('#tag-select').html('');
-            $('#tag-select').append(`<option value='${tags}'>${tag}</option>`);
+            $('#tag-select').append(`<option value='${tag.title}'>${tag.title}</option>`);
         });
     });
 }
