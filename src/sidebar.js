@@ -54,34 +54,52 @@
 //     return new Map([...map.entries()].sort((a, b) => b[1] - a[1]));
 // }
 
-async function arrangeTags() {
+async function loadTags() {
     widgets = await miro.board.widgets.get({
         type: 'STICKER',
     });
+    allTags = [];
 
-    await miro.board.widgets.update(widgets.map((widget) => {
-		var text = widget.text;
-		var tags = widget.tags;
-		var metaIds = Object.keys(widget.metadata);
+    await miro.board.widgets.update(
+        widgets.map((widget) => {
+            var text = widget.text;
+            var tags = widget.tags;
+            var metaIds = Object.keys(widget.metadata);
 
-		if (metaIds.length) { // Check metaData to know tags are existed
-			tags = [];
-			metaIds.map(index => {
-				if (widget.metadata[index].tag && widget.metadata[index].tagName)
-					tags.push(widget.metadata[index].tag.tagName)
-			})
+            if (metaIds.length) {
+                // Check metaData to know tags are existed
+                tags = [];
+                metaIds.map((index) => {
+                    if (widget.metadata[index].tag && widget.metadata[index].tagName) tags.push(widget.metadata[index].tag.tagName);
+                });
 
-			splitArray = widget.text.split('Tag: ');
-			splitArray.pop();
-			text = splitArray.join('Tag: '); // Split Tag: part from the text
-		}
+                splitArray = widget.text.split('Tag: ');
+                splitArray.pop();
+                text = splitArray.join('Tag: '); // Split Tag: part from the text
+            }
 
-		return {
-			id: widget.id,
-			tags: tags,
-			text: text
-		};
-    }));
+            tags.forEach((tag) => {
+                if (allTags.indexOf(tag) == -1) {
+                    allTags.push(tag);
+                }
+            });
+
+            return {
+                id: widget.id,
+                tags: tags,
+                text: text,
+            };
+        })
+    );
+
+    return allTags;
+}
+
+function addTagSelectOptions(tags) {
+    tags.forEach((tag) => {
+        $('#tag-select').html('');
+        $('#tag-select').append(`<option value='${tags}'>${tag}</option>`);
+    });
 }
 
 miro.onReady(() => {
@@ -90,15 +108,16 @@ miro.onReady(() => {
     // });
     // miro.board.selection.get().then(showStatistics);
 
-	arrangeTags();
+    tags = loadTags();
+    addTagSelectOptions(tags);
 });
 
 $('#metismenu').metisMenu();
 
 $('[data-tabbtn]').on('click', (e) => {
-	tabId = $(e.currentTarget).attr('data-tabbtn');
-	$('.tab-panel').removeClass('active');
-	$(`#${tabId}`).addClass('active');
-	$('[data-tabbtn]').removeClass('tab-active');
-	$(e.currentTarget).addClass('tab-active');
-})
+    tabId = $(e.currentTarget).attr('data-tabbtn');
+    $('.tab-panel').removeClass('active');
+    $(`#${tabId}`).addClass('active');
+    $('[data-tabbtn]').removeClass('tab-active');
+    $(e.currentTarget).addClass('tab-active');
+});
