@@ -94,7 +94,7 @@ function getWordTagTotalCount(words) {
 function getWordTotalCount(wordTags) {
 	return wordTags.reduce(function (a, b) {
 		return sum(getWordTagTotalCount(a), getWordTagTotalCount(b));
-	});
+	}, 0);
 }
 
 function getSortedWordsArrayIndex(wordCounts) {
