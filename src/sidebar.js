@@ -233,7 +233,7 @@ async function listWords() {
                 widgetWrapper.append(wordEle);
             }
 
-            tagEle.push(widgetWrapper);
+            tagEle.append(widgetWrapper);
             tagWrapper.append(tagEle);
         }
         wordEle.append(tagWrapper);
