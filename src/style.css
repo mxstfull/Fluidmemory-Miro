@@ -119,24 +119,6 @@
   .stat-list .metismenu .action a {
     margin-right: 9px;
   }
-  .stat-list .cluster::after {
-    content: 'C';
-    width: 24px;
-    height: 24px;
-    line-height: 38px;
-  }
-  .stat-list .bookmark::after {
-    content: 'B';
-    width: 24px;
-    height: 24px;
-    line-height: 38px;
-  }
-  .stat-list .copy::after {
-    content: 'D';
-    width: 24px;
-    height: 24px;
-    line-height: 38px;
-  }
   .stat-list .metismenu li {
     position: relative;
   }

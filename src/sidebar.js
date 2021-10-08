@@ -118,8 +118,8 @@ async function loadTags() {
 
 function addTagSelectOptions() {
     miro.board.tags.get().then((tags) => {
+		$('#tag-select').html('');
         tags.forEach((tag) => {
-            $('#tag-select').html('');
             $('#tag-select').append(`<option value='${tag.title}'>${tag.title}</option>`);
         });
     });
