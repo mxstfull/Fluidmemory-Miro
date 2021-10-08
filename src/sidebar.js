@@ -84,11 +84,9 @@ async function loadTags() {
                 }
             });
 
-            return {
-                id: widget.id,
-                tags: tags,
-                text: text,
-            };
+			widget.tags = tags;
+			widget.text = text;
+            return widget;
         })
     );
 
