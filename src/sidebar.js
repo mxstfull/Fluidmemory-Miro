@@ -64,19 +64,22 @@ async function loadTags() {
         widgets.map((widget) => {
             var text = widget.text;
             var tags = widget.tags;
-            var metaIds = Object.keys(widget.metadata);
 
-            if (metaIds.length) {
-                // Check metaData to know tags are existed
-                tags = [];
-                metaIds.map((index) => {
-                    if (widget.metadata[index].tag && widget.metadata[index].tagName) tags.push(widget.metadata[index].tag.tagName);
-                });
+			if (widget.metadata) {
+				var metaIds = Object.keys(widget.metadata);
 
-                splitArray = widget.text.split('Tag: ');
-                splitArray.pop();
-                text = splitArray.join('Tag: '); // Split Tag: part from the text
-            }
+				if (metaIds.length) {
+					// Check metaData to know tags are existed
+					tags = [];
+					metaIds.map((index) => {
+						if (widget.metadata[index].tag && widget.metadata[index].tagName) tags.push(widget.metadata[index].tag.tagName);
+					});
+
+					splitArray = widget.text.split('Tag: ');
+					splitArray.pop();
+					text = splitArray.join('Tag: '); // Split Tag: part from the text
+				}
+			}
 
             tags.forEach((tag) => {
                 if (allTags.indexOf(tag) == -1) {
