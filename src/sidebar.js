@@ -238,6 +238,7 @@ async function listWords() {
         }
         wordEle.append(tagWrapper);
         $('#metismenu').append(wordEle);
+		$('#metismenu').metisMenu();
     }
 }
 
@@ -251,8 +252,6 @@ miro.onReady(() => {
         addTagSelectOptions();
     });
 });
-
-$('#metismenu').metisMenu();
 
 $('[data-tabbtn]').on('click', (e) => {
     tabId = $(e.currentTarget).attr('data-tabbtn');
