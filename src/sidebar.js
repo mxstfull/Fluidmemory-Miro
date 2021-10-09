@@ -10,7 +10,7 @@ function getTags() {
     return miro.board.tags.get();
 }
 function analyzeStopList() {
-    return $('#stopList').val().replace(/\s/g, '').split(',');
+    return $('#stopList').val().replace(/\s/g, '').split(',').push('');
 }
 function getSelectedTag() {
     return $('#tag-select').val();
@@ -219,7 +219,7 @@ async function listWords() {
 					</div>
 				</li>`);
             var widgetWrapper = $('<ul></ul>');
-            var count = 0;
+            var count = 1;
 
             for (widgetId of widgetIndexes) {
                 var wordCount = wordTagWords[widgetId];
