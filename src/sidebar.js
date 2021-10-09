@@ -184,7 +184,7 @@ async function listWords() {
         var wordEle = $(`
 			<li>
 				<a href="#" class="has-arrow" aria-expanded="false">
-					Word1
+					${word}
 					<span class="item-badge">(${totalCount})</span>
 				</a>
 				<div class="action">
@@ -203,7 +203,7 @@ async function listWords() {
             var tagEle = $(`
 				<li>
 					<a href="#" class="has-arrow" aria-expanded="false">
-						Word1
+						${tag}
 						<span class="item-badge">(${totalTagCount})</span>
 					</a>
 					<div class="action">
@@ -214,13 +214,14 @@ async function listWords() {
 					</div>
 				</li>`);
             var widgetWrapper = $('<ul></ul>');
+            var count = 0;
 
             for (widgetId of widgetIndexes) {
                 var wordCount = wordTagWords[widgetId];
                 var widgetEle = $(`
 					<li>
 						<a href="#">
-							Word1
+							Sticky ${count}
 							<span class="item-badge">(${wordCount})</span>
 						</a>
 						<div class="action">
@@ -231,6 +232,7 @@ async function listWords() {
 						</div>
 					</li>`);
                 widgetWrapper.append(widgetEle);
+                count ++;
             }
 
             tagEle.append(widgetWrapper);
