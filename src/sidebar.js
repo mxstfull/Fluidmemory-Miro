@@ -217,7 +217,7 @@ async function listWords() {
 
             for (widgetId of widgetIndexes) {
                 var wordCount = wordTagWords[widgetId];
-                var wordEle = $(`
+                var widgetEle = $(`
 					<li>
 						<a href="#">
 							Word1
@@ -230,7 +230,7 @@ async function listWords() {
 							<button class="btn button-icon button-icon-small icon-more"></button>
 						</div>
 					</li>`);
-                widgetWrapper.append(wordEle);
+                widgetWrapper.append(widgetEle);
             }
 
             tagEle.append(widgetWrapper);
