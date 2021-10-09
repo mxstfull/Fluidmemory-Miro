@@ -109,7 +109,7 @@
   .stat-list .metismenu ul {
     list-style: none;
     padding-left: 22px;
-    background-color: rgba(216,216,216,0.3);
+    background-color: rgb(243 243 243);
   }
   .stat-list .metismenu .action {
     position: absolute;
@@ -142,4 +142,13 @@
   }
   .stat-list .tab-panel.active {
     display: inherit;
+  }
+  .stat-list .button-icon {
+    background-color: transparent;
+  }
+  .stat-list .button-icon:hover {
+    background-color: white;
+  }
+  .stat-list .icon-more {
+    transform: rotate(90deg);
   }

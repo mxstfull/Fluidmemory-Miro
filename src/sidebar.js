@@ -238,8 +238,8 @@ async function listWords() {
         }
         wordEle.append(tagWrapper);
         $('#metismenu').append(wordEle);
-		$('#metismenu').metisMenu();
     }
+    $('#metismenu').metisMenu();
 }
 
 miro.onReady(() => {
