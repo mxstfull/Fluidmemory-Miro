@@ -10,7 +10,9 @@ function getTags() {
     return miro.board.tags.get();
 }
 function analyzeStopList() {
-    return $('#stopList').val().replace(/\s/g, '').split(',').push('');
+    var list = $('#stopList').val().replace(/\s/g, '').split(',');
+    list.push('');
+    return list;
 }
 function getSelectedTag() {
     return $('#tag-select').val();
@@ -83,13 +85,13 @@ function addTagSelectOptions() {
 }
 
 function getWordTagTotalCount(words) {
-	var sum = 0;
+    var sum = 0;
 
     for (index in words) {
         sum += words[index];
     }
 
-    return sum;    
+    return sum;
 }
 
 function getWordTotalCount(wordTags) {
@@ -98,32 +100,32 @@ function getWordTotalCount(wordTags) {
     for (index in wordTags) {
         sum += getWordTagTotalCount(wordTags[index]);
     }
-    
+
     return sum;
 }
 
 function getSortedWordsArrayIndex(wordCounts) {
-	indexes = Object.keys(wordCounts);
-	indexes.sort((a, b) => {
-		return getWordTotalCount(wordCounts[a]) < getWordTotalCount(wordCounts[b]) ? 1 : -1;
-	});
-	return indexes;
+    indexes = Object.keys(wordCounts);
+    indexes.sort((a, b) => {
+        return getWordTotalCount(wordCounts[a]) < getWordTotalCount(wordCounts[b]) ? 1 : -1;
+    });
+    return indexes;
 }
 
 function getSortedWordTagArrayIndex(wordTagCounts) {
-	indexes = Object.keys(wordTagCounts);
-	indexes.sort((a, b) => {
-		return getWordTagTotalCount(wordTagCounts[a]) < getWordTagTotalCount(wordTagCounts[b]) ? 1 : -1;
-	});
-	return indexes;
+    indexes = Object.keys(wordTagCounts);
+    indexes.sort((a, b) => {
+        return getWordTagTotalCount(wordTagCounts[a]) < getWordTagTotalCount(wordTagCounts[b]) ? 1 : -1;
+    });
+    return indexes;
 }
 
 function getSortedWordWidgetArrayIndex(wordWidgetCounts) {
-	indexes = Object.keys(wordWidgetCounts);
-	indexes.sort((a, b) => {
-		return wordWidgetCounts[a] < wordWidgetCounts[b] ? 1 : -1;
-	});
-	return indexes;
+    indexes = Object.keys(wordWidgetCounts);
+    indexes.sort((a, b) => {
+        return wordWidgetCounts[a] < wordWidgetCounts[b] ? 1 : -1;
+    });
+    return indexes;
 }
 
 async function listWords() {
@@ -237,7 +239,7 @@ async function listWords() {
 						</div>
 					</li>`);
                 widgetWrapper.append(widgetEle);
-                count ++;
+                count++;
             }
 
             tagEle.append(widgetWrapper);
@@ -269,5 +271,5 @@ $('[data-tabbtn]').on('click', (e) => {
 });
 
 $('#countWordApply').on('click', (e) => {
-	listWords();
+    listWords();
 });
