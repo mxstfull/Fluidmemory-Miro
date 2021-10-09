@@ -102,28 +102,30 @@
     margin-bottom: 10px
   }
 
-  .stat-list .metismenu {
+  .stat-list #metismenu {
     list-style: none;
+    max-height: calc(100% - 420px);
+    overflow-y: auto;
     padding: 0;
   }
-  .stat-list .metismenu ul {
+  .stat-list #metismenu ul {
     list-style: none;
     padding-left: 22px;
     background-color: rgb(243 243 243);
   }
-  .stat-list .metismenu .action {
+  .stat-list #metismenu .action {
     position: absolute;
     right: 40px;
     top: 0;
     display: flex;
   }
-  .stat-list .metismenu .action a {
+  .stat-list #metismenu .action a {
     margin-right: 9px;
   }
-  .stat-list .metismenu li {
+  .stat-list #metismenu li {
     position: relative;
   }
-  .stat-list .metismenu li > a {
+  .stat-list #metismenu li > a {
     box-sizing: border-box;
     width: 100%;
     display: block;
@@ -134,7 +136,7 @@
     line-height: 19px;
     text-decoration: none;
   }
-  .stat-list .metismenu a .item-badge {
+  .stat-list #metismenu a .item-badge {
     font-weight: normal;
   }
   .stat-list .tab-panel {
