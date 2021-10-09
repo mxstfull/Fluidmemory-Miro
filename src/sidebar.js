@@ -82,19 +82,24 @@ function addTagSelectOptions() {
     });
 }
 
-function sum(a, b) {
-    return a + b;
-}
-
-
 function getWordTagTotalCount(words) {
-	return words.reduce(sum, 0);
+	var sum = 0;
+
+    for (index in words) {
+        sum += words[index];
+    }
+
+    return sum;    
 }
 
 function getWordTotalCount(wordTags) {
-	return wordTags.reduce(function (a, b) {
-		return sum(getWordTagTotalCount(a), getWordTagTotalCount(b));
-	}, 0);
+    var sum = 0;
+
+    for (index in wordTags) {
+        sum += getWordTagTotalCount(wordTags[index]);
+    }
+    
+    return sum;
 }
 
 function getSortedWordsArrayIndex(wordCounts) {
