@@ -139,6 +139,13 @@
   .stat-list #metismenu a .item-badge {
     font-weight: normal;
   }
+  .stat-list #metismenu .word-name {
+    max-width: 70px;
+    display: inline-block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    float: left;
+  }
   .stat-list .tab-panel {
     display: none;
   }

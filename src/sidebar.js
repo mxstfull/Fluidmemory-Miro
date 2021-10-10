@@ -128,6 +128,23 @@ function getSortedWordWidgetArrayIndex(wordWidgetCounts) {
     return indexes;
 }
 
+function menuItem(word, count, shorten = false) {
+    return $(`
+    <li>
+        <a href="#" class="has-arrow" aria-expanded="false">
+            <span class="word-name">${word}</span>
+            <span class="item-badge">(${count})</span>
+        </a>
+        <div class="action">
+            ${
+                shorten
+                    ? '<button class="btn button-icon button-icon-small icon-tile" title="Cluster"></button><button class="btn button-icon button-icon-small icon-pin" title="Add a Tag"></button><button class="btn button-icon button-icon-small icon-duplicate" title="Duplicate"></button><button class="btn button-icon button-icon-small icon-more" title="More"></button>'
+                    : '<button class="btn button-icon button-icon-small icon-tile" title="Cluster"></button><button class="btn button-icon button-icon-small icon-pin" title="Add a Tag"></button><button class="btn button-icon button-icon-small icon-more" title="More"></button>'
+            }
+        </div>
+    </li>`);
+}
+
 async function listWords() {
     var stopList = analyzeStopList();
     var selectedTag = getSelectedTag();
@@ -188,56 +205,21 @@ async function listWords() {
         var wordTags = wordCounts[word];
         var totalCount = getWordTotalCount(wordTags);
         var tagIndexes = getSortedWordTagArrayIndex(wordTags);
-        var wordEle = $(`
-			<li>
-				<a href="#" class="has-arrow" aria-expanded="false">
-					${word}
-					<span class="item-badge">(${totalCount})</span>
-				</a>
-				<div class="action">
-					<button class="btn button-icon button-icon-small icon-tile"></button>
-					<button class="btn button-icon button-icon-small icon-pin"></button>
-					<button class="btn button-icon button-icon-small icon-duplicate"></button>
-					<button class="btn button-icon button-icon-small icon-more"></button>
-				</div>
-			</li>`);
+        var wordEle = menuItem(word, totalCount);
         var tagWrapper = $('<ul></ul>');
 
         for (tag of tagIndexes) {
             var wordTagWords = wordTags[tag];
             var totalTagCount = getWordTagTotalCount(wordTagWords);
             var widgetIndexes = getSortedWordWidgetArrayIndex(wordTagWords);
-            var tagEle = $(`
-				<li>
-					<a href="#" class="has-arrow" aria-expanded="false">
-						${tag}
-						<span class="item-badge">(${totalTagCount})</span>
-					</a>
-					<div class="action">
-						<button class="btn button-icon button-icon-small icon-tile"></button>
-						<button class="btn button-icon button-icon-small icon-duplicate"></button>
-						<button class="btn button-icon button-icon-small icon-pin"></button>
-						<button class="btn button-icon button-icon-small icon-more"></button>
-					</div>
-				</li>`);
+            var tagEle = menuItem(tag, totalTagCount, true);
             var widgetWrapper = $('<ul></ul>');
             var count = 1;
 
             for (widgetId of widgetIndexes) {
                 var wordCount = wordTagWords[widgetId];
-                var widgetEle = $(`
-					<li>
-						<a href="#">
-							Sticky ${count}
-							<span class="item-badge">(${wordCount})</span>
-						</a>
-						<div class="action">
-							<button class="btn button-icon button-icon-small icon-tile"></button>
-							<button class="btn button-icon button-icon-small icon-duplicate"></button>
-							<button class="btn button-icon button-icon-small icon-pin"></button>
-							<button class="btn button-icon button-icon-small icon-more"></button>
-						</div>
-					</li>`);
+                var widgetEle = menuItem('Sticky ' + count, wordCount, true);
+
                 widgetWrapper.append(widgetEle);
                 count++;
             }
@@ -252,11 +234,6 @@ async function listWords() {
 }
 
 miro.onReady(() => {
-    // miro.addListener('SELECTION_UPDATED', (e) => {
-    //     showStatistics(e.data);
-    // });
-    // miro.board.selection.get().then(showStatistics);
-
     loadTags().then(() => {
         addTagSelectOptions();
     });
