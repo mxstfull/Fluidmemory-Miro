@@ -137,7 +137,7 @@ function menuItem(word, count, shorten = false) {
         </a>
         <div class="action">
             ${
-                shorten
+                !shorten
                     ? '<button class="btn button-icon button-icon-small icon-tile" title="Cluster"></button><button class="btn button-icon button-icon-small icon-pin" title="Add a Tag"></button><button class="btn button-icon button-icon-small icon-duplicate" title="Duplicate"></button><button class="btn button-icon button-icon-small icon-more" title="More"></button>'
                     : '<button class="btn button-icon button-icon-small icon-tile" title="Cluster"></button><button class="btn button-icon button-icon-small icon-pin" title="Add a Tag"></button><button class="btn button-icon button-icon-small icon-more" title="More"></button>'
             }
