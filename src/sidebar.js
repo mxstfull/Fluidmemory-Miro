@@ -129,6 +129,7 @@ function getSortedWordWidgetArrayIndex(wordWidgetCounts) {
 }
 
 function moreButtonClicked(e) {
+    $('.more-dropmenu').hide();
     $(e).parent().children('.more-dropmenu').toggle();
 }
 
