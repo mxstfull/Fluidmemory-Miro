@@ -148,7 +148,7 @@ function menuItem(word, count, shorten = false, expandable = true) {
             ${
                 !shorten
                     ? '<ul class="more-dropmenu"> <li> <button class="btn button-icon button-icon-small icon-deactivated" title="Add to stop list"> Add to stop list</button> </li> </ul>'
-                    : '<ul class="more-dropmenu"> <li><button class="btn button-icon button-icon-small icon-duplicate" title="Duplicate">Duplicate/button></li> <li> <button class="btn button-icon button-icon-small icon-deactivated" title="Add to stop list">Add to stop list</button> </li> </ul>'
+                    : '<ul class="more-dropmenu"> <li><button class="btn button-icon button-icon-small icon-duplicate" title="Duplicate">Duplicate</li> <li> <button class="btn button-icon button-icon-small icon-deactivated" title="Add to stop list">Add to stop list</button> </li> </ul>'
             }
         </div>
     </li>`);

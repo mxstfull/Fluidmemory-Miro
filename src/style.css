@@ -159,13 +159,18 @@
     display: none;
   }
 
+  .stat-list #metismenu .more-dropmenu li {
+    padding: 5px;
+  }
+  .stat-list #metismenu .more-dropmenu li:hover {
+    background-color: rgb(243 243 243);
+  }
+
   .stat-list #metismenu .more-dropmenu button {
     width: 100%;
     text-align: center;
     padding-left: 35px;
-  }
-  .stat-list #metismenu .more-dropmenu button:hover {
-    background-color: rgb(243 243 243);
+    padding: 
   }
   .stat-list .tab-panel {
     display: none;
