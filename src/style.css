@@ -146,6 +146,27 @@
     overflow: hidden;
     float: left;
   }
+
+  .stat-list #metismenu .more-dropmenu {
+    position: absolute;
+    right: -10px;
+    top: 40px;
+    background-color: white;
+    border-radius: 5px;
+    border: 1px solid;
+    z-index: 1;
+    padding: 0;
+    display: none;
+  }
+
+  .stat-list #metismenu .more-dropmenu button {
+    width: 100%;
+    text-align: center;
+    padding-left: 35px;
+  }
+  .stat-list #metismenu .more-dropmenu button:hover {
+    background-color: rgb(243 243 243);
+  }
   .stat-list .tab-panel {
     display: none;
   }

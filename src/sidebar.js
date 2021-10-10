@@ -128,18 +128,27 @@ function getSortedWordWidgetArrayIndex(wordWidgetCounts) {
     return indexes;
 }
 
-function menuItem(word, count, shorten = false) {
+function moreButtonClicked(e) {
+    $(e).parent().children('.more-dropmenu').toggle();
+}
+
+function menuItem(word, count, shorten = false, expandable = true) {
     return $(`
     <li title="${word + ' (' + count + ')'}">
-        <a href="#" class="has-arrow" aria-expanded="false">
+        <a href="#" ${expandable ? 'class="has-arrow" aria-expanded="false"' : ''}>
             <span class="word-name">${word}</span>
             <span class="item-badge">(${count})</span>
         </a>
         <div class="action">
             ${
                 !shorten
-                    ? '<button class="btn button-icon button-icon-small icon-tile" title="Cluster"></button><button class="btn button-icon button-icon-small icon-pin" title="Add a Tag"></button><button class="btn button-icon button-icon-small icon-duplicate" title="Duplicate"></button><button class="btn button-icon button-icon-small icon-more" title="More"></button>'
-                    : '<button class="btn button-icon button-icon-small icon-tile" title="Cluster"></button><button class="btn button-icon button-icon-small icon-pin" title="Add a Tag"></button><button class="btn button-icon button-icon-small icon-more" title="More"></button>'
+                    ? '<button class="btn button-icon button-icon-small icon-tile" title="Cluster"></button><button class="btn button-icon button-icon-small icon-pin" title="Add a Tag"></button><button class="btn button-icon button-icon-small icon-duplicate" title="Duplicate"></button><button class="btn button-icon button-icon-small icon-more" onClick="moreButtonClicked(this)" title="More"></button>'
+                    : '<button class="btn button-icon button-icon-small icon-tile" title="Cluster"></button><button class="btn button-icon button-icon-small icon-pin" title="Add a Tag"></button><button class="btn button-icon button-icon-small icon-more" onClick="moreButtonClicked(this)" title="More"></button>'
+            }
+            ${
+                !shorten
+                    ? '<ul class="more-dropmenu"> <li> <button class="btn button-icon button-icon-small icon-deactivated" title="Add to stop list"> Add to stop list</button> </li> </ul>'
+                    : '<ul class="more-dropmenu"> <li><button class="btn button-icon button-icon-small icon-duplicate" title="Duplicate">Duplicate/button></li> <li> <button class="btn button-icon button-icon-small icon-deactivated" title="Add to stop list">Add to stop list</button> </li> </ul>'
             }
         </div>
     </li>`);
@@ -218,7 +227,7 @@ async function listWords() {
 
             for (widgetId of widgetIndexes) {
                 var wordCount = wordTagWords[widgetId];
-                var widgetEle = menuItem('Sticky ' + count, wordCount, true);
+                var widgetEle = menuItem('Sticky ' + count, wordCount, true, false);
 
                 widgetWrapper.append(widgetEle);
                 count++;
