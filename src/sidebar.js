@@ -130,7 +130,7 @@ function getSortedWordWidgetArrayIndex(wordWidgetCounts) {
 
 function menuItem(word, count, shorten = false) {
     return $(`
-    <li>
+    <li title="${word + ' (' + count + ')'}">
         <a href="#" class="has-arrow" aria-expanded="false">
             <span class="word-name">${word}</span>
             <span class="item-badge">(${count})</span>
