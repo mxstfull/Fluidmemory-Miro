@@ -251,9 +251,10 @@ async function listWords() {
 }
 
 miro.onReady(() => {
-    //loadTags().then(() => {
-        addTagSelectOptions();
-    //});
+    console.log('aasdfasdf')
+    // loadTags().then(() => {
+    //     addTagSelectOptions();
+    // });
 });
 
 $('[data-tabbtn]').on('click', (e) => {
