@@ -1,6 +1,9 @@
 function randomColor() {
     return '#' + Math.floor(Math.random() * 16777215).toString(16);
 }
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
 function getStickies() {
     return miro.board.widgets.get({
         type: 'STICKER',
@@ -10,7 +13,7 @@ function getTags() {
     return miro.board.tags.get();
 }
 function analyzeStopList() {
-    var list = $('#stopList').val().replace(/\s/g, '').split(',');
+    var list = $('#stopList').val().toLowerCase().replace(/\s/g, '').split(',');
     list.push('');
     return list;
 }
@@ -135,7 +138,7 @@ function moreButtonClicked(e) {
 
 function menuItem(word, count, shorten = false, expandable = true) {
     return $(`
-    <li title="${word + ' (' + count + ')'}">
+    <li title="${capitalizeFirstLetter(word) + ' (' + count + ')'}">
         <a href="#" ${expandable ? 'class="has-arrow" aria-expanded="false"' : ''}>
             <span class="word-name">${word}</span>
             <span class="item-badge">(${count})</span>
@@ -182,7 +185,10 @@ async function listWords() {
     }
 
     for (widget of stickies) {
-        var text = widget.plainText.replace(/[^A-Za-z0-9]/g, ' ').replace(/\s\s+/g, ' '); // Replace special characters into space and replace multiple spaces into single space
+        var text = widget.plainText
+            .replace(/[^A-Za-z0-9]/g, ' ')
+            .toLowerCase()
+            .replace(/\s\s+/g, ' '); // Replace special characters into space and replace multiple spaces into single space
         var words = text.split(' ');
         var tagNames = widget.tags.map((tag) => tag.title);
 
@@ -240,7 +246,7 @@ async function listWords() {
         wordEle.append(tagWrapper);
         $('#metismenu').append(wordEle);
     }
-    $("#metismenu").metisMenu('dispose');
+    $('#metismenu').metisMenu('dispose');
     $('#metismenu').metisMenu();
 }
 
