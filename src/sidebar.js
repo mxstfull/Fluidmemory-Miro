@@ -1,6 +1,9 @@
 function randomColor() {
     return '#' + Math.floor(Math.random() * 16777215).toString(16);
 }
+function randomId() {
+    return Date.now().toString() + Math.floor(Math.random() * 10000)
+}
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -137,8 +140,9 @@ function moreButtonClicked(e) {
 }
 
 function menuItem(word, count, shorten = false, expandable = true) {
+    var id = randomId();
     return $(`
-    <li title="${capitalizeFirstLetter(word) + ' (' + count + ')'}">
+    <li title="${capitalizeFirstLetter(word) + ' (' + count + ')'}" id="${id}">
         <a href="#" ${expandable ? 'class="has-arrow" aria-expanded="false"' : ''}>
             <span class="word-name">${word}</span>
             <span class="item-badge">(${count})</span>
@@ -146,13 +150,13 @@ function menuItem(word, count, shorten = false, expandable = true) {
         <div class="action">
             ${
                 !shorten
-                    ? '<button class="btn button-icon button-icon-small icon-tile" title="Cluster"></button><button class="btn button-icon button-icon-small icon-pin" title="Add a Tag"></button><button class="btn button-icon button-icon-small icon-duplicate" title="Duplicate"></button><button class="btn button-icon button-icon-small icon-more" onClick="moreButtonClicked(this)" title="More"></button>'
-                    : '<button class="btn button-icon button-icon-small icon-tile" title="Cluster"></button><button class="btn button-icon button-icon-small icon-pin" title="Add a Tag"></button><button class="btn button-icon button-icon-small icon-more" onClick="moreButtonClicked(this)" title="More"></button>'
+                    ? `<button class="btn button-icon button-icon-small icon-tile" title="Cluster"></button><button class="btn button-icon button-icon-small icon-pin" title="Add a Tag"></button><button class="btn button-icon button-icon-small icon-duplicate" title="Duplicate"></button><button class="btn button-icon button-icon-small icon-more" onClick="moreButtonClicked(this)" title="More"></button>`
+                    : `<button class="btn button-icon button-icon-small icon-tile" title="Cluster"></button><button class="btn button-icon button-icon-small icon-pin" title="Add a Tag"></button><button class="btn button-icon button-icon-small icon-more" onClick="moreButtonClicked(this)" title="More"></button>`
             }
             ${
                 !shorten
-                    ? '<ul class="more-dropmenu"> <li> <button class="btn button-icon button-icon-small icon-deactivated" title="Add to stop list"> Add to stop list</button> </li> </ul>'
-                    : '<ul class="more-dropmenu"> <li><button class="btn button-icon button-icon-small icon-duplicate" title="Duplicate">Duplicate</li> <li> <button class="btn button-icon button-icon-small icon-deactivated" title="Add to stop list">Add to stop list</button> </li> </ul>'
+                    ? `<ul class="more-dropmenu"> <li> <button class="btn button-icon button-icon-small icon-deactivated" title="Add to stop list" id='${}'> Add to stop list</button> </li> </ul>`
+                    : `<ul class="more-dropmenu"> <li><button class="btn button-icon button-icon-small icon-duplicate" title="Duplicate">Duplicate</li> <li> <button class="btn button-icon button-icon-small icon-deactivated" title="Add to stop list">Add to stop list</button> </li> </ul>`
             }
         </div>
     </li>`);
@@ -262,7 +266,7 @@ $('[data-tabbtn]').on('click', (e) => {
     $('[data-tabbtn]').removeClass('tab-active');
     $(e.currentTarget).addClass('tab-active');
 
-    if (tabId == tab-count) {
+    if (tabId == 'tab-count') {
         addTagSelectOptions();
     }
 });
