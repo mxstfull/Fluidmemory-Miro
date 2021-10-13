@@ -132,12 +132,13 @@ function menuItem(data, shorten = false, expandable = true) {
         <div class="action">
             ${
                 !shorten
-                    ? `<button class="btn button-icon button-icon-small icon-tile" title="Cluster" onClick='clusterItems(${JSON.stringify(
-                          data
-                      )})'></button><button class="btn button-icon button-icon-small icon-pin" title="Add a Tag"></button><button class="btn button-icon button-icon-small icon-duplicate" title="Duplicate"></button><button class="btn button-icon button-icon-small icon-more" onClick="moreButtonClicked(this)" title="More"></button>`
-                    : `<button class="btn button-icon button-icon-small icon-tile" title="Cluster" onClick='clusterItems(${JSON.stringify(
-                          data
-                      )})'></button><button class="btn button-icon button-icon-small icon-pin" title="Add a Tag"></button><button class="btn button-icon button-icon-small icon-more" onClick="moreButtonClicked(this)" title="More"></button>`
+                    ? `<button class="btn button-icon button-icon-small icon-tile" title="Cluster" onClick='clusterItems(${JSON.stringify(data)})'></button>
+                        <button class="btn button-icon button-icon-small icon-pin" title="Add a Tag" onClick='addTagSelectedItem(${JSON.stringify(data)})'></button>
+                        <button class="btn button-icon button-icon-small icon-duplicate" title="Duplicate"></button>
+                        <button class="btn button-icon button-icon-small icon-more" onClick="moreButtonClicked(this)" title="More"></button>`
+                    : `<button class="btn button-icon button-icon-small icon-tile" title="Cluster" onClick='clusterItems(${JSON.stringify(data)})'></button>
+                        <button class="btn button-icon button-icon-small icon-pin" title="Add a Tag" onClick='addTagSelectedItem(${JSON.stringify(data)})'></button>
+                        <button class="btn button-icon button-icon-small icon-more" onClick="moreButtonClicked(this)" title="More"></button>`
             }
             ${
                 !shorten
@@ -418,7 +419,7 @@ async function clusterItems(data) {
         var clusterLocation = getClusterLocation(widgets, clusterDimensions);
         let widgetLocations = getWidgetLocations(clusterLocation, clusterDimension, clusteringWidgets.length, defaultWidgetWidth, defaultWidgetHeight);
 
-        await miro.board.tags.update(
+        await miro.board.widgets.update(
             clusteringWidgets.map((widget, index) => {
                 return {
                     ...widget,
@@ -431,6 +432,8 @@ async function clusterItems(data) {
         toggleLoading(false);
     }
 }
+
+// Add a tag based on words
 
 function moreButtonClicked(e) {
     show = false;
@@ -445,6 +448,10 @@ function moreButtonClicked(e) {
 
     if (show) $(e).parent().children('.more-dropmenu').show();
     else $(e).parent().children('.more-dropmenu').hide();
+}
+
+function addTagSelectedItem() {
+
 }
 
 $('#countWordApply').on('click', (e) => {
