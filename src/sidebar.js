@@ -15,11 +15,36 @@ function getStickies() {
 function getTags() {
     return miro.board.tags.get();
 }
+
+function toggleLoading(show = true) {
+    $('.loading-wrapper').css({ visibility: show ? 'visible' : '' });
+}
+
+miro.onReady(() => {
+    // loadTags().then(() => {
+    // });
+});
+
+$('[data-tabbtn]').on('click', (e) => {
+    tabId = $(e.currentTarget).attr('data-tabbtn');
+    $('.tab-panel').removeClass('active');
+    $(`#${tabId}`).addClass('active');
+    $('[data-tabbtn]').removeClass('tab-active');
+    $(e.currentTarget).addClass('tab-active');
+
+    if (tabId == 'tab-count') {
+        addTagSelectOptions();
+    }
+});
+
+//////////////// Count Tab ///////////////////////
+
 function analyzeStopList() {
     var list = $('#stopList').val().toLowerCase().replace(/\s/g, '').split(',');
     list.push('');
     return list;
 }
+
 function getSelectedTag() {
     return $('#tag-select').val();
 }
@@ -179,10 +204,6 @@ function menuItem(data, shorten = false, expandable = true) {
     </li>`);
 }
 
-function toggleLoading(show = true) {
-    $('.loading-wrapper').css({visibility: show ? 'visible' : ''})
-}
-
 async function listWords() {
     toggleLoading();
 
@@ -304,23 +325,6 @@ async function listWords() {
     $('#metismenu').metisMenu();
     toggleLoading(false);
 }
-
-miro.onReady(() => {
-    // loadTags().then(() => {
-    // });
-});
-
-$('[data-tabbtn]').on('click', (e) => {
-    tabId = $(e.currentTarget).attr('data-tabbtn');
-    $('.tab-panel').removeClass('active');
-    $(`#${tabId}`).addClass('active');
-    $('[data-tabbtn]').removeClass('tab-active');
-    $(e.currentTarget).addClass('tab-active');
-
-    if (tabId == 'tab-count') {
-        addTagSelectOptions();
-    }
-});
 
 $('#countWordApply').on('click', (e) => {
     listWords();
