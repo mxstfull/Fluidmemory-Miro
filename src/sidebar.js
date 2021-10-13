@@ -20,7 +20,26 @@ function toggleLoading(show = true) {
     $('.loading-wrapper').css({ visibility: show ? 'visible' : '' });
 }
 
+miro.onReady(() => {
+    // loadTags().then(() => {
+    // });
+});
+
+$('[data-tabbtn]').on('click', (e) => {
+    tabId = $(e.currentTarget).attr('data-tabbtn');
+    $('.tab-panel').removeClass('active');
+    $(`#${tabId}`).addClass('active');
+    $('[data-tabbtn]').removeClass('tab-active');
+    $(e.currentTarget).addClass('tab-active');
+
+    if (tabId == 'tab-count') {
+        addTagSelectOptions();
+    }
+});
+
 //////////////// Count Tab ///////////////////////
+
+var wordCounts;
 
 function analyzeStopList() {
     var list = $('#stopList').val().toLowerCase().replace(/\s/g, '').split(',');
@@ -111,8 +130,8 @@ function menuItem(data, shorten = false, expandable = true) {
         <div class="action">
             ${
                 !shorten
-                    ? `<button class="btn button-icon button-icon-small icon-tile" title="Cluster"></button><button class="btn button-icon button-icon-small icon-pin" title="Add a Tag"></button><button class="btn button-icon button-icon-small icon-duplicate" title="Duplicate"></button><button class="btn button-icon button-icon-small icon-more" onClick="moreButtonClicked(this)" title="More"></button>`
-                    : `<button class="btn button-icon button-icon-small icon-tile" title="Cluster"></button><button class="btn button-icon button-icon-small icon-pin" title="Add a Tag"></button><button class="btn button-icon button-icon-small icon-more" onClick="moreButtonClicked(this)" title="More"></button>`
+                    ? `<button class="btn button-icon button-icon-small icon-tile" title="Cluster" onClick='clusterItems(${JSON.stringify(data)})'></button><button class="btn button-icon button-icon-small icon-pin" title="Add a Tag"></button><button class="btn button-icon button-icon-small icon-duplicate" title="Duplicate"></button><button class="btn button-icon button-icon-small icon-more" onClick="moreButtonClicked(this)" title="More"></button>`
+                    : `<button class="btn button-icon button-icon-small icon-tile" title="Cluster" onClick='clusterItems(${JSON.stringify(data)})'></button><button class="btn button-icon button-icon-small icon-pin" title="Add a Tag"></button><button class="btn button-icon button-icon-small icon-more" onClick="moreButtonClicked(this)" title="More"></button>`
             }
             ${
                 !shorten
@@ -129,7 +148,7 @@ async function listWords() {
     var stopList = analyzeStopList();
     var selectedTag = getSelectedTag();
     var stickies = await getStickies();
-    var wordCounts = [];
+    wordCounts = [];
     /*
 		wordCounts = [
 			'word1': [
@@ -243,6 +262,10 @@ async function listWords() {
     $('#metismenu').metisMenu('dispose');
     $('#metismenu').metisMenu();
     toggleLoading(false);
+}
+
+async function clusterItems(data) {
+    
 }
 
 function moreButtonClicked(e) {
