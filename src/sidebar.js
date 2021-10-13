@@ -288,7 +288,7 @@ function getWidgetIdsFromData(data) {
             widgetIds = widgetIds.concat(newIds);
         }
     } else if (data.type == 'tag') {
-        widgets = wordCounts[data.word][data.tag];
+        widgets = wordCounts[data.word][data.tagName];
 
         widgetIds = Object.keys(widgets);
     } else {
