@@ -284,7 +284,7 @@ function getWidgetIdsFromData(data) {
             newIds = Object.keys(widgets).filter((item) => {
                 return widgetIds.indexOf(item) == -1;
             });
-            widgetIds.concat(newIds);
+            widgetIds = widgetIds.concat(newIds);
         }
     } else if (data.type == 'tag') {
         words = wordCounts[data.word][data];
@@ -293,7 +293,7 @@ function getWidgetIdsFromData(data) {
             newIds = Object.keys(widgets).filter((item) => {
                 return widgetIds.indexOf(item) == -1;
             });
-            widgetIds.concat(newIds);
+            widgetIds = widgetIds.concat(newIds);
         }
     } else {
         toggleLoading(false);
