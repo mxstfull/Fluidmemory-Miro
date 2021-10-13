@@ -126,7 +126,7 @@ function menuItem(data, shorten = false, expandable = true) {
     return $(`
     <li class="menu-item-${data.type}" title="${capitalizeFirstLetter(data.showName) + ' (' + data.count + ')'}" id="${id}">
         <a href="#" ${expandable ? 'class="has-arrow" aria-expanded="false"' : ''}>
-            <span class="word-name">${data.showName}</span>
+            <span class="word-name">${data.showName}</span> &nbsp;
             <span class="item-badge">(${data.count})</span>
         </a>
         <div class="action">

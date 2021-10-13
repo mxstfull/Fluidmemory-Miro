@@ -116,8 +116,10 @@
   .stat-list #metismenu .action {
     position: absolute;
     right: 40px;
-    top: 0;
+    top: 7px;
     display: flex;
+    align-items: center;
+    gap: 5px;
   }
   .stat-list #metismenu .action a {
     margin-right: 9px;
@@ -140,7 +142,7 @@
     font-weight: normal;
   }
   .stat-list #metismenu .word-name {
-    max-width: 70px;
+    max-width: 120px;
     display: inline-block;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -180,12 +182,21 @@
   }
   .stat-list .button-icon {
     background-color: transparent;
+    background-position: center;
+    background-size: 20px 20px;
+    width: 24px;
+    height: 24px;
+    padding: 0;
   }
   .stat-list .button-icon:hover {
     background-color: white;
   }
   .stat-list .icon-more {
     transform: rotate(90deg);
+  }
+  .stat-list .icon-pin {
+    background-image: url(/src/tag.png);
+    background-size: 16px 16px;
   }
 
   .loading-wrapper {
