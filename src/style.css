@@ -199,7 +199,6 @@
     justify-content: center;
     align-items: center;
     background: #00000088;
-    display: none;
   }
   .loading {
     width: 100px;

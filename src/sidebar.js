@@ -177,8 +177,8 @@ function menuItem(data, shorten = false, expandable = true) {
     </li>`);
 }
 
-function toggleLoading() {
-    $('.loading-wrapper').toggle();
+function toggleLoading(show = true) {
+    $('.loading-wrapper').css({visibility: show ? 'visible' : ''})
 }
 
 async function listWords() {
@@ -300,7 +300,7 @@ async function listWords() {
     }
     $('#metismenu').metisMenu('dispose');
     $('#metismenu').metisMenu();
-    toggleLoading();
+    toggleLoading(false);
 }
 
 miro.onReady(() => {
