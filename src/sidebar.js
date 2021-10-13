@@ -288,14 +288,9 @@ function getWidgetIdsFromData(data) {
             widgetIds = widgetIds.concat(newIds);
         }
     } else if (data.type == 'tag') {
-        words = wordCounts[data.word][data];
-        for (tagName in tags) {
-            widgets = tags[tagName];
-            newIds = Object.keys(widgets).filter((item) => {
-                return widgetIds.indexOf(item) == -1;
-            });
-            widgetIds = widgetIds.concat(newIds);
-        }
+        widgets = wordCounts[data.word][data.tag];
+
+        widgetIds = Object.keys(widgets);
     } else {
         toggleLoading(false);
         return false;
