@@ -272,7 +272,7 @@ async function listWords() {
 
 // Cluster in Count
 
-function getClusteringWidgetIds(data) {
+function getWidgetIdsFromData(data) {
     widgetIds = [];
 
     toggleLoading(true);
@@ -284,7 +284,7 @@ function getClusteringWidgetIds(data) {
             newIds = Object.keys(widgets).filter((item) => {
                 return widgetIds.indexOf(item) == -1;
             });
-            widgetIds.push(newIds);
+            widgetIds.concat(newIds);
         }
     } else if (data.type == 'tag') {
         words = wordCounts[data.word][data];
@@ -293,7 +293,7 @@ function getClusteringWidgetIds(data) {
             newIds = Object.keys(widgets).filter((item) => {
                 return widgetIds.indexOf(item) == -1;
             });
-            widgetIds.push(newIds);
+            widgetIds.concat(newIds);
         }
     } else {
         toggleLoading(false);
@@ -406,7 +406,7 @@ function getWidgetLocations(clusterLocation, clusterDimension, numNewWidgets, wi
 }
 
 async function clusterItems(data) {
-    widgetIds = getClusteringWidgetIds(data);
+    widgetIds = getWidgetIdsFromData(data);
 
     if (widgetIds) {
         toggleLoading(true);
