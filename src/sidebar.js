@@ -40,6 +40,8 @@ $('[data-tabbtn]').on('click', (e) => {
 //////////////// Count Tab ///////////////////////
 
 var wordCounts;
+var defaultWidgetWidth = 199,
+    defaultWidgetHeight = 228;
 
 function analyzeStopList() {
     var list = $('#stopList').val().toLowerCase().replace(/\s/g, '').split(',');
@@ -130,8 +132,12 @@ function menuItem(data, shorten = false, expandable = true) {
         <div class="action">
             ${
                 !shorten
-                    ? `<button class="btn button-icon button-icon-small icon-tile" title="Cluster" onClick='clusterItems(${JSON.stringify(data)})'></button><button class="btn button-icon button-icon-small icon-pin" title="Add a Tag"></button><button class="btn button-icon button-icon-small icon-duplicate" title="Duplicate"></button><button class="btn button-icon button-icon-small icon-more" onClick="moreButtonClicked(this)" title="More"></button>`
-                    : `<button class="btn button-icon button-icon-small icon-tile" title="Cluster" onClick='clusterItems(${JSON.stringify(data)})'></button><button class="btn button-icon button-icon-small icon-pin" title="Add a Tag"></button><button class="btn button-icon button-icon-small icon-more" onClick="moreButtonClicked(this)" title="More"></button>`
+                    ? `<button class="btn button-icon button-icon-small icon-tile" title="Cluster" onClick='clusterItems(${JSON.stringify(
+                          data
+                      )})'></button><button class="btn button-icon button-icon-small icon-pin" title="Add a Tag"></button><button class="btn button-icon button-icon-small icon-duplicate" title="Duplicate"></button><button class="btn button-icon button-icon-small icon-more" onClick="moreButtonClicked(this)" title="More"></button>`
+                    : `<button class="btn button-icon button-icon-small icon-tile" title="Cluster" onClick='clusterItems(${JSON.stringify(
+                          data
+                      )})'></button><button class="btn button-icon button-icon-small icon-pin" title="Add a Tag"></button><button class="btn button-icon button-icon-small icon-more" onClick="moreButtonClicked(this)" title="More"></button>`
             }
             ${
                 !shorten
@@ -264,13 +270,171 @@ async function listWords() {
     toggleLoading(false);
 }
 
+// Cluster in Count
+
+function getClusteringWidgetIds(data) {
+    widgetIds = [];
+
+    toggleLoading(true);
+
+    if (data.type == 'word') {
+        tags = wordCounts[data.word];
+        for (tagName in tags) {
+            widgets = tags[tagName];
+            newIds = Object.keys(widgets).filter((item) => {
+                return widgetIds.indexOf(item) == -1;
+            });
+            widgetIds.push(newIds);
+        }
+    } else if (data.type == 'tag') {
+        words = wordCounts[data.word][data];
+        for (tagName in tags) {
+            widgets = tags[tagName];
+            newIds = Object.keys(widgets).filter((item) => {
+                return widgetIds.indexOf(item) == -1;
+            });
+            widgetIds.push(newIds);
+        }
+    } else {
+        toggleLoading(false);
+        return false;
+    }
+    toggleLoading(false);
+    return widgetIds;
+}
+
+function getClusterDimensions(widgetCount, widgetWidth = defaultWidgetWidth, widgetHeight = defaultWidgetHeight) {
+    const clusterDimension = Math.ceil(Math.sqrt(widgetCount)); // eg if length 22, 5*5
+    const clusterWidth = widgetWidth * clusterDimension;
+    const clusterHeight = widgetHeight * clusterDimension;
+    return { clusterWidth, clusterHeight, clusterDimension };
+}
+
+function getWidgetLocation(widget) {
+    return { startX: widget.bounds.left, startY: widget.bounds.top, endX: widget.bounds.right, endY: widget.bounds.bottom };
+    // x: occupied from startX to endX
+    // y: occupied from startY to endY
+}
+
+function getBoardWidgetLocations(widgets) {
+    return widgets.map((widget) => getWidgetLocation(widget));
+}
+
+function getClusterLocation(currentWidgets, clusterDimensions) {
+    const widgetLocations = getBoardWidgetLocations(currentWidgets);
+    const candidateSeries = [
+        [0, 0],
+        [1, 0],
+        [1, 0.5],
+        [1, 1],
+        [0.5, 1],
+        [0, 1],
+        [-0.5, 1],
+        [-1, 1],
+        [-1, 0.5],
+        [-1, 0],
+        [-1, -0.5],
+        [-1, -1],
+        [-0.5, -1],
+        [0, -1],
+        [0.5, -1],
+        [1, -1],
+    ];
+    let multiplier = 200;
+    const margin = 30;
+    let locationOccupied;
+    let clusterLocationCandidate;
+    let i;
+    do {
+        for (i = 0; i < candidateSeries.length; i++) {
+            clusterLocationCandidate = getClusterLocationCandidate(clusterDimensions, candidateSeries[i], multiplier);
+            locationOccupied = isLocationOccupied(clusterLocationCandidate, widgetLocations, margin);
+            if (!locationOccupied) break;
+        }
+        multiplier = multiplier + 100;
+    } while (locationOccupied);
+    return clusterLocationCandidate;
+}
+
+function getClusterLocationCandidate(clusterDimensions, candidateSeriesItem, multiplier = 100) {
+    const { clusterWidth, clusterHeight } = clusterDimensions;
+    const x = candidateSeriesItem[0] * multiplier;
+    const y = candidateSeriesItem[1] * multiplier;
+    const startX = x - clusterWidth / 2;
+    const endX = x + clusterWidth / 2;
+    const startY = y - clusterHeight / 2;
+    const endY = y + clusterHeight / 2;
+    return { x, y, startX, endX, startY, endY };
+}
+
+function isLocationOccupied(clusterLocationCandidate, widgetLocations, margin = 30) {
+    const locationOccupied = widgetLocations.some((widgetLocation) => {
+        return locationsIntersect(widgetLocation, clusterLocationCandidate, margin);
+    });
+    return locationOccupied;
+}
+
+function locationsIntersect(location1, location2, margin = 30) {
+    const { startX: a_startX, startY: a_startY, endX: a_endX, endY: a_endY } = location1;
+    const { startX: b_startX, startY: b_startY, endX: b_endX, endY: b_endY } = location2;
+    const intersectX = a_startX + margin <= b_endX && b_startX + margin <= a_endX;
+    const intersectY = a_startY + margin <= b_endY && b_startY + margin <= a_endY;
+    const locationsIntersect = intersectX && intersectY;
+    return locationsIntersect;
+}
+
+function getWidgetLocations(clusterLocation, clusterDimension, numNewWidgets, widgetWidth = 199, widgetHeight = 228) {
+    let locations = [];
+    const { startX: cluster_startX, endX: cluster_endX, startY: cluster_startY, endY: cluster_endY } = clusterLocation;
+    let currentWidget = 0;
+
+    for (let i = 0; i < clusterDimension; i++) {
+        for (let j = 0; j < clusterDimension; j++) {
+            const location = {
+                x: cluster_startX + ((0.5 + j) * widgetWidth) / 2,
+                y: cluster_startY + ((0.5 + i) * widgetHeight) / 2,
+            };
+            locations.push(location);
+            currentWidget++;
+            if (currentWidget >= numNewWidgets) {
+                i = clusterDimension;
+                break;
+            }
+        }
+    }
+    return locations;
+}
+
 async function clusterItems(data) {
-    
+    widgetIds = getClusteringWidgetIds(data);
+
+    if (widgetIds) {
+        toggleLoading(true);
+
+        var widgets = await getStickies();
+        var clusteringWidgets = widgets.filter((widget) => widgetIds.includes(widget.id));
+        var clusterDimensions = getClusterDimensions(clusteringWidgets.length);
+        var { clusterDimension } = clusterDimensions;
+        var clusterLocation = getClusterLocation(widgets, clusterDimensions);
+        let widgetLocations = getWidgetLocations(clusterLocation, clusterDimension, clusteringWidgets.length, defaultWidgetWidth, defaultWidgetHeight);
+
+        await miro.board.tags.update(
+            clusteringWidgets.map((widget, index) => {
+                updateWidget = {
+                    ...widget,
+                    x: widgetLocations[index].x,
+                    y: widgetLocations[index].y,
+                };
+            })
+        );
+
+        toggleLoading(false);
+    }
 }
 
 function moreButtonClicked(e) {
     show = false;
-    
+
     if ($(e).parent().children('.more-dropmenu').css('display') == 'none') {
         show = true;
     } else {
@@ -279,12 +443,69 @@ function moreButtonClicked(e) {
 
     $('.more-dropmenu').hide();
 
-    if (show)
-        $(e).parent().children('.more-dropmenu').hide();
-    else
-        $(e).parent().children('.more-dropmenu').show();
+    if (show) $(e).parent().children('.more-dropmenu').show();
+    else $(e).parent().children('.more-dropmenu').hide();
 }
 
 $('#countWordApply').on('click', (e) => {
     listWords();
 });
+
+// Arrage tags exported from google sheet
+
+async function loadTags() {
+    widgets = await getStickies();
+
+    for (widget of widgets) {
+        var text = widget.text;
+        var tags = widget.tags.map((tag) => tag.title);
+
+        if (widget.metadata) {
+            var metaIds = Object.keys(widget.metadata);
+
+            if (metaIds.length) {
+                // Check metaData to know tags are existed
+                tags = [];
+                metaIds.map((index) => {
+                    if (widget.metadata[index].tag && widget.metadata[index].tag.tagName) {
+                        tags.push(widget.metadata[index].tag.tagName);
+                    }
+                });
+
+                splitArray = widget.text.split('Tag: ');
+                if (splitArray.length > 1) {
+                    splitArray.pop();
+                    text = splitArray.join('Tag: '); // Split Tag: part from the text
+                }
+            }
+        }
+
+        registeredTags = await getTags(); // get existed tags in board
+
+        for (tag of tags) {
+            index = registeredTags.findIndex((item) => item.title == tag);
+
+            if (index !== -1) {
+                // If the tag is registered, update it. Unless, create a new tag.
+                if (registeredTags[index].widgetIds.indexOf(widget.id) == -1) {
+                    registeredTags[index].widgetIds.push(widget.id.toString());
+                    await miro.board.tags.update(registeredTags[index]);
+                }
+            } else {
+                await miro.board.tags.create({
+                    color: randomColor(),
+                    title: tag,
+                    widgetIds: [widget.id],
+                });
+            }
+        }
+
+        widget.text = text;
+        widget.tags = tags;
+        delete widget.createdUserId;
+        delete widget.lastModifiedUserId;
+        delete widget.metadata;
+
+        miro.board.widgets.update(widget);
+    }
+}
