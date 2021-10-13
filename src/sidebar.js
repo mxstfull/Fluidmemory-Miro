@@ -84,11 +84,13 @@ async function loadTags() {
 }
 
 function addTagSelectOptions() {
+    toggleLoading();
     getTags().then((tags) => {
         $('#tag-select').html('<option value="all"> All </option>');
         tags.forEach((tag) => {
             $('#tag-select').append(`<option value='${tag.title}'>${tag.title}</option>`);
         });
+        toggleLoading(false);
     });
 }
 
