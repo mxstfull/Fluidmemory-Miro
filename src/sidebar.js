@@ -139,11 +139,21 @@ function moreButtonClicked(e) {
     $(e).parent().children('.more-dropmenu').toggle();
 }
 
+function addToStopList(ele, word) {
+    var wordMenu = $(ele).closest('.menu-item-word')
+
+    wordMenu.remove();
+
+    var stopList = analyzeStopList();
+    stopList.push('word');
+    $('#stopList').val(stopList.join(', '));
+}
+
 function menuItem(data, shorten = false, expandable = true) {
     var id = randomId();
 
     return $(`
-    <li title="${capitalizeFirstLetter(data.showName) + ' (' + data.count +')'}" id="${id}">
+    <li class="menu-item-${data.type}" title="${capitalizeFirstLetter(data.showName) + ' (' + data.count +')'}" id="${id}">
         <a href="#" ${expandable ? 'class="has-arrow" aria-expanded="false"' : ''}>
             <span class="word-name">${data.showName}</span>
             <span class="item-badge">(${data.count})</span>
@@ -156,8 +166,8 @@ function menuItem(data, shorten = false, expandable = true) {
             }
             ${
                 !shorten
-                    ? `<ul class="more-dropmenu"> <li> <button class="btn button-icon button-icon-small icon-deactivated" title="Add to stop list" onClick='addToStopList()'> Add to stop list</button> </li> </ul>`
-                    : `<ul class="more-dropmenu"> <li><button class="btn button-icon button-icon-small icon-duplicate" title="Duplicate">Duplicate</li> <li> <button class="btn button-icon button-icon-small icon-deactivated" title="Add to stop list">Add to stop list</button> </li> </ul>`
+                    ? `<ul class="more-dropmenu"> <li> <button class="btn button-icon button-icon-small icon-deactivated" title="Add to stop list" onClick='addToStopList(this, "${data.word}")'> Add to stop list</button> </li> </ul>`
+                    : `<ul class="more-dropmenu"> <li><button class="btn button-icon button-icon-small icon-duplicate" title="Duplicate">Duplicate</li> <li> <button class="btn button-icon button-icon-small icon-deactivated" title="Add to stop list" onClick='addToStopList(this, "${data.word}")'>Add to stop list</button> </li> </ul>`
             }
         </div>
     </li>`);
@@ -232,6 +242,7 @@ async function listWords() {
             tagName: null,
             stickyId: null,
             count: totalCount,
+            type: 'word'
         });
         var tagWrapper = $('<ul></ul>');
 
@@ -246,6 +257,7 @@ async function listWords() {
                     tagName: tag,
                     stickyId: null,
                     count: totalTagCount,
+                    type: 'tag'
                 },
                 true
             );
@@ -261,6 +273,7 @@ async function listWords() {
                         tagName: tag,
                         stickyId: widgetId,
                         count: wordCount,
+                        type: 'sticky'
                     },
                     true,
                     false
