@@ -20,23 +20,6 @@ function toggleLoading(show = true) {
     $('.loading-wrapper').css({ visibility: show ? 'visible' : '' });
 }
 
-miro.onReady(() => {
-    // loadTags().then(() => {
-    // });
-});
-
-$('[data-tabbtn]').on('click', (e) => {
-    tabId = $(e.currentTarget).attr('data-tabbtn');
-    $('.tab-panel').removeClass('active');
-    $(`#${tabId}`).addClass('active');
-    $('[data-tabbtn]').removeClass('tab-active');
-    $(e.currentTarget).addClass('tab-active');
-
-    if (tabId == 'tab-count') {
-        addTagSelectOptions();
-    }
-});
-
 //////////////// Count Tab ///////////////////////
 
 function analyzeStopList() {
@@ -47,65 +30,6 @@ function analyzeStopList() {
 
 function getSelectedTag() {
     return $('#tag-select').val();
-}
-
-async function loadTags() {
-    toggleLoading();
-    widgets = await getStickies();
-
-    for (widget of widgets) {
-        var text = widget.text;
-        var tags = widget.tags.map((tag) => tag.title);
-
-        if (widget.metadata) {
-            var metaIds = Object.keys(widget.metadata);
-
-            if (metaIds.length) {
-                // Check metaData to know tags are existed
-                tags = [];
-                metaIds.map((index) => {
-                    if (widget.metadata[index].tag && widget.metadata[index].tag.tagName) {
-                        tags.push(widget.metadata[index].tag.tagName);
-                    }
-                });
-
-                splitArray = widget.text.split('Tag: ');
-                if (splitArray.length > 1) {
-                    splitArray.pop();
-                    text = splitArray.join('Tag: '); // Split Tag: part from the text
-                }
-            }
-        }
-
-        registeredTags = await getTags(); // get existed tags in board
-
-        for (tag of tags) {
-            index = registeredTags.findIndex((item) => item.title == tag);
-
-            if (index !== -1) {
-                // If the tag is registered, update it. Unless, create a new tag.
-                if (registeredTags[index].widgetIds.indexOf(widget.id) == -1) {
-                    registeredTags[index].widgetIds.push(widget.id.toString());
-                    await miro.board.tags.update(registeredTags[index]);
-                }
-            } else {
-                await miro.board.tags.create({
-                    color: randomColor(),
-                    title: tag,
-                    widgetIds: [widget.id],
-                });
-            }
-        }
-
-        widget.text = text;
-        widget.tags = tags;
-        delete widget.createdUserId;
-        delete widget.lastModifiedUserId;
-        delete widget.metadata;
-
-        miro.board.widgets.update(widget);
-    }
-    toggleLoading();
 }
 
 function addTagSelectOptions() {
@@ -161,11 +85,6 @@ function getSortedWordWidgetArrayIndex(wordWidgetCounts) {
         return wordWidgetCounts[a] < wordWidgetCounts[b] ? 1 : -1;
     });
     return indexes;
-}
-
-function moreButtonClicked(e) {
-    $('.more-dropmenu').hide();
-    $(e).parent().children('.more-dropmenu').toggle();
 }
 
 function addToStopList(ele, word) {
@@ -324,6 +243,23 @@ async function listWords() {
     $('#metismenu').metisMenu('dispose');
     $('#metismenu').metisMenu();
     toggleLoading(false);
+}
+
+function moreButtonClicked(e) {
+    show = false;
+    
+    if ($(e).parent().children('.more-dropmenu').css('display') == 'none') {
+        show = true;
+    } else {
+        show = false;
+    }
+
+    $('.more-dropmenu').hide();
+
+    if (show)
+        $(e).parent().children('.more-dropmenu').hide();
+    else
+        $(e).parent().children('.more-dropmenu').show();
 }
 
 $('#countWordApply').on('click', (e) => {
