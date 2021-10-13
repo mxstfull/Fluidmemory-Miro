@@ -25,6 +25,7 @@ function getSelectedTag() {
 }
 
 async function loadTags() {
+    toggleLoading();
     widgets = await getStickies();
 
     for (widget of widgets) {
@@ -79,6 +80,7 @@ async function loadTags() {
 
         miro.board.widgets.update(widget);
     }
+    toggleLoading();
 }
 
 function addTagSelectOptions() {
@@ -140,12 +142,13 @@ function moreButtonClicked(e) {
 }
 
 function addToStopList(ele, word) {
-    var wordMenu = $(ele).closest('.menu-item-word')
+    var wordMenu = $(ele).closest('.menu-item-word');
 
     wordMenu.remove();
 
     var stopList = analyzeStopList();
-    stopList = stopList.push(word).filter((item) => item !== '');
+    stopList.push(word);
+    stopList = stopList.filter((item) => item !== '');
 
     $('#stopList').val(stopList.join(', '));
 }
@@ -154,7 +157,7 @@ function menuItem(data, shorten = false, expandable = true) {
     var id = randomId();
 
     return $(`
-    <li class="menu-item-${data.type}" title="${capitalizeFirstLetter(data.showName) + ' (' + data.count +')'}" id="${id}">
+    <li class="menu-item-${data.type}" title="${capitalizeFirstLetter(data.showName) + ' (' + data.count + ')'}" id="${id}">
         <a href="#" ${expandable ? 'class="has-arrow" aria-expanded="false"' : ''}>
             <span class="word-name">${data.showName}</span>
             <span class="item-badge">(${data.count})</span>
@@ -174,11 +177,16 @@ function menuItem(data, shorten = false, expandable = true) {
     </li>`);
 }
 
+function toggleLoading() {
+    $('.loading-wrapper').toggle();
+}
+
 async function listWords() {
+    toggleLoading();
+
     var stopList = analyzeStopList();
     var selectedTag = getSelectedTag();
     var stickies = await getStickies();
-    var tags = await getTags();
     var wordCounts = [];
     /*
 		wordCounts = [
@@ -243,7 +251,7 @@ async function listWords() {
             tagName: null,
             stickyId: null,
             count: totalCount,
-            type: 'word'
+            type: 'word',
         });
         var tagWrapper = $('<ul></ul>');
 
@@ -258,7 +266,7 @@ async function listWords() {
                     tagName: tag,
                     stickyId: null,
                     count: totalTagCount,
-                    type: 'tag'
+                    type: 'tag',
                 },
                 true
             );
@@ -274,7 +282,7 @@ async function listWords() {
                         tagName: tag,
                         stickyId: widgetId,
                         count: wordCount,
-                        type: 'sticky'
+                        type: 'sticky',
                     },
                     true,
                     false
@@ -292,6 +300,7 @@ async function listWords() {
     }
     $('#metismenu').metisMenu('dispose');
     $('#metismenu').metisMenu();
+    toggleLoading();
 }
 
 miro.onReady(() => {
