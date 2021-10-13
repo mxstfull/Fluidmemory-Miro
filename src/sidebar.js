@@ -145,7 +145,8 @@ function addToStopList(ele, word) {
     wordMenu.remove();
 
     var stopList = analyzeStopList();
-    stopList.push('word');
+    stopList = stopList.push(word).filter((item) => item !== '');
+
     $('#stopList').val(stopList.join(', '));
 }
 
