@@ -2,7 +2,7 @@ function randomColor() {
     return '#' + Math.floor(Math.random() * 16777215).toString(16);
 }
 function randomId() {
-    return Date.now().toString() + Math.floor(Math.random() * 10000)
+    return Date.now().toString() + Math.floor(Math.random() * 10000);
 }
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -139,13 +139,14 @@ function moreButtonClicked(e) {
     $(e).parent().children('.more-dropmenu').toggle();
 }
 
-function menuItem(word, count, shorten = false, expandable = true) {
+function menuItem(data, shorten = false, expandable = true) {
     var id = randomId();
+
     return $(`
-    <li title="${capitalizeFirstLetter(word) + ' (' + count + ')'}" id="${id}">
+    <li title="${capitalizeFirstLetter(data.showName) + ' (' + data.count +')'}" id="${id}">
         <a href="#" ${expandable ? 'class="has-arrow" aria-expanded="false"' : ''}>
-            <span class="word-name">${word}</span>
-            <span class="item-badge">(${count})</span>
+            <span class="word-name">${data.showName}</span>
+            <span class="item-badge">(${data.count})</span>
         </a>
         <div class="action">
             ${
@@ -155,7 +156,7 @@ function menuItem(word, count, shorten = false, expandable = true) {
             }
             ${
                 !shorten
-                    ? `<ul class="more-dropmenu"> <li> <button class="btn button-icon button-icon-small icon-deactivated" title="Add to stop list" id='${}'> Add to stop list</button> </li> </ul>`
+                    ? `<ul class="more-dropmenu"> <li> <button class="btn button-icon button-icon-small icon-deactivated" title="Add to stop list" onClick='addToStopList()'> Add to stop list</button> </li> </ul>`
                     : `<ul class="more-dropmenu"> <li><button class="btn button-icon button-icon-small icon-duplicate" title="Duplicate">Duplicate</li> <li> <button class="btn button-icon button-icon-small icon-deactivated" title="Add to stop list">Add to stop list</button> </li> </ul>`
             }
         </div>
@@ -225,20 +226,45 @@ async function listWords() {
         var wordTags = wordCounts[word];
         var totalCount = getWordTotalCount(wordTags);
         var tagIndexes = getSortedWordTagArrayIndex(wordTags);
-        var wordEle = menuItem(word, totalCount);
+        var wordEle = menuItem({
+            showName: word,
+            word: word,
+            tagName: null,
+            stickyId: null,
+            count: totalCount,
+        });
         var tagWrapper = $('<ul></ul>');
 
         for (tag of tagIndexes) {
             var wordTagWords = wordTags[tag];
             var totalTagCount = getWordTagTotalCount(wordTagWords);
             var widgetIndexes = getSortedWordWidgetArrayIndex(wordTagWords);
-            var tagEle = menuItem(tag, totalTagCount, true);
+            var tagEle = menuItem(
+                {
+                    showName: tag,
+                    word: word,
+                    tagName: tag,
+                    stickyId: null,
+                    count: totalTagCount,
+                },
+                true
+            );
             var widgetWrapper = $('<ul></ul>');
             var count = 1;
 
             for (widgetId of widgetIndexes) {
                 var wordCount = wordTagWords[widgetId];
-                var widgetEle = menuItem('Sticky ' + count, wordCount, true, false);
+                var widgetEle = menuItem(
+                    {
+                        showName: 'Sticky ' + count,
+                        word: word,
+                        tagName: tag,
+                        stickyId: widgetId,
+                        count: wordCount,
+                    },
+                    true,
+                    false
+                );
 
                 widgetWrapper.append(widgetEle);
                 count++;
