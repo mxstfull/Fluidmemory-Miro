@@ -195,7 +195,7 @@
     transform: rotate(90deg);
   }
   .stat-list .icon-pin {
-    background-image: url(/src/tag.png);
+    background-image: url(tag.png);
     background-size: 16px 16px;
   }
 
