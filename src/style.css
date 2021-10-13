@@ -180,7 +180,7 @@
   .stat-list .tab-panel.active {
     display: inherit;
   }
-  .stat-list .button-icon {
+  .stat-list .action>.button-icon {
     background-color: transparent;
     background-position: center;
     background-size: 20px 20px;
@@ -191,10 +191,10 @@
   .stat-list .button-icon:hover {
     background-color: white;
   }
-  .stat-list .icon-more {
+  .stat-list .action>.icon-more {
     transform: rotate(90deg);
   }
-  .stat-list .icon-pin {
+  .stat-list .action>.icon-pin {
     background-image: url(tag.png);
     background-size: 16px 16px;
   }
