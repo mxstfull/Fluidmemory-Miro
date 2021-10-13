@@ -420,7 +420,7 @@ async function clusterItems(data) {
 
         await miro.board.tags.update(
             clusteringWidgets.map((widget, index) => {
-                updateWidget = {
+                return {
                     ...widget,
                     x: widgetLocations[index].x,
                     y: widgetLocations[index].y,
