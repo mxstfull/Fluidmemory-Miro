@@ -468,6 +468,8 @@ async function addTagSelectedItem(data) {
     }
 
     toggleLoading(false);
+    addTagSelectOptions();
+    listWords();
 }
 
 // Add a tag based on words
@@ -489,6 +491,8 @@ async function duplicateSelection(data) {
         await miro.board.tags.update(tags);
     }
     toggleLoading(false);
+    addTagSelectOptions();
+    listWords();
 }
 
 function moreButtonClicked(e) {
