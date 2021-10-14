@@ -12,6 +12,9 @@ function getStickies() {
         type: 'STICKER',
     });
 }
+function getStickyById(stickies, id) {
+    return stickies[stickies.findIndex(widget => widget.id = id)]
+}
 function getTags() {
     return miro.board.tags.get();
 }
@@ -132,18 +135,20 @@ function menuItem(data, shorten = false, expandable = true) {
         <div class="action">
             ${
                 !shorten
-                    ? `<button class="btn button-icon button-icon-small icon-tile" title="Cluster" onClick='clusterItems(${JSON.stringify(data)})'></button>
+                    ? `<button class="btn button-icon button-icon-small icon-tile" title="Cluster" onClick='clusterItemsFromData(${JSON.stringify(data)})'></button>
                         <button class="btn button-icon button-icon-small icon-pin" title="Add a Tag" onClick='addTagSelectedItem(${JSON.stringify(data)})'></button>
-                        <button class="btn button-icon button-icon-small icon-duplicate" title="Duplicate"></button>
+                        <button class="btn button-icon button-icon-small icon-duplicate" title="Duplicate" onClick='duplicateSelection(${JSON.stringify(data)})'></button>
                         <button class="btn button-icon button-icon-small icon-more" onClick="moreButtonClicked(this)" title="More"></button>`
-                    : `<button class="btn button-icon button-icon-small icon-tile" title="Cluster" onClick='clusterItems(${JSON.stringify(data)})'></button>
+                    : `<button class="btn button-icon button-icon-small icon-tile" title="Cluster" onClick='clusterItemsFromData(${JSON.stringify(data)})'></button>
                         <button class="btn button-icon button-icon-small icon-pin" title="Add a Tag" onClick='addTagSelectedItem(${JSON.stringify(data)})'></button>
                         <button class="btn button-icon button-icon-small icon-more" onClick="moreButtonClicked(this)" title="More"></button>`
             }
             ${
                 !shorten
                     ? `<ul class="more-dropmenu"> <li> <button class="btn button-icon button-icon-small icon-deactivated" title="Add to stop list" onClick='addToStopList(this, "${data.word}")'> Add to stop list</button> </li> </ul>`
-                    : `<ul class="more-dropmenu"> <li><button class="btn button-icon button-icon-small icon-duplicate" title="Duplicate">Duplicate</li> <li> <button class="btn button-icon button-icon-small icon-deactivated" title="Add to stop list" onClick='addToStopList(this, "${data.word}")'>Add to stop list</button> </li> </ul>`
+                    : `<ul class="more-dropmenu"> 
+                        <li><button class="btn button-icon button-icon-small icon-duplicate" title="Duplicate" onClick='duplicateSelection(${JSON.stringify(data)})'>Duplicate</button></li>
+                        <li> <button class="btn button-icon button-icon-small icon-deactivated" title="Add to stop list" onClick='addToStopList(this, "${data.word}")'>Add to stop list</button> </li> </ul>`
             }
         </div>
     </li>`);
@@ -401,9 +406,7 @@ function getWidgetLocations(clusterLocation, clusterDimension, numNewWidgets, wi
     return locations;
 }
 
-async function clusterItems(data) {
-    widgetIds = getWidgetIdsFromData(data);
-
+async function clusterWidgets(widgetIds, update = true) {
     if (widgetIds) {
         toggleLoading(true);
 
@@ -413,22 +416,80 @@ async function clusterItems(data) {
         var { clusterDimension } = clusterDimensions;
         var clusterLocation = getClusterLocation(widgets, clusterDimensions);
         let widgetLocations = getWidgetLocations(clusterLocation, clusterDimension, clusteringWidgets.length, defaultWidgetWidth, defaultWidgetHeight);
+        let newWidgets = [];
 
-        await miro.board.widgets.update(
-            clusteringWidgets.map((widget, index) => {
-                return {
-                    ...widget,
-                    x: widgetLocations[index].x,
-                    y: widgetLocations[index].y,
-                };
-            })
-        );
+        if (update == true) {
+            newWidgets = await miro.board.widgets.update(
+                clusteringWidgets.map((widget, index) => {
+                    return {
+                        ...widget,
+                        x: widgetLocations[index].x,
+                        y: widgetLocations[index].y,
+                    };
+                })
+            );
+        } else {
+            newWidgets = await miro.board.widgets.create(
+                clusteringWidgets.map((widget, index) => {
+                    newWidget = {
+                        ...widget,
+                        x: widgetLocations[index].x,
+                        y: widgetLocations[index].y,
+                    };
+                    delete newWidget.id;
+                    delete newWidget.createdUserId;
+                    delete newWidget.lastModifiedUserId;
+                    return newWidget;
+                })
+            );
+        }
 
         toggleLoading(false);
+        return newWidgets;
     }
 }
 
+function clusterItemsFromData(data) {
+    clusterWidgets(getWidgetIdsFromData(data));
+}
+
 // Add a tag based on words
+async function addTagSelectedItem(data) {
+    toggleLoading(true);
+
+    var widgetIds = getWidgetIdsFromData(data);
+    
+    if (widgetIds.length) {
+        await miro.board.tags.create({
+            color: randomColor(),
+            title: data.word + (data.tagName ? '-' + data.tagName : ''),
+            widgetIds: widgetIds,
+        });
+    }
+
+    toggleLoading(false);
+}
+
+// Add a tag based on words
+async function duplicateSelection(data) {
+    toggleLoading(true);
+    var oldWidgetIds = getWidgetIdsFromData(data);
+    var tags = await getTags();
+
+    if (oldWidgetIds.length) {
+        var newWidgets = await clusterWidgets(oldWidgetIds, false);
+
+        tags.forEach(tag => {
+            oldWidgetIds.forEach((id, index) => {
+                if (tag.widgetIds.indexOf(id) > -1) {
+                    tag.widgetIds.push(newWidgets[index].id);
+                }
+            })
+        })
+        await miro.board.tags.update(tags);
+    }
+    toggleLoading(false);
+}
 
 function moreButtonClicked(e) {
     show = false;
@@ -445,14 +506,9 @@ function moreButtonClicked(e) {
     else $(e).parent().children('.more-dropmenu').hide();
 }
 
-function addTagSelectedItem() {
-
-}
-
 $('#countWordApply').on('click', (e) => {
     listWords();
 });
-
 // Arrage tags exported from google sheet
 
 async function loadTags() {
