@@ -13,7 +13,7 @@ function getStickies() {
     });
 }
 function getStickyById(stickies, id) {
-    return stickies[stickies.findIndex(widget => widget.id = id)]
+    return stickies[stickies.findIndex((widget) => (widget.id = id))];
 }
 function getTags() {
     return miro.board.tags.get();
@@ -28,6 +28,10 @@ miro.onReady(() => {
     // });
 });
 
+$.getJSON('nltk_stoplist.json', (data) => {
+    stopList = data;
+});
+
 $('[data-tabbtn]').on('click', (e) => {
     tabId = $(e.currentTarget).attr('data-tabbtn');
     $('.tab-panel').removeClass('active');
@@ -40,12 +44,13 @@ $('[data-tabbtn]').on('click', (e) => {
     }
 });
 
-//////////////// Count Tab ///////////////////////
-
 var wordCounts;
 var defaultWidgetWidth = 199,
     defaultWidgetHeight = 228;
 var NOTAG = '!-----!';
+var stopList;
+
+//////////////// Count Tab ///////////////////////
 
 function analyzeStopList() {
     var list = $('#stopList').val().toLowerCase().replace(/\s/g, '').split(',');
@@ -240,7 +245,7 @@ async function listWords() {
                 {
                     showName: tag == NOTAG ? 'No Tag' : tag,
                     word: word,
-                    tagName: tag == NOTAG ? 'No Tag' : tag,
+                    tagName: tag,
                     stickyId: null,
                     count: totalTagCount,
                     type: 'tag',
@@ -462,11 +467,11 @@ async function addTagSelectedItem(data) {
     toggleLoading(true);
 
     var widgetIds = getWidgetIdsFromData(data);
-    
+
     if (widgetIds.length) {
         await miro.board.tags.create({
             color: randomColor(),
-            title: data.word + (data.tagName ? (data.tagName == NOTAG ? 'NoTag' : '-' +  data.tagName) : ''),
+            title: data.word + (!data.tagName || data.tagName == NOTAG ? '' : data.word + '-' + data.tagName),
             widgetIds: widgetIds,
         });
     }
@@ -485,13 +490,13 @@ async function duplicateSelection(data) {
     if (oldWidgetIds.length) {
         var newWidgets = await clusterWidgets(oldWidgetIds, false);
 
-        tags.forEach(tag => {
+        tags.forEach((tag) => {
             oldWidgetIds.forEach((id, index) => {
                 if (tag.widgetIds.indexOf(id) > -1) {
                     tag.widgetIds.push(newWidgets[index].id);
                 }
-            })
-        })
+            });
+        });
         await miro.board.tags.update(tags);
     }
     toggleLoading(false);
