@@ -46,7 +46,7 @@ var defaultWidgetWidth = 199,
 var NOTAG = '!-----!';
 var defaultStopList;
 
-$.getJSON('nltk_stoplist.json', (data) => {
+$.getJSON('src/nltk_stoplist.json', (data) => {
     defaultStopList = data;
 });
 

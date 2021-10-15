@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Miro - FluidMemory</title>
+        <link rel="stylesheet" href="https://unpkg.com/mirotone/dist/styles.css" />
+    </head>
+    <body style="position: fixed; width: 500px; height: 300px; background-color: white; border-radius: 10px; left: 50%; right: 50%;">
+        <h1>Modal view</h1>
+        
+        <script src="https://miro.com/app/static/sdk.1.1.js"></script>
+        <script>
+            data = await miro.board.metadata.get();
+            console.log(data);
+        </script>
+    </body>
+</html>
