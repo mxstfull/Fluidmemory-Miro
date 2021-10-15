@@ -45,6 +45,7 @@ $('[data-tabbtn]').on('click', (e) => {
 var wordCounts;
 var defaultWidgetWidth = 199,
     defaultWidgetHeight = 228;
+var NOTAG = '!-----!';
 
 function analyzeStopList() {
     var list = $('#stopList').val().toLowerCase().replace(/\s/g, '').split(',');
@@ -196,6 +197,9 @@ async function listWords() {
                 if (!wordCounts[word]) {
                     wordCounts[word] = [];
                 }
+                if (!tagNames.length) {
+                    tagNames = [NOTAG];
+                }
                 for (tag of tagNames) {
                     if (!wordCounts[word][tag]) {
                         wordCounts[word][tag] = [];
@@ -234,9 +238,9 @@ async function listWords() {
             var widgetIndexes = getSortedWordWidgetArrayIndex(wordTagWords);
             var tagEle = menuItem(
                 {
-                    showName: tag,
+                    showName: tag == NOTAG ? 'No Tag' : tag,
                     word: word,
-                    tagName: tag,
+                    tagName: tag == NOTAG ? 'No Tag' : tag,
                     stickyId: null,
                     count: totalTagCount,
                     type: 'tag',
@@ -462,7 +466,7 @@ async function addTagSelectedItem(data) {
     if (widgetIds.length) {
         await miro.board.tags.create({
             color: randomColor(),
-            title: data.word + (data.tagName ? '-' + data.tagName : ''),
+            title: data.word + (data.tagName ? (data.tagName == NOTAG ? 'NoTag' : '-' +  data.tagName) : ''),
             widgetIds: widgetIds,
         });
     }
