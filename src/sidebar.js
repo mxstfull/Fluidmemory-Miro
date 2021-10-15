@@ -28,10 +28,6 @@ miro.onReady(() => {
     // });
 });
 
-$.getJSON('nltk_stoplist.json', (data) => {
-    stopList = data;
-});
-
 $('[data-tabbtn]').on('click', (e) => {
     tabId = $(e.currentTarget).attr('data-tabbtn');
     $('.tab-panel').removeClass('active');
@@ -48,13 +44,18 @@ var wordCounts;
 var defaultWidgetWidth = 199,
     defaultWidgetHeight = 228;
 var NOTAG = '!-----!';
-var stopList;
+var defaultStopList;
+
+$.getJSON('nltk_stoplist.json', (data) => {
+    defaultStopList = data;
+});
 
 //////////////// Count Tab ///////////////////////
 
 function analyzeStopList() {
     var list = $('#stopList').val().toLowerCase().replace(/\s/g, '').split(',');
     list.push('');
+    list = defaultStopList.concat(list)
     return list;
 }
 
