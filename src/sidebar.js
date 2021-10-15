@@ -55,7 +55,7 @@ $.getJSON('src/nltk_stoplist.json', (data) => {
 function analyzeStopList() {
     var list = $('#stopList').val().toLowerCase().replace(/\s/g, '').split(',');
     list.push('');
-    list = defaultStopList.concat(list)
+    list = defaultStopList.concat(list);
     return list;
 }
 
@@ -421,11 +421,17 @@ async function clusterWidgets(widgetIds, update = true) {
         toggleLoading(true);
 
         var widgets = await getStickies();
-        var clusteringWidgets = widgets.filter((widget) => widgetIds.includes(widget.id));
-        var clusterDimensions = getClusterDimensions(clusteringWidgets.length);
+        var widgetWidth = defaultWidgetWidth,
+            widgetHeight = defaultWidgetHeight;
+        var clusteringWidgets = widgets.filter((widget) => {
+            widgetWidth = widget.bounds.width;
+            widgetHeight = widget.bounds.Height;
+            return widgetIds.includes(widget.id);
+        });
+        var clusterDimensions = getClusterDimensions(clusteringWidgets.length, widgetWidth, widgetHeight);
         var { clusterDimension } = clusterDimensions;
         var clusterLocation = getClusterLocation(widgets, clusterDimensions);
-        let widgetLocations = getWidgetLocations(clusterLocation, clusterDimension, clusteringWidgets.length, defaultWidgetWidth, defaultWidgetHeight);
+        let widgetLocations = getWidgetLocations(clusterLocation, clusterDimension, clusteringWidgets.length, widgetWidth, widgetHeight);
         let newWidgets = [];
 
         if (update == true) {
