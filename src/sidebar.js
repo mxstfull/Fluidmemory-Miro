@@ -403,8 +403,8 @@ function getWidgetLocations(clusterLocation, clusterDimension, numNewWidgets, wi
     for (let i = 0; i < clusterDimension; i++) {
         for (let j = 0; j < clusterDimension; j++) {
             const location = {
-                x: cluster_startX + ((0.5 + j) * widgetWidth) + margin * j,
-                y: cluster_startY + ((0.5 + i) * widgetHeight) + margin * i,
+                x: cluster_startX + (0.5 + j) * widgetWidth + margin * j,
+                y: cluster_startY + (0.5 + i) * widgetHeight + margin * i,
             };
             locations.push(location);
             currentWidget++;
@@ -426,8 +426,8 @@ async function clusterWidgets(widgetIds, update = true) {
             widgetHeight = defaultWidgetHeight,
             margin = defaultMargin;
         var clusteringWidgets = widgets.filter((widget) => {
-            widgetWidth = widget.bounds.width
-            widgetHeight = widget.bounds.height
+            widgetWidth = widget.bounds.width;
+            widgetHeight = widget.bounds.height;
             return widgetIds.includes(widget.id);
         });
         var clusterDimensions = getClusterDimensions(clusteringWidgets.length, widgetWidth, widgetHeight, margin);
@@ -444,7 +444,7 @@ async function clusterWidgets(widgetIds, update = true) {
                         bounds: {
                             ...widget.bounds,
                             width: widgetWidth,
-                            height: widgetHeight
+                            height: widgetHeight,
                         },
                         x: widgetLocations[index].x,
                         y: widgetLocations[index].y,
@@ -459,7 +459,7 @@ async function clusterWidgets(widgetIds, update = true) {
                         bounds: {
                             ...widget.bounds,
                             width: widgetWidth,
-                            height: widgetHeight
+                            height: widgetHeight,
                         },
                         x: widgetLocations[index].x,
                         y: widgetLocations[index].y,
@@ -486,18 +486,28 @@ async function addTagSelectedItem(data) {
     toggleLoading(true);
 
     var widgetIds = getWidgetIdsFromData(data);
+    var appId = '3074457365447061755';
 
     if (widgetIds.length) {
-        await miro.board.tags.create({
-            color: randomColor(),
-            title: data.word + (!data.tagName || data.tagName == NOTAG ? '' : data.word + '-' + data.tagName),
-            widgetIds: widgetIds,
-        });
+        await miro.board.metadata.update({
+            [appId]: {
+                focusedTagName: data.word + (!data.tagName || data.tagName == NOTAG ? '' : data.word + '-' + data.tagName)
+            }
+        })
+        miro.board.ui.openModal('setTagNameModal.html', { width: 400, height: 400}).then(() => {
+            miro.board.metadata.get().then(async (metadata) => {
+                await miro.board.tags.create({
+                    color: randomColor(),
+                    title: metadata[appId].focusedTagName,
+                    widgetIds: widgetIds,
+                });
+                            
+                toggleLoading(false);
+                addTagSelectOptions();
+                listWords();
+            })
+        })
     }
-
-    toggleLoading(false);
-    addTagSelectOptions();
-    listWords();
 }
 
 // Add a tag based on words
