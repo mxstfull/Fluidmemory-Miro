@@ -491,22 +491,24 @@ async function addTagSelectedItem(data) {
     if (widgetIds.length) {
         await miro.board.metadata.update({
             [appId]: {
-                focusedTagName: data.word + (!data.tagName || data.tagName == NOTAG ? '' : data.word + '-' + data.tagName)
-            }
-        })
-        miro.board.ui.openModal('setTagNameModal.html', { width: 400, height: 400}).then(() => {
+                focusedTagName: data.word + (!data.tagName || data.tagName == NOTAG ? '' : data.word + '-' + data.tagName),
+            },
+        });
+        miro.board.ui.openModal('setTagNameModal.html', { width: 400, height: 300 }).then(() => {
             miro.board.metadata.get().then(async (metadata) => {
-                await miro.board.tags.create({
-                    color: randomColor(),
-                    title: metadata[appId].focusedTagName,
-                    widgetIds: widgetIds,
-                });
-                            
-                toggleLoading(false);
-                addTagSelectOptions();
-                listWords();
-            })
-        })
+                if (metadata[appId].focusedTagName) {
+                    await miro.board.tags.create({
+                        color: randomColor(),
+                        title: metadata[appId].focusedTagName,
+                        widgetIds: widgetIds,
+                    });
+
+                    toggleLoading(false);
+                    addTagSelectOptions();
+                    listWords();
+                }
+            });
+        });
     }
 }
 

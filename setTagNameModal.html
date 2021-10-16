@@ -4,13 +4,50 @@
         <title>Miro - FluidMemory</title>
         <link rel="stylesheet" href="https://unpkg.com/mirotone/dist/styles.css" />
     </head>
-    <body style="position: fixed; width: 500px; height: 300px; background-color: white; border-radius: 10px; left: 50%; right: 50%;">
+    <body style="padding: 30px; box-sizing: border-box;">
         <h1>Modal view</h1>
-        
+        <div class="form-group">
+            <label>Tag Name</label>
+            <input class="input" type="text" placeholder="Tag Name" id="tagName" />
+            <div style="display: flex; justify-content: space-between">
+                <button class="button button-primary" type="button" onclick="confirm()">OK</button>
+                <button class="button button-danger" type="button" onclick="cancel()">CANCEL</button>
+            </div>
+        </div>
         <script src="https://miro.com/app/static/sdk.1.1.js"></script>
         <script>
-            data = await miro.board.metadata.get();
-            console.log(data);
+            var appId = '3074457365447061755';
+            var defaultValue = '';
+            miro.board.metadata.get().then((data) => {
+                console.log(data);
+
+                if (data[appId]) {
+                    $('#tagName').val(data[appId].focusedTagName);
+                    defaultValue = data[appId].focusedTagName;
+                }
+            });
+            function confirm() {
+                value = $('#tagName').val();
+                if ($('#tagName').val() == '') {
+                    value = defaultValue;
+                }
+                miro.board.metadata.update({
+                    [appId]: {
+                        focusedTagName: value,
+                    },
+                }).then(() => {
+                    miro.board.ui.closeModal()
+                });
+            }
+            function cancel() {
+                miro.board.metadata.update({
+                    [appId]: {
+                        focusedTagName: null,
+                    },
+                }).then(() => {
+                    miro.board.ui.closeModal()
+                });
+            }
         </script>
     </body>
 </html>
