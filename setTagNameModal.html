@@ -4,49 +4,57 @@
         <title>Miro - FluidMemory</title>
         <link rel="stylesheet" href="https://unpkg.com/mirotone/dist/styles.css" />
     </head>
-    <body style="padding: 30px; box-sizing: border-box;">
+    <body style="padding: 30px; box-sizing: border-box">
         <h1>Modal view</h1>
         <div class="form-group">
             <label>Tag Name</label>
             <input class="input" type="text" placeholder="Tag Name" id="tagName" />
             <div style="display: flex; justify-content: space-between">
-                <button class="button button-primary" type="button" onclick="confirm()">OK</button>
-                <button class="button button-danger" type="button" onclick="cancel()">CANCEL</button>
+                <button class="button button-primary" style="margin: 10px; margin-left: 0" type="button" onclick="confirm()">OK</button>
+                <button class="button button-danger" style="margin: 10px; margin-right: 0" type="button" onclick="cancel()">CANCEL</button>
             </div>
         </div>
+        <script src="https://unpkg.com/jquery"></script>
         <script src="https://miro.com/app/static/sdk.1.1.js"></script>
         <script>
             var appId = '3074457365447061755';
             var defaultValue = '';
-            miro.board.metadata.get().then((data) => {
-                console.log(data);
+            miro.onReady(() => {
+                miro.board.metadata.get().then((data) => {
+                    console.log(data);
 
-                if (data[appId]) {
-                    $('#tagName').val(data[appId].focusedTagName);
-                    defaultValue = data[appId].focusedTagName;
-                }
+                    if (data[appId]) {
+                        $('#tagName').val(data[appId].focusedTagName);
+                        defaultValue = data[appId].focusedTagName;
+                    }
+                });
             });
+
             function confirm() {
                 value = $('#tagName').val();
                 if ($('#tagName').val() == '') {
                     value = defaultValue;
                 }
-                miro.board.metadata.update({
-                    [appId]: {
-                        focusedTagName: value,
-                    },
-                }).then(() => {
-                    miro.board.ui.closeModal()
-                });
+                miro.board.metadata
+                    .update({
+                        [appId]: {
+                            focusedTagName: value,
+                        },
+                    })
+                    .then(() => {
+                        miro.board.ui.closeModal();
+                    });
             }
             function cancel() {
-                miro.board.metadata.update({
-                    [appId]: {
-                        focusedTagName: null,
-                    },
-                }).then(() => {
-                    miro.board.ui.closeModal()
-                });
+                miro.board.metadata
+                    .update({
+                        [appId]: {
+                            focusedTagName: null,
+                        },
+                    })
+                    .then(() => {
+                        miro.board.ui.closeModal();
+                    });
             }
         </script>
     </body>
