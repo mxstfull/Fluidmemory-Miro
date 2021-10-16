@@ -424,8 +424,8 @@ async function clusterWidgets(widgetIds, update = true) {
         var widgetWidth = defaultWidgetWidth,
             widgetHeight = defaultWidgetHeight;
         var clusteringWidgets = widgets.filter((widget) => {
-            widgetWidth = Math.max(widgetWidth, widget.bounds.width)
-            widgetHeight = Math.max(widgetHeight, widget.bounds.height)
+            widgetWidth = widget.bounds.width
+            widgetHeight = widget.bounds.height
             return widgetIds.includes(widget.id);
         });
         var clusterDimensions = getClusterDimensions(clusteringWidgets.length, widgetWidth, widgetHeight);
