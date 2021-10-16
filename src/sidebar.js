@@ -439,6 +439,11 @@ async function clusterWidgets(widgetIds, update = true) {
                 clusteringWidgets.map((widget, index) => {
                     return {
                         ...widget,
+                        bounds: {
+                            ...widget.bounds,
+                            width: widgetWidth,
+                            height: widgetHeight
+                        },
                         x: widgetLocations[index].x,
                         y: widgetLocations[index].y,
                     };
@@ -449,6 +454,11 @@ async function clusterWidgets(widgetIds, update = true) {
                 clusteringWidgets.map((widget, index) => {
                     newWidget = {
                         ...widget,
+                        bounds: {
+                            ...widget.bounds,
+                            width: widgetWidth,
+                            height: widgetHeight
+                        },
                         x: widgetLocations[index].x,
                         y: widgetLocations[index].y,
                     };
