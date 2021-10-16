@@ -403,8 +403,8 @@ function getWidgetLocations(clusterLocation, clusterDimension, numNewWidgets, wi
     for (let i = 0; i < clusterDimension; i++) {
         for (let j = 0; j < clusterDimension; j++) {
             const location = {
-                x: cluster_startX + ((0.5 + j) * widgetWidth) + (j ? margin : 0),
-                y: cluster_startY + ((0.5 + i) * widgetHeight) + (i ? margin : 0),
+                x: cluster_startX + ((0.5 + j) * widgetWidth) + margin * j,
+                y: cluster_startY + ((0.5 + i) * widgetHeight) + margin * i,
             };
             locations.push(location);
             currentWidget++;
