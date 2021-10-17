@@ -26,7 +26,7 @@ function loadBookmarksToList() {
 
 function moveToBookmark(bookmark) {
     console.log(bookmark)
-    miro.board.viewport.update(bookmark.viewport);
+    miro.board.viewport.set(bookmark.viewport);
 }
 
 async function updateBookmark(bookmark) {
