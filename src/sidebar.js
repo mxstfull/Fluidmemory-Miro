@@ -36,17 +36,3 @@ miro.onReady(() => {
     // loadTags().then(() => {
     // });
 });
-
-$('[data-tabbtn]').on('click', (e) => {
-    tabId = $(e.currentTarget).attr('data-tabbtn');
-    $('.tab-panel').removeClass('active');
-    $(`#${tabId}`).addClass('active');
-    $('[data-tabbtn]').removeClass('tab-active');
-    $(e.currentTarget).addClass('tab-active');
-
-    if (tabId == 'tab-count') {
-        loadTagSelectOptions();
-    } else if (tabId == 'tab-bookmarks') {
-        loadBooksmarksToList();
-    }
-});

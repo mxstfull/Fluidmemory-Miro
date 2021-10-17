@@ -13,7 +13,7 @@ function addBookmarkList(bookmark) {
     `);
 }
 
-function loadBooksmarksToList() {
+function loadBookmarksToList() {
     toggleLoading();
     getBookmarks().then((bookmarks) => {
         $('#bookmarkList').html('');

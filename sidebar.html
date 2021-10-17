@@ -50,8 +50,7 @@
                     <div class="action">
                         <button class="button button-primary" id="addBookmark">Apply</button>
                     </div>
-                    <ul class="metisMenu" id="bookmarkList">
-                    </ul>
+                    <ul class="metisMenu" id="bookmarkList"></ul>
                 </div>
             </div>
         </div>
@@ -65,5 +64,20 @@
         <script src="src/sidebar.js"></script>
         <script src="src/counter.js"></script>
         <script src="src/bookmark.js"></script>
+        <script>
+            $('[data-tabbtn]').on('click', (e) => {
+                tabId = $(e.currentTarget).attr('data-tabbtn');
+                $('.tab-panel').removeClass('active');
+                $(`#${tabId}`).addClass('active');
+                $('[data-tabbtn]').removeClass('tab-active');
+                $(e.currentTarget).addClass('tab-active');
+
+                if (tabId == 'tab-count') {
+                    loadTagSelectOptions();
+                } else if (tabId == 'tab-bookmarks') {
+                    loadBookmarksToList();
+                }
+            });
+        </script>
     </body>
 </html>
