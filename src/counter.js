@@ -276,8 +276,8 @@ function getWidgetIdsFromData(data) {
 
 function getClusterDimensions(widgetCount, widgetWidth = defaultWidgetWidth, widgetHeight = defaultWidgetHeight, margin = defaultMargin) {
     const clusterDimension = Math.ceil(Math.sqrt(widgetCount)); // eg if length 22, 5*5
-    const clusterWidth = widgetWidth * clusterDimension + margin * (clusterDimension - 1);
-    const clusterHeight = widgetHeight * clusterDimension + margin * (clusterDimension - 1);
+    const clusterWidth = widgetWidth * clusterDimension + margin * (clusterDimension + 1);
+    const clusterHeight = widgetHeight * clusterDimension + margin * (clusterDimension + 1);
     return { clusterWidth, clusterHeight, clusterDimension };
 }
 
@@ -311,8 +311,8 @@ function getClusterLocation(currentWidgets, clusterDimensions) {
         [0.5, -1],
         [1, -1],
     ];
-    let multiplier = 200;
-    const margin = 30;
+    let multiplier = 100;
+    const margin = defaultMargin;
     let locationOccupied;
     let clusterLocationCandidate;
     let i;
@@ -338,14 +338,14 @@ function getClusterLocationCandidate(clusterDimensions, candidateSeriesItem, mul
     return { x, y, startX, endX, startY, endY };
 }
 
-function isLocationOccupied(clusterLocationCandidate, widgetLocations, margin = 30) {
+function isLocationOccupied(clusterLocationCandidate, widgetLocations, margin = defaultMargin) {
     const locationOccupied = widgetLocations.some((widgetLocation) => {
         return locationsIntersect(widgetLocation, clusterLocationCandidate, margin);
     });
     return locationOccupied;
 }
 
-function locationsIntersect(location1, location2, margin = 30) {
+function locationsIntersect(location1, location2, margin = defaultMargin) {
     const { startX: a_startX, startY: a_startY, endX: a_endX, endY: a_endY } = location1;
     const { startX: b_startX, startY: b_startY, endX: b_endX, endY: b_endY } = location2;
     const intersectX = a_startX + margin <= b_endX && b_startX + margin <= a_endX;
