@@ -28,7 +28,7 @@ function moveToBookmark(bookmark) {
     miro.board.viewport.update(bookmark.viewport);
 }
 
-function updateBookmark(bookmark) {
+async function updateBookmark(bookmark) {
     var viewport = await miro.board.viewport.get();
     miro.board.metadata.get().then(async (metadata) => {
         var index = metadata[appId].bookmarks.findIndex((item) => item.id == bookmark.id);
@@ -49,7 +49,6 @@ function updateBookmark(bookmark) {
 }
 
 function removeBookmark(bookmark) {
-    var viewport = await miro.board.viewport.get();
     miro.board.metadata.get().then(async (metadata) => {
         var index = metadata[appId].bookmarks.findIndex((item) => item.id == bookmark.id);
 
