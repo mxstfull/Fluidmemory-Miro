@@ -1,13 +1,13 @@
 function addBookmarkList(bookmark) {
     $('#bookmarkList').append(`
         <li class="menu-item" title="${bookmark.name}">
-            <a href="#" onclick="moveToBookmark(${JSON.stringify(bookmark)})">
+            <a href="#" onclick='moveToBookmark(${JSON.stringify(bookmark)})'>
                 <div class="word-name">${bookmark.name}</div>
                 &nbsp;
             </a>
             <div class="action">
-                <button class="btn button-icon button-icon-small icon-photo" title="Update with current view" onclick="updateBookmark(${JSON.stringify(bookmark)})"></button>
-                <button class="btn button-icon button-icon-small icon-trash" title="Remove" onclick="removeBookmark(${JSON.stringify(bookmark)})"></button>
+                <button class="btn button-icon button-icon-small icon-photo" title="Update with current view" onclick='updateBookmark(${JSON.stringify(bookmark)})'></button>
+                <button class="btn button-icon button-icon-small icon-trash" title="Remove" onclick='removeBookmark(${JSON.stringify(bookmark)})'></button>
             </div>
         </li>
     `);
