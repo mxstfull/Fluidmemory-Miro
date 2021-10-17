@@ -53,7 +53,7 @@ $('#addBookmark').on('click', async () => {
                 })
 
                 toggleLoading(false);
-                loadBooksmarksToList();
+                loadBookmarksToList();
             }
         });
     });
