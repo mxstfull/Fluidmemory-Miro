@@ -348,8 +348,8 @@ function isLocationOccupied(clusterLocationCandidate, widgetLocations, margin = 
 function locationsIntersect(location1, location2, margin = defaultMargin) {
     const { startX: a_startX, startY: a_startY, endX: a_endX, endY: a_endY } = location1;
     const { startX: b_startX, startY: b_startY, endX: b_endX, endY: b_endY } = location2;
-    const intersectX = a_startX + margin <= b_endX && b_startX + margin <= a_endX;
-    const intersectY = a_startY + margin <= b_endY && b_startY + margin <= a_endY;
+    const intersectX = a_startX <= b_endX && b_startX <= a_endX;
+    const intersectY = a_startY <= b_endY && b_startY <= a_endY;
     const locationsIntersect = intersectX && intersectY;
     return locationsIntersect;
 }
@@ -362,8 +362,8 @@ function getWidgetLocations(clusterLocation, clusterDimension, numNewWidgets, wi
     for (let i = 0; i < clusterDimension; i++) {
         for (let j = 0; j < clusterDimension; j++) {
             const location = {
-                x: cluster_startX + (0.5 + j) * widgetWidth + margin * j,
-                y: cluster_startY + (0.5 + i) * widgetHeight + margin * i,
+                x: cluster_startX + (0.5 + j) * widgetWidth + margin * (j + 1),
+                y: cluster_startY + (0.5 + i) * widgetHeight + margin * (i + 1),
             };
             locations.push(location);
             currentWidget++;
