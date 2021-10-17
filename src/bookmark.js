@@ -24,25 +24,34 @@ function loadBookmarksToList() {
     });
 }
 
-function moveToBookmark(bookmark) {
-    console.log(bookmark)
-    miro.board.viewport.set(bookmark.viewport);
+async function moveToBookmark(bookmark) {
+    console.log(bookmark);
+    var oldTags = await getTags();
+    var oldStickies = await getStickies();
+
+    await miro.board.tags.delete(oldTags.map((item) => item.id));
+    await miro.board.widgets.deleteById(oldStickies.map((item) => item.id));
+
+    await miro.board.tags.create(bookmark.tags);
+    await miro.board.widgets.create(bookmark.widgets);
 }
 
 async function updateBookmark(bookmark) {
-    var viewport = await miro.board.viewport.get();
+    var stickies = await getStickies();
+    var tags = await getTags();
     miro.board.metadata.get().then(async (metadata) => {
         var index = metadata[appId].bookmarks.findIndex((item) => item.id == bookmark.id);
 
         if (index > -1) {
-            metadata[appId].bookmarks[index].viewport = viewport;
+            metadata[appId].bookmarks[index].stickies = stickies;
+            metadata[appId].bookmarks[index].tags = tags;
         }
 
         await miro.board.metadata.update({
             [appId]: {
-                ...metadata[appId]
-            }
-        })
+                ...metadata[appId],
+            },
+        });
 
         toggleLoading(false);
         loadBookmarksToList();
@@ -59,9 +68,9 @@ function removeBookmark(bookmark) {
 
         await miro.board.metadata.update({
             [appId]: {
-                ...metadata[appId]
-            }
-        })
+                ...metadata[appId],
+            },
+        });
 
         toggleLoading(false);
         loadBookmarksToList();
@@ -76,26 +85,26 @@ $('#addBookmark').on('click', async () => {
             focusedBookmarkName: 'Bookmark',
         },
     });
-    var viewport = await miro.board.viewport.get();
+
+    var stickies = await getStickies();
+    var tags = await getTags();
 
     miro.board.ui.openModal('setBookmarkNameModal.html', { width: 400, height: 300 }).then(() => {
         miro.board.metadata.get().then(async (metadata) => {
             if (metadata[appId].focusedBookmarkName) {
-                
-                if (!metadata[appId].bookmarks)
-                    metadata[appId].bookmarks = [];
+                if (!metadata[appId].bookmarks) metadata[appId].bookmarks = [];
 
                 metadata[appId].bookmarks.push({
                     id: randomId(),
-                    name: metadata[appId].focusedBookmarkName,
-                    viewport: viewport
-                })
+                    stickies,
+                    tags,
+                });
 
                 await miro.board.metadata.update({
                     [appId]: {
-                        ...metadata[appId]
-                    }
-                })
+                        ...metadata[appId],
+                    },
+                });
 
                 toggleLoading(false);
                 loadBookmarksToList();
