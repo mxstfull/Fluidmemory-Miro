@@ -1,7 +1,7 @@
 function addBookmarkList(bookmark) {
     $('#bookmarkList').append(`
         <li class="menu-item" title="${bookmark.name}">
-            <a href="#">
+            <a href="#" onclick="moveToBookmark(${JSON.stringify(bookmark)})">
                 <div class="word-name">${bookmark.name}</div>
                 &nbsp;
             </a>
@@ -24,6 +24,50 @@ function loadBookmarksToList() {
     });
 }
 
+function moveToBookmark(bookmark) {
+    miro.board.viewport.update(bookmark.viewport);
+}
+
+function updateBookmark(bookmark) {
+    var viewport = await miro.board.viewport.get();
+    miro.board.metadata.get().then(async (metadata) => {
+        var index = metadata[appId].bookmarks.findIndex((item) => item.id == bookmark.id);
+
+        if (index > -1) {
+            metadata[appId].bookmarks[index].viewport = viewport;
+        }
+
+        await miro.board.metadata.update({
+            [appId]: {
+                ...metadata[appId]
+            }
+        })
+
+        toggleLoading(false);
+        loadBookmarksToList();
+    });
+}
+
+function removeBookmark(bookmark) {
+    var viewport = await miro.board.viewport.get();
+    miro.board.metadata.get().then(async (metadata) => {
+        var index = metadata[appId].bookmarks.findIndex((item) => item.id == bookmark.id);
+
+        if (index > -1) {
+            metadata[appId].bookmarks.splice(index, 1);
+        }
+
+        await miro.board.metadata.update({
+            [appId]: {
+                ...metadata[appId]
+            }
+        })
+
+        toggleLoading(false);
+        loadBookmarksToList();
+    });
+}
+
 $('#addBookmark').on('click', async () => {
     toggleLoading(true);
 
@@ -42,6 +86,7 @@ $('#addBookmark').on('click', async () => {
                     metadata[appId].bookmarks = [];
 
                 metadata[appId].bookmarks.push({
+                    id: randomId(),
                     name: metadata[appId].focusedBookmarkName,
                     viewport: viewport
                 })
