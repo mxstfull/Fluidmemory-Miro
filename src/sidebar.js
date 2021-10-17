@@ -27,6 +27,11 @@ async function getBookmarks() {
     }
     return [];
 }
+async function formatMetadata() {
+    await miro.board.metadata.update({
+        [appId]: {}
+    });
+}
 
 function toggleLoading(show = true) {
     $('.loading-wrapper').css({ visibility: show ? 'visible' : '' });
@@ -35,4 +40,5 @@ function toggleLoading(show = true) {
 miro.onReady(() => {
     // loadTags().then(() => {
     // });
+    formatMetadata();
 });
