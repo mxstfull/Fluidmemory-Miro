@@ -23,7 +23,7 @@ function getSelectedTag() {
     return $('#tag-select').val();
 }
 
-function addTagSelectOptions() {
+function loadTagSelectOptions() {
     toggleLoading();
     getTags().then((tags) => {
         $('#tag-select').html('<option value="all"> All </option>');
@@ -445,7 +445,6 @@ async function addTagSelectedItem(data) {
     toggleLoading(true);
 
     var widgetIds = getWidgetIdsFromData(data);
-    var appId = '3074457365447061755';
 
     if (widgetIds.length) {
         await miro.board.metadata.update({
@@ -463,7 +462,7 @@ async function addTagSelectedItem(data) {
                     });
 
                     toggleLoading(false);
-                    addTagSelectOptions();
+                    loadTagSelectOptions();
                     listWords();
                 }
             });
@@ -490,7 +489,7 @@ async function duplicateSelection(data) {
         await miro.board.tags.update(tags);
     }
     toggleLoading(false);
-    addTagSelectOptions();
+    loadTagSelectOptions();
     listWords();
 }
 

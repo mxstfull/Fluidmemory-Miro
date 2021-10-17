@@ -26,6 +26,13 @@
                     if (data[appId]) {
                         $('#bookmarkName').val(data[appId].focusedBookmarkName);
                         defaultValue = data[appId].focusedBookmarkName;
+
+                        miro.board.metadata
+                            .update({
+                                [appId]: {
+                                    focusedBookmarkName: null,
+                                },
+                            });
                     }
                 });
             });

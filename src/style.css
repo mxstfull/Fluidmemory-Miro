@@ -1,13 +1,13 @@
 @font-face {
     font-family: 'Formular';
     src: url('https://miro.com/app/static/static/fonts/general/FormularRegular/formular-regular.4b9930.woff2');
-  }
-  
-  body,
-  button,
-  input,
-  textarea,
-  select {
+}
+
+body,
+button,
+input,
+textarea,
+select {
     font: 14px OpenSans, Arial, Helvetica, sans-serif;
     font-style: normal;
     font-variant-ligatures: normal;
@@ -19,9 +19,9 @@
     font-size: 14px;
     line-height: normal;
     font-family: OpenSans, Arial, Helvetica, sans-serif;
-  }
-  
-  .sidebar__content {
+}
+
+.sidebar__content {
     display: flex;
     flex-grow: 1;
     position: relative;
@@ -30,13 +30,13 @@
     min-height: 0;
     height: 100%;
     padding: 10px 15px;
-  }
-  
-  .stat-list {
+}
+
+.stat-list {
     width: 340px;
-  }
-  
-  .stat-list .stat-list__header {
+}
+
+.stat-list .stat-list__header {
     font-size: 14px;
     font-weight: bold;
     height: 44px;
@@ -44,93 +44,105 @@
     font-family: Formular, sans-serif;
     font-size: 24px;
     font-weight: 500;
-  }
-  
-  .stat-list .stat-list__empty {
+}
+
+.stat-list .stat-list__empty {
     color: #050038;
     font-size: 12px;
     margin: 20px 0 20px 0;
     padding: 0 24px 0 24px;
     text-align: center;
-  }
-  
-  .stat-list .stat-list__table {
+}
+
+.stat-list .stat-list__table {
     margin-bottom: 40px;
-  }
-  
-  .stat-list .stat-list__title {
+}
+
+.stat-list .stat-list__title {
     display: flex;
     padding: 0 20px 0 24px;
-  }
-  
-  .stat-list .stat-list__title span {
+}
+
+.stat-list .stat-list__title span {
     color: #050038;
     font-weight: bold;
     padding: 0 4px;
     font-size: 14px;
-  }
-  
-  .stat-list .stat-list__title::after,
-  .stat-list .stat-list__title::before {
+}
+
+.stat-list .stat-list__title::after,
+.stat-list .stat-list__title::before {
     content: '';
     display: block;
     background-color: #e1e0e7;
     height: 1px;
     flex-grow: 1;
     margin-top: 9px;
-  }
-  
-  .stat-list .stat-list__item {
+}
+
+.stat-list .stat-list__item {
     font-family: Formular, sans-serif;
     font-size: 18px;
     line-height: 20px;
     margin: 10px 0 10px 0;
     font-weight: normal;
     padding: 0 24px 0 24px;
-  }
-  
-  .stat-list .stat-list__item .stat-list__item-name {
+}
+
+.stat-list .stat-list__item .stat-list__item-name {
     text-transform: capitalize;
     margin-left: 4px;
-  }
-  
-  .stat-list .stat-list__item .stat-list__item-value {
+}
+
+.stat-list .stat-list__item .stat-list__item-value {
     float: right;
-  }
+}
 
-  .stat-list .tabs {
-    margin-bottom: 10px
-  }
+.stat-list .tabs {
+    margin-bottom: 10px;
+}
 
-  .stat-list .metismenu {
+.stat-list .metismenu {
     list-style: none;
     max-height: calc(100% - 420px);
     overflow-y: auto;
     padding: 0;
-  }
-  .stat-list .metismenu ul {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+.stat-list .metismenu::-webkit-scrollbar {
+    display: none;
+}
+.stat-list .metismenu ul {
     list-style: none;
     padding-left: 22px;
     background-color: rgb(243 243 243);
-  }
-  .stat-list .metismenu .action {
+}
+.stat-list .metismenu > li > a:hover {
+    background: #4262ff42;
+}
+.stat-list .metismenu .action {
     position: absolute;
     right: 40px;
     top: 7px;
     display: flex;
     align-items: center;
     gap: 5px;
-  }
-  .stat-list #bookmarkList .action {
+}
+.stat-list #bookmarkList .action {
     right: 10px;
-  }
-  .stat-list .metismenu .action a {
+}
+.stat-list #bookmarkList {
+    max-height: calc(100% - 300px);
+    height: 100%;
+}
+.stat-list .metismenu .action a {
     margin-right: 9px;
-  }
-  .stat-list .metismenu li {
+}
+.stat-list .metismenu li {
     position: relative;
-  }
-  .stat-list .metismenu li > a {
+}
+.stat-list .metismenu li > a {
     box-sizing: border-box;
     width: 100%;
     display: block;
@@ -140,20 +152,20 @@
     font-size: 14px;
     line-height: 19px;
     text-decoration: none;
-  }
-  .stat-list .metismenu a .item-badge {
+}
+.stat-list .metismenu a .item-badge {
     font-weight: normal;
-  }
-  .stat-list .metismenu .word-name {
+}
+.stat-list .metismenu .word-name {
     max-width: 120px;
     display: inline-block;
     text-overflow: ellipsis;
     overflow: hidden;
     float: left;
     white-space: nowrap;
-  }
+}
 
-  .stat-list .metismenu .more-dropmenu {
+.stat-list .metismenu .more-dropmenu {
     position: absolute;
     right: -10px;
     top: 40px;
@@ -163,46 +175,46 @@
     z-index: 1;
     padding: 0;
     display: none;
-  }
+}
 
-  .stat-list .metismenu .more-dropmenu li {
+.stat-list .metismenu .more-dropmenu li {
     padding: 5px;
-  }
-  .stat-list .metismenu .more-dropmenu li:hover {
+}
+.stat-list .metismenu .more-dropmenu li:hover {
     background-color: rgb(243 243 243);
-  }
+}
 
-  .stat-list .metismenu .more-dropmenu button {
+.stat-list .metismenu .more-dropmenu button {
     width: 100%;
     text-align: center;
     padding-left: 35px;
-  }
-  .stat-list .tab-panel {
+}
+.stat-list .tab-panel {
     display: none;
-  }
-  .stat-list .tab-panel.active {
+}
+.stat-list .tab-panel.active {
     display: inherit;
-  }
-  .stat-list .action>.button-icon {
+}
+.stat-list .action > .button-icon {
     background-color: transparent;
     background-position: center;
     background-size: 20px 20px;
     width: 24px;
     height: 24px;
     padding: 0;
-  }
-  .stat-list .button-icon:hover {
+}
+.stat-list .button-icon:hover {
     background-color: white;
-  }
-  .stat-list .action>.icon-more {
+}
+.stat-list .action > .icon-more {
     transform: rotate(90deg);
-  }
-  .stat-list .action>.icon-pin {
+}
+.stat-list .action > .icon-pin {
     background-image: url(tag.png);
     background-size: 16px 16px;
-  }
+}
 
-  .loading-wrapper {
+.loading-wrapper {
     position: fixed;
     left: 0;
     top: 0;
@@ -213,8 +225,8 @@
     align-items: center;
     background: #00000088;
     visibility: hidden;
-  }
-  .loading {
+}
+.loading {
     width: 100px;
     height: 100px;
     border-radius: 50%;
@@ -223,14 +235,13 @@
     border-left: 8px solid transparent;
     border-bottom: 8px solid transparent;
     animation: spin 1s ease infinite;
-  }
+}
 
-  @keyframes spin {
+@keyframes spin {
     0% {
-      transform: rotate(0deg);
+        transform: rotate(0deg);
     }
     100% {
-      transform: rotate(359deg);
+        transform: rotate(359deg);
     }
-  }
-  
+}

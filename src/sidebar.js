@@ -1,3 +1,5 @@
+var appId = '3074457365447061755';
+
 function randomColor() {
     return '#' + Math.floor(Math.random() * 16777215).toString(16);
 }
@@ -18,6 +20,13 @@ function getStickyById(stickies, id) {
 function getTags() {
     return miro.board.tags.get();
 }
+async function getBookmarks() {
+    var data = await miro.board.metadata.get();
+    if (data[appId]) {
+        return data[appId].bookmarks ? data[appId].bookmarks : [];
+    }
+    return [];
+}
 
 function toggleLoading(show = true) {
     $('.loading-wrapper').css({ visibility: show ? 'visible' : '' });
@@ -36,6 +45,8 @@ $('[data-tabbtn]').on('click', (e) => {
     $(e.currentTarget).addClass('tab-active');
 
     if (tabId == 'tab-count') {
-        addTagSelectOptions();
+        loadTagSelectOptions();
+    } else if (tabId == 'tab-bookmarks') {
+        loadBooksmarksToList();
     }
 });

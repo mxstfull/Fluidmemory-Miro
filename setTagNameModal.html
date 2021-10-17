@@ -26,6 +26,13 @@
                     if (data[appId]) {
                         $('#tagName').val(data[appId].focusedTagName);
                         defaultValue = data[appId].focusedTagName;
+
+                        miro.board.metadata
+                            .update({
+                                [appId]: {
+                                    focusedTagName: null,
+                                },
+                            });
                     }
                 });
             });
