@@ -1,13 +1,13 @@
 function addBookmarkList(bookmark) {
     $('#bookmarkList').append(`
         <li class="menu-item" title="${bookmark.name}">
-            <a href="#" onclick='moveToBookmark(${JSON.stringify(bookmark)})'>
+            <a href="#" onclick='moveToBookmark(${bookmark.id})'>
                 <div class="word-name">${bookmark.name}</div>
                 &nbsp;
             </a>
             <div class="action">
-                <button class="btn button-icon button-icon-small icon-photo" title="Update with current view" onclick='updateBookmark(${JSON.stringify(bookmark)})'></button>
-                <button class="btn button-icon button-icon-small icon-trash" title="Remove" onclick='removeBookmark(${JSON.stringify(bookmark)})'></button>
+                <button class="btn button-icon button-icon-small icon-photo" title="Update with current view" onclick='updateBookmark(${bookmark.id})'></button>
+                <button class="btn button-icon button-icon-small icon-trash" title="Remove" onclick='removeBookmark(${bookmark.id})'></button>
             </div>
         </li>
     `);
@@ -24,8 +24,16 @@ function loadBookmarksToList() {
     });
 }
 
-async function moveToBookmark(bookmark) {
-    console.log(bookmark);
+async function getBookmarkById(bookmarkId) {
+    var bookmarks = await getBookmarks();
+    var bookmarkIndex = bookmarks.findIndex((item) => item.id == bookmarkId);
+    return bookmarks[bookmarkIndex];
+}
+
+async function moveToBookmark(bookmarkId) {
+    toggleLoading(true);
+
+    var bookmark = await getBookmarkById(bookmarkId);
     var oldTags = await getTags();
     var oldStickies = await getStickies();
 
@@ -34,11 +42,17 @@ async function moveToBookmark(bookmark) {
 
     await miro.board.tags.create(bookmark.tags);
     await miro.board.widgets.create(bookmark.widgets);
+
+    toggleLoading(false);
 }
 
-async function updateBookmark(bookmark) {
+async function updateBookmark(bookmarkId) {
+    toggleLoading(true);
+
     var stickies = await getStickies();
     var tags = await getTags();
+    var bookmark = await getBookmarkById(bookmarkId);
+
     miro.board.metadata.get().then(async (metadata) => {
         var index = metadata[appId].bookmarks.findIndex((item) => item.id == bookmark.id);
 
@@ -58,9 +72,11 @@ async function updateBookmark(bookmark) {
     });
 }
 
-function removeBookmark(bookmark) {
+function removeBookmark(bookmarkId) {
+    toggleLoading(true);
+
     miro.board.metadata.get().then(async (metadata) => {
-        var index = metadata[appId].bookmarks.findIndex((item) => item.id == bookmark.id);
+        var index = metadata[appId].bookmarks.findIndex((item) => item.id == bookmarkId);
 
         if (index > -1) {
             metadata[appId].bookmarks.splice(index, 1);
