@@ -40,5 +40,4 @@ function toggleLoading(show = true) {
 miro.onReady(() => {
     // loadTags().then(() => {
     // });
-    formatMetadata();
 });
