@@ -24,7 +24,7 @@ function loadBooksmarksToList() {
     });
 }
 
-$('#addBookmark').on('click', () => {
+$('#addBookmark').on('click', async () => {
     toggleLoading(true);
 
     await miro.board.metadata.update({
