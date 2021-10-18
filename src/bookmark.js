@@ -49,7 +49,7 @@ async function moveToBookmark(bookmarkId) {
     });
 
     newWidgets.forEach((widget, index) => {
-        oldWidget = bookmark.widgets[index];
+        oldWidget = bookmark.stickies[index];
         oldWidget.tags.forEach(widgetTag => {
             index = newTags.findIndex((item) => item.id == widgetTag.id)
             if (index > -1) {
