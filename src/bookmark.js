@@ -112,6 +112,7 @@ $('#addBookmark').on('click', async () => {
 
                 metadata[appId].bookmarks.push({
                     id: randomId(),
+                    name: metadata[appId].focusedBookmarkName,
                     stickies,
                     tags,
                 });
