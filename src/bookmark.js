@@ -42,7 +42,7 @@ async function moveToBookmark(bookmarkId) {
     await miro.board.tags.delete(oldTags.map((item) => item.id));
     await miro.board.widgets.deleteById(oldStickies.map((item) => item.id));
 
-    var newWidgets = await miro.board.widgets.create(bookmark.widgets);
+    var newWidgets = await miro.board.widgets.create(bookmark.stickies);
     var newTags = bookmark.tags.map(tag => {
         tag.widgetIds = [];
         return tag;
