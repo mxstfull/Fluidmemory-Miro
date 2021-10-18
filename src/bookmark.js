@@ -40,8 +40,22 @@ async function moveToBookmark(bookmarkId) {
     await miro.board.tags.delete(oldTags.map((item) => item.id));
     await miro.board.widgets.deleteById(oldStickies.map((item) => item.id));
 
-    await miro.board.tags.create(bookmark.tags);
-    await miro.board.widgets.create(bookmark.widgets);
+    var newWidgets = await miro.board.widgets.create(bookmark.widgets);
+    var newTags = bookmark.tags.map(tag => {
+        tag.widgetIds = [];
+        return tag;
+    });
+
+    newWidgets.forEach((widget, index) => {
+        oldWidget = bookmark.widgets[index];
+        oldWidget.tags.forEach(widgetTag => {
+            index = newTags.findIndex((item) => item.id == widgetTag.id)
+            if (index > -1) {
+                newTags[index].widgetIds.push(widget.id);
+            }
+        })
+    })
+    await miro.board.tags.create(newTags);
 
     toggleLoading(false);
 }
