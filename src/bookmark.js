@@ -17,9 +17,11 @@ function loadBookmarksToList() {
     toggleLoading();
     getBookmarks().then((bookmarks) => {
         $('#bookmarkList').html('');
-        bookmarks.forEach((bookmark) => {
-            addBookmarkList(bookmark);
-        });
+        if (bookmarks && bookmarks.length) {
+            bookmarks.forEach((bookmark) => {
+                addBookmarkList(bookmark);
+            });
+        }        
         toggleLoading(false);
     });
 }
