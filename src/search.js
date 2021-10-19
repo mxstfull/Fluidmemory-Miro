@@ -37,7 +37,7 @@ $('#searchApply').on('click', async function () {
     toggleLoading(false);
 });
 
-$('#createTagApply').on('click', function () {
+$('#createTagApply').on('click', async function () {
     toggleLoading(true);
 
     await miro.board.metadata.update({
