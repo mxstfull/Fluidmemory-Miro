@@ -83,7 +83,7 @@ async function addTagToSelectedStickies(tagId) {
     if (index > -1) {
         var selectedStickies = await miro.board.selection.get();
 
-        tags[index].widgetIds.concat(selectedStickies.map((widget) => widget.id));
+        tags[index].widgetIds = tags[index].widgetIds.concat(selectedStickies.map((widget) => widget.id));
         await miro.board.tags.update(tags[index]);
     }
 
