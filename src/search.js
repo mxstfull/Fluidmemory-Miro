@@ -38,8 +38,8 @@ $('#searchApply').on('click', async function () {
 
     await miro.board.selection.selectWidgets(selectedIds);
     await miro.board.viewport.set({
-        x: (left + right) / 2,
-        y: (top + left) / 2,
+        x: left,
+        y: top,
         width: right - left,
         height: bottom - top
     });
