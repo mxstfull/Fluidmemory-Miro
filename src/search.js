@@ -6,7 +6,7 @@ function loadTagList() {
             $('#tagList').append(
                 ` <li title="${tag.title}" id="${tag.id}">
                     <a href="#">
-                        <span class="word-name">${tag.title}</span>
+                        <div class="word-name">${tag.title}</div> &nbsp;
                     </a>
                     <div class="action">
                         <button class="btn button-icon button-icon-small icon-pin" title="Add a Tag to selection" onClick='addTagToSelectedStickies("${tag.id}")'></button>
