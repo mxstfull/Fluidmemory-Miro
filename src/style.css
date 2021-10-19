@@ -129,8 +129,16 @@ select {
     align-items: center;
     gap: 5px;
 }
-.stat-list #bookmarkList .action {
+.stat-list #bookmarkList .action, .stat-list #tagList .action {
     right: 10px;
+}
+.stat-list .menu-wrapper {
+    margin-top: 40px;
+    border-top: 2px solid #EBEBEF;
+    padding: 5px 0;
+}
+.metisMenu #tagList {
+    margin-left: 10px;
 }
 .stat-list #bookmarkList {
     max-height: calc(100% - 300px);

@@ -45,7 +45,22 @@
 
                     <ul class="metisMenu" id="metismenu"></ul>
                 </div>
-                <div class="tab-panel" id="tab-search"></div>
+                <div class="tab-panel" id="tab-search">
+                    <div class="form-group">
+                        <label>Select keywords (comma-separated)</label>
+                        <textarea class="textarea" placeholder="Write keywords" id="searchKeywords" spellcheck="true" rows="4"></textarea>
+                    </div>
+                    <div class="action">
+                        <button class="button button-primary" id="searchApply">Search</button>
+                    </div>
+                    <div class="menu-wrapper">
+                        <label>Tags</label>
+                        <ul class="metisMenu" id="tagList"></ul>
+                    </div>
+                    <div class="action">
+                        <button class="button button-primary" id="createTagApply">Create tag</button>
+                    </div>
+                </div>
                 <div class="tab-panel" id="tab-bookmarks">
                     <div class="action">
                         <button class="button button-primary" id="addBookmark">Apply</button>
@@ -64,6 +79,7 @@
         <script src="src/sidebar.js"></script>
         <script src="src/counter.js"></script>
         <script src="src/bookmark.js"></script>
+        <script src="src/search.js"></script>
         <script>
             $('[data-tabbtn]').on('click', (e) => {
                 tabId = $(e.currentTarget).attr('data-tabbtn');
