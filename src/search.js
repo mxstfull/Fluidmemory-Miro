@@ -3,7 +3,7 @@ function loadTagList() {
     getTags().then((tags) => {
         $('#tagList').html('');
         tags.forEach((tag) => {
-            $('#tag-select').append(
+            $('#tagList').append(
                 ` <li title="${tag.title}" id="${tag.id}">
                     <a href="#">
                         <span class="word-name">${tag.title}</span>
