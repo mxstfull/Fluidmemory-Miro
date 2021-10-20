@@ -10,6 +10,7 @@ function loadTagList() {
                     </a>
                     <div class="action">
                         <button class="btn button-icon button-icon-small icon-pin" title="Add a Tag to selection" onClick='addTagToSelectedStickies("${tag.id}")'></button>
+                        <button class="btn button-icon button-icon-small icon-pin" title="Cluster stickies of this tag" onClick='clusterStickiesOfTag("${tag.id}")'></button>
                     </div>
                 </li>`
             );
@@ -25,26 +26,29 @@ $('#searchApply').on('click', async function () {
     var keywords = text.split(',').filter((word) => word !== '');
 
     var stickies = await getStickies();
-    var left = Infinity, top = Infinity, right = -Infinity, bottom = -Infinity;
+    var left = Infinity,
+        top = Infinity,
+        right = -Infinity,
+        bottom = -Infinity;
 
     var selectedWidgets = stickies.filter((sticky) => {
         return keywords.some((word) => sticky.plainText.indexOf(word) > -1);
     });
     var selectedIds = selectedWidgets.map((sticky) => sticky.id);
 
-    selectedStickies.forEach(sticky => {
+    selectedStickies.forEach((sticky) => {
         left = Math.min(left, sticky.bounds.left);
         top = Math.min(top, sticky.bounds.top);
         right = Math.max(right, sticky.bounds.right);
         bottom = Math.max(bottom, sticky.bounds.bottom);
-    })
+    });
 
     await miro.board.selection.selectWidgets(selectedIds);
     await miro.board.viewport.set({
         x: left,
         y: top,
         width: right - left,
-        height: bottom - top
+        height: bottom - top,
     });
 
     toggleLoading(false);
@@ -89,6 +93,15 @@ async function addTagToSelectedStickies(tagId) {
         tags[index].widgetIds = tags[index].widgetIds.concat(selectedStickies.map((widget) => widget.id));
         await miro.board.tags.update(tags[index]);
     }
+
+    toggleLoading(false);
+}
+
+async function clusterStickiesOfTag(tagId) {
+    toggleLoading(true);
+
+    stickies = await getStickies();
+    await clusterWidgets(stickies.map((widget) => widget.id));
 
     toggleLoading(false);
 }
