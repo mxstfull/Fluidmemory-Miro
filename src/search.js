@@ -74,9 +74,9 @@ $('#createTagApply').on('click', async function () {
                     widgetIds: selectedStickies.map((widget) => widget.id),
                 });
 
-                toggleLoading(false);
                 loadTagList();
             }
+            toggleLoading(false);
         });
     });
 });
