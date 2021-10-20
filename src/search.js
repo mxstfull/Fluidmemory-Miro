@@ -28,13 +28,16 @@ $('#searchApply').on('click', async function () {
     var left = Infinity, top = Infinity, right = -Infinity, bottom = -Infinity;
 
     var selectedWidgets = stickies.filter((sticky) => {
+        return keywords.some((word) => sticky.plainText.indexOf(word) > -1);
+    });
+    var selectedIds = selectedWidgets.map((sticky) => sticky.id);
+
+    selectedStickies.forEach(sticky => {
         left = Math.min(left, sticky.bounds.left);
         top = Math.min(top, sticky.bounds.top);
         right = Math.max(right, sticky.bounds.right);
         bottom = Math.max(bottom, sticky.bounds.bottom);
-        return keywords.some((word) => sticky.plainText.indexOf(word) > -1);
-    });
-    var selectedIds = selectedWidgets.map((sticky) => sticky.id);
+    })
 
     await miro.board.selection.selectWidgets(selectedIds);
     await miro.board.viewport.set({
