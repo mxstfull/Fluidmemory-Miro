@@ -25,7 +25,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-panel active" id="tab-cluster"></div>
+                <div class="tab-panel active" id="tab-cluster">
+                    <div class="menu-wrapper">
+                        <label>Clusters</label>
+                        <ul class="metisMenu" id="clusterList"></ul>
+                    </div>
+                    <div class="action">
+                        <button class="button button-primary" id="createClusterApply">Create cluster</button>
+                    </div>
+                </div>
                 <div class="tab-panel" id="tab-count">
                     <div class="form-group">
                         <label>Tag</label>
@@ -80,6 +88,7 @@
         <script src="src/counter.js"></script>
         <script src="src/bookmark.js"></script>
         <script src="src/search.js"></script>
+        <script src="src/cluster.js"></script>
         <script>
             $('[data-tabbtn]').on('click', (e) => {
                 tabId = $(e.currentTarget).attr('data-tabbtn');

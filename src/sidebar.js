@@ -17,6 +17,11 @@ function getStickies() {
         type: 'STICKER',
     });
 }
+function getStickyById(widgets, id) {
+    index = widgets.findIndex(widget => widget.id == id)
+
+    return index > -1 ? widgets[index] : null;
+}
 function getStickyById(stickies, id) {
     return stickies[stickies.findIndex((widget) => (widget.id = id))];
 }
@@ -27,6 +32,13 @@ async function getBookmarks() {
     var data = await miro.board.metadata.get();
     if (data[appId]) {
         return data[appId].bookmarks ? data[appId].bookmarks : [];
+    }
+    return [];
+}
+async function getClusters() {
+    var data = await miro.board.metadata.get();
+    if (data[appId]) {
+        return data[appId].clusters ? data[appId].clusters : [];
     }
     return [];
 }
@@ -143,26 +155,7 @@ function getWidgetLocations(clusterLocation, clusterDimension, numNewWidgets, wi
     return locations;
 }
 
-async function focusOnWidgets(widgets) {
-    var left = Infinity,
-        top = Infinity,
-        right = -Infinity,
-        bottom = -Infinity;
-    widgets.forEach((sticky) => {
-        left = Math.min(left, sticky.bounds.left);
-        top = Math.min(top, sticky.bounds.top);
-        right = Math.max(right, sticky.bounds.right);
-        bottom = Math.max(bottom, sticky.bounds.bottom);
-    });
-    await miro.board.viewport.set({
-        x: left,
-        y: top,
-        width: right - left,
-        height: bottom - top,
-    });
-}
-
-async function clusterWidgets(widgetIds, update = true) {
+async function clusterWidgets(widgetIds, clusterName, update = true) {
     if (widgetIds) {
         toggleLoading(true);
 
@@ -217,6 +210,7 @@ async function clusterWidgets(widgetIds, update = true) {
             );
         }
 
+        await registerCluster(newWidgets, clusterName);
         await focusOnWidgets(newWidgets);
 
         toggleLoading(false);
@@ -224,7 +218,60 @@ async function clusterWidgets(widgetIds, update = true) {
     }
 }
 
-miro.onReady(() => {
+function getDimensionOfWidget(widgets) {
+    var left = Infinity,
+        top = Infinity,
+        right = -Infinity,
+        bottom = -Infinity;
+
+    widgets.forEach((sticky) => {
+        left = Math.min(left, sticky.bounds.left);
+        top = Math.min(top, sticky.bounds.top);
+        right = Math.max(right, sticky.bounds.right);
+        bottom = Math.max(bottom, sticky.bounds.bottom);
+    });
+
+    return {left, top, right, bottom};
+}
+
+async function focusOnWidgets(widgets) {
+    var {left, right, top, bottom} = getDimensionOfWidget(widgets);
+
+    await miro.board.viewport.set({
+        x: left,
+        y: top,
+        width: right - left,
+        height: bottom - top,
+    });
+}
+
+async function registerCluster(widgets, clusterName) {
+    var widgetIds = widgets.map(widget => widget.id);
+    var metadata = await miro.board.metadata.get();
+
+    if (metadata[appId]['clusters']) {
+        metadata[appId]['clusters'] = []
+    }
+
+    metadata[appId]['clusters'].push({
+        id: randomId(),
+        widgetIds,
+        name: clusterName
+    });
+
+    await miro.board.metadata.update(metadata);
+
+    console.log(metadata);
+}
+
+miro.onReady(async () => {
+    metaData = await miro.board.metadata.get();
+
+    if (!metaData[appId]) {
+        metaData[appId] = {appId}
+        await miro.board.metadata.update(metaData)
+    }
+
     // loadTags().then(() => {
     // });
 });
