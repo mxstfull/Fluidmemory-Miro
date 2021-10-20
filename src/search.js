@@ -36,20 +36,8 @@ $('#searchApply').on('click', async function () {
     });
     var selectedIds = selectedWidgets.map((sticky) => sticky.id);
 
-    selectedWidgets.forEach((sticky) => {
-        left = Math.min(left, sticky.bounds.left);
-        top = Math.min(top, sticky.bounds.top);
-        right = Math.max(right, sticky.bounds.right);
-        bottom = Math.max(bottom, sticky.bounds.bottom);
-    });
-
     await miro.board.selection.selectWidgets(selectedIds);
-    await miro.board.viewport.set({
-        x: left,
-        y: top,
-        width: right - left,
-        height: bottom - top,
-    });
+    await focusOnWidgets(selectedWidgets);
 
     toggleLoading(false);
 });

@@ -143,6 +143,25 @@ function getWidgetLocations(clusterLocation, clusterDimension, numNewWidgets, wi
     return locations;
 }
 
+async function focusOnWidgets(widgets) {
+    var left = Infinity,
+        top = Infinity,
+        right = -Infinity,
+        bottom = -Infinity;
+    widgets.forEach((sticky) => {
+        left = Math.min(left, sticky.bounds.left);
+        top = Math.min(top, sticky.bounds.top);
+        right = Math.max(right, sticky.bounds.right);
+        bottom = Math.max(bottom, sticky.bounds.bottom);
+    });
+    await miro.board.viewport.set({
+        x: left,
+        y: top,
+        width: right - left,
+        height: bottom - top,
+    });
+}
+
 async function clusterWidgets(widgetIds, update = true) {
     if (widgetIds) {
         toggleLoading(true);
@@ -197,6 +216,8 @@ async function clusterWidgets(widgetIds, update = true) {
                 })
             );
         }
+
+        await focusOnWidgets(newWidgets);
 
         toggleLoading(false);
         return newWidgets;
