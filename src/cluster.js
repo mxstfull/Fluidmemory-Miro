@@ -118,9 +118,9 @@ $('#createClusterApply').on('click', async () => {
                     },
                 });
 
-                toggleLoading(false);
                 loadClustersToList();
             }
+            toggleLoading(false);
         });
     });
 });

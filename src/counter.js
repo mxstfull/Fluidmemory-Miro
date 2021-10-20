@@ -296,10 +296,10 @@ async function addTagSelectedItem(data) {
                         widgetIds: widgetIds,
                     });
 
-                    toggleLoading(false);
                     loadTagSelectOptions();
                     listWords();
                 }
+                toggleLoading(false);
             });
         });
     }

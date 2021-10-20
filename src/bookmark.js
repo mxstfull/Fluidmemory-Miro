@@ -139,9 +139,9 @@ $('#addBookmark').on('click', async () => {
                     },
                 });
 
-                toggleLoading(false);
                 loadBookmarksToList();
             }
+            toggleLoading(false);
         });
     });
 });
