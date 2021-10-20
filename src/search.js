@@ -36,7 +36,7 @@ $('#searchApply').on('click', async function () {
     });
     var selectedIds = selectedWidgets.map((sticky) => sticky.id);
 
-    selectedStickies.forEach((sticky) => {
+    selectedWidgets.forEach((sticky) => {
         left = Math.min(left, sticky.bounds.left);
         top = Math.min(top, sticky.bounds.top);
         right = Math.max(right, sticky.bounds.right);
