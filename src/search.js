@@ -64,7 +64,7 @@ $('#createTagApply').on('click', async function () {
                 await miro.board.tags.create({
                     color: randomColor(),
                     title: metadata[appId].focusedTagName,
-                    widgetIds: [selectedStickies.map((widget) => widget.id)],
+                    widgetIds: selectedStickies.map((widget) => widget.id),
                 });
 
                 toggleLoading(false);
