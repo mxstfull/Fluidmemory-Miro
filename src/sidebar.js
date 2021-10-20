@@ -155,7 +155,7 @@ function getWidgetLocations(clusterLocation, clusterDimension, numNewWidgets, wi
     return locations;
 }
 
-async function clusterWidgets(widgetIds, clusterName, update = true) {
+async function clusterWidgets(widgetIds, clusterName = null, clusterId = null, update = true) {
     if (widgetIds) {
         toggleLoading(true);
 
@@ -210,7 +210,8 @@ async function clusterWidgets(widgetIds, clusterName, update = true) {
             );
         }
 
-        await registerCluster(newWidgets, clusterName);
+        if (clusterName)
+            await registerCluster(newWidgets, clusterName, clusterId);
         await focusOnWidgets(newWidgets);
 
         toggleLoading(false);
@@ -245,7 +246,7 @@ async function focusOnWidgets(widgets) {
     });
 }
 
-async function registerCluster(widgets, clusterName) {
+async function registerCluster(widgets, clusterName, clusterId) {
     var widgetIds = widgets.map(widget => widget.id);
     var metadata = await miro.board.metadata.get();
 
@@ -253,11 +254,16 @@ async function registerCluster(widgets, clusterName) {
         metadata[appId]['clusters'] = []
     }
 
-    metadata[appId]['clusters'].push({
-        id: randomId(),
-        widgetIds,
-        name: clusterName
-    });
+    if (clusterId) {
+        var index = metadata[appId]['clusters'].findIndex(cluster => cluster.id == clusterId);
+        metadata[appId]['clusters'][index].widgetIds = widgetIds;
+    } else {
+        metadata[appId]['clusters'].push({
+            id: randomId(),
+            widgetIds,
+            name: clusterName
+        });
+    }
 
     await miro.board.metadata.update(metadata);
 

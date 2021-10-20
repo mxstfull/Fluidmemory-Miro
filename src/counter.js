@@ -312,7 +312,7 @@ async function duplicateSelection(data) {
     var tags = await getTags();
 
     if (oldWidgetIds.length) {
-        var newWidgets = await clusterWidgets(oldWidgetIds, false);
+        var newWidgets = await clusterWidgets(oldWidgetIds, null, null, false);
 
         tags.forEach((tag) => {
             oldWidgetIds.forEach((id, index) => {

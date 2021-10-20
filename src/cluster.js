@@ -54,15 +54,7 @@ async function updateCluster(clusterId) {
         var index = metadata[appId].clusters.findIndex((item) => item.id == cluster.id);
         var selectedStickies = await miro.board.selection.get();
 
-        if (index > -1) {
-            metadata[appId].clusters[index].widgetIds = selectedStickies.map(widget => widget.id);
-        }
-
-        await miro.board.metadata.update({
-            [appId]: {
-                ...metadata[appId],
-            },
-        });
+        clusterWidgets(selectedStickies.map(widget => widget.id), metadata[appId].focusedClusterName, metadata[appId].clusters[index].id);
 
         toggleLoading(false);
         loadClustersToList();
@@ -104,19 +96,7 @@ $('#createClusterApply').on('click', async () => {
     miro.board.ui.openModal('setClusterNameModal.html', { width: 400, height: 300 }).then(() => {
         miro.board.metadata.get().then(async (metadata) => {
             if (metadata[appId].focusedClusterName) {
-                if (!metadata[appId].clusters) metadata[appId].clusters = [];
-
-                metadata[appId].clusters.push({
-                    id: randomId(),
-                    widgetIds: selectedStickies.map(widget => widget.id),
-                    name: metadata[appId].focusedClusterName
-                });
-
-                await miro.board.metadata.update({
-                    [appId]: {
-                        ...metadata[appId],
-                    },
-                });
+                await clusterWidgets(selectedStickies.map(widget => widget.id), metadata[appId].focusedClusterName);
 
                 loadClustersToList();
             }
