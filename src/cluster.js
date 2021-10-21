@@ -76,7 +76,7 @@ async function updateCluster(clusterId) {
     toggleLoading(false);
 }
 
-function removeCluster(clusterId) {
+async function removeCluster(clusterId) {
     toggleLoading(true);
 
     await miro.board.widgets.deleteById(clusterId);
