@@ -250,7 +250,7 @@ async function registerCluster(widgets, clusterName, clusterId) {
     var widgetIds = widgets.map(widget => widget.id);
     var metadata = await miro.board.metadata.get();
 
-    if (metadata[appId]['clusters']) {
+    if (!metadata[appId]['clusters']) {
         metadata[appId]['clusters'] = []
     }
 
