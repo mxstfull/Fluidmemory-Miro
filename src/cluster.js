@@ -79,22 +79,10 @@ async function updateCluster(clusterId) {
 function removeCluster(clusterId) {
     toggleLoading(true);
 
-    miro.board.metadata.get().then(async (metadata) => {
-        var index = metadata[appId].clusters.findIndex((item) => item.id == clusterId);
+    await miro.board.widgets.deleteById(clusterId);
 
-        if (index > -1) {
-            metadata[appId].clusters.splice(index, 1);
-        }
-
-        await miro.board.metadata.update({
-            [appId]: {
-                ...metadata[appId],
-            },
-        });
-
-        toggleLoading(false);
-        loadClustersToList();
-    });
+    loadClustersToList();
+    toggleLoading(false);
 }
 
 $('#createClusterApply').on('click', async () => {
