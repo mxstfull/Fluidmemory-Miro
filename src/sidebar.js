@@ -35,13 +35,6 @@ async function getBookmarks() {
     }
     return [];
 }
-async function getClusters() {
-    var data = await miro.board.metadata.get();
-    if (data[appId]) {
-        return data[appId].clusters ? data[appId].clusters : [];
-    }
-    return [];
-}
 async function formatMetadata() {
     await miro.board.metadata.update({
         [appId]: {}
@@ -155,7 +148,7 @@ function getWidgetLocations(clusterLocation, clusterDimension, numNewWidgets, wi
     return locations;
 }
 
-async function clusterWidgets(widgetIds, clusterName = null, clusterId = null, update = true) {
+async function clusterWidgets(widgetIds, update = true) {
     if (widgetIds) {
         toggleLoading(true);
 
@@ -210,8 +203,6 @@ async function clusterWidgets(widgetIds, clusterName = null, clusterId = null, u
             );
         }
 
-        if (clusterName)
-            await registerCluster(newWidgets, clusterName, clusterId);
         await focusOnWidgets(newWidgets);
 
         toggleLoading(false);
@@ -246,29 +237,29 @@ async function focusOnWidgets(widgets) {
     });
 }
 
-async function registerCluster(widgets, clusterName, clusterId) {
-    var widgetIds = widgets.map(widget => widget.id);
-    var metadata = await miro.board.metadata.get();
+// async function registerCluster(widgets, clusterName, clusterId) {
+//     var widgetIds = widgets.map(widget => widget.id);
+//     var metadata = await miro.board.metadata.get();
 
-    if (!metadata[appId]['clusters']) {
-        metadata[appId]['clusters'] = []
-    }
+//     if (!metadata[appId]['clusters']) {
+//         metadata[appId]['clusters'] = []
+//     }
 
-    if (clusterId) {
-        var index = metadata[appId]['clusters'].findIndex(cluster => cluster.id == clusterId);
-        metadata[appId]['clusters'][index].widgetIds = widgetIds;
-    } else {
-        metadata[appId]['clusters'].push({
-            id: randomId(),
-            widgetIds,
-            name: clusterName
-        });
-    }
+//     if (clusterId) {
+//         var index = metadata[appId]['clusters'].findIndex(cluster => cluster.id == clusterId);
+//         metadata[appId]['clusters'][index].widgetIds = widgetIds;
+//     } else {
+//         metadata[appId]['clusters'].push({
+//             id: randomId(),
+//             widgetIds,
+//             name: clusterName
+//         });
+//     }
 
-    await miro.board.metadata.update(metadata);
+//     await miro.board.metadata.update(metadata);
 
-    console.log(metadata);
-}
+//     console.log(metadata);
+// }
 
 miro.onReady(async () => {
     metaData = await miro.board.metadata.get();
