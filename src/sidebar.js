@@ -261,14 +261,3 @@ async function focusOnWidgets(widgets) {
 //     console.log(metadata);
 // }
 
-miro.onReady(async () => {
-    metaData = await miro.board.metadata.get();
-
-    if (!metaData[appId]) {
-        metaData[appId] = {appId}
-        await miro.board.metadata.update(metaData)
-    }
-
-    // loadTags().then(() => {
-    // });
-});

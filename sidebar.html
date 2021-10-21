@@ -90,7 +90,20 @@
         <script src="src/search.js"></script>
         <script src="src/cluster.js"></script>
         <script>
-            loadClustersToList();
+            miro.onReady(async () => {
+                metaData = await miro.board.metadata.get();
+
+                if (!metaData[appId]) {
+                    metaData[appId] = { appId };
+                    await miro.board.metadata.update(metaData);
+                }
+
+                loadClustersToList();
+
+                // loadTags().then(() => {
+                // });
+            });
+
             $('[data-tabbtn]').on('click', (e) => {
                 tabId = $(e.currentTarget).attr('data-tabbtn');
                 $('.tab-panel').removeClass('active');

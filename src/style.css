@@ -129,7 +129,7 @@ select {
     align-items: center;
     gap: 5px;
 }
-.stat-list #bookmarkList .action, .stat-list #tagList .action {
+.stat-list #bookmarkList .action, .stat-list #tagList .action, .stat-list #clusterList .action {
     right: 10px;
 }
 .stat-list .menu-wrapper {
