@@ -59,18 +59,8 @@ async function updateCluster(clusterId) {
     var cluster = await getClusterById(clusterId);
     var selectedStickies = await miro.board.selection.get();
     var selectedStickyIds = selectedStickies.map((widget) => widget.id);
-    var {clusterLocation} = await getClusteringWidgetLocation(selectedStickyIds);
-                    
-    await miro.board.widgets.update({
-        ...cluster,
-        width: clusterLocation.endX - clusterLocation.startX,
-        height: clusterLocation.endY - clusterLocation.startY,
-        x: (clusterLocation.endX + clusterLocation.startX) / 2,
-        y: (clusterLocation.endY + clusterLocation.startY) / 2,
-    });
     
-    await clusterWidgets(selectedStickyIds, false);
-    await miro.board.widgets.deleteById(selectedStickyIds)
+    await locateOnFrame(selectedStickyIds);
 
     loadClustersToList();
     toggleLoading(false);
@@ -101,20 +91,7 @@ $('#createClusterApply').on('click', async () => {
         miro.board.ui.openModal('setClusterNameModal.html', { width: 400, height: 300 }).then(() => {
             miro.board.metadata.get().then(async (metadata) => {
                 if (metadata[appId].focusedClusterName) {
-                    var {clusterLocation} = await getClusteringWidgetLocation(selectedStickyIds);
-                    
-                    await miro.board.widgets.create({
-                        type: 'FRAME',
-                        title: metadata[appId].focusedClusterName,
-                        clientVisible: true,
-                        width: clusterLocation.endX - clusterLocation.startX,
-                        height: clusterLocation.endY - clusterLocation.startY,
-                        x: (clusterLocation.endX + clusterLocation.startX) / 2,
-                        y: (clusterLocation.endY + clusterLocation.startY) / 2,
-                    });
-                    
-                    await clusterWidgets(selectedStickyIds, false);
-                    await miro.board.widgets.deleteById(selectedStickyIds)
+                    await locateOnFrame(selectedStickyIds);
 
                     loadClustersToList();
                 }
@@ -125,3 +102,42 @@ $('#createClusterApply').on('click', async () => {
         toggleLoading(false);
     }
 });
+
+async function locateOnFrame(stickyIds) {
+    var { clusterLocation, widgetLocations, clusteringWidgets, widgetWidth, widgetHeight } = await getClusteringWidgetLocation(stickyIds);
+    let backgroundColor = randomBrightColor();
+
+    await miro.board.widgets.create({
+        type: 'FRAME',
+        title: metadata[appId].focusedClusterName,
+        clientVisible: true,
+        width: clusterLocation.endX - clusterLocation.startX,
+        height: clusterLocation.endY - clusterLocation.startY,
+        x: (clusterLocation.endX + clusterLocation.startX) / 2,
+        y: (clusterLocation.endY + clusterLocation.startY) / 2,
+    });
+
+    await miro.board.widgets.create(
+        clusteringWidgets.map((widget, index) => {
+            newWidget = {
+                ...widget,
+                bounds: {
+                    ...widget.bounds,
+                    width: widgetWidth,
+                    height: widgetHeight,
+                },
+                style: {
+                    ...widget.style,
+                    stickerBackgroundColor: backgroundColor,
+                },
+                x: widgetLocations[index].x,
+                y: widgetLocations[index].y,
+            };
+            delete newWidget.id;
+            delete newWidget.createdUserId;
+            delete newWidget.lastModifiedUserId;
+            return newWidget;
+        })
+    );
+    await miro.board.widgets.deleteById(stickyIds);
+}
