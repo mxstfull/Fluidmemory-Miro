@@ -59,7 +59,7 @@ async function updateCluster(clusterId) {
     var cluster = await getClusterById(clusterId);
     var selectedStickies = await miro.board.selection.get();
     var selectedStickyIds = selectedStickies.map((widget) => widget.id);
-    var {clusterLocation} = getClusteringWidgetLocation(selectedStickyIds);
+    var {clusterLocation} = await getClusteringWidgetLocation(selectedStickyIds);
                     
     await miro.board.widgets.update({
         ...cluster,
@@ -101,7 +101,7 @@ $('#createClusterApply').on('click', async () => {
         miro.board.ui.openModal('setClusterNameModal.html', { width: 400, height: 300 }).then(() => {
             miro.board.metadata.get().then(async (metadata) => {
                 if (metadata[appId].focusedClusterName) {
-                    var {clusterLocation} = getClusteringWidgetLocation(selectedStickyIds);
+                    var {clusterLocation} = await getClusteringWidgetLocation(selectedStickyIds);
                     
                     await miro.board.widgets.create({
                         type: 'FRAME',
