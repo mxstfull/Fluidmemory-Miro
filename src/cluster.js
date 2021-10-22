@@ -106,6 +106,7 @@ $('#createClusterApply').on('click', async () => {
 async function locateOnFrame(stickyIds, clusterName, cluster = null) {
     var { clusterLocation, widgetLocations, clusteringWidgets, widgetWidth, widgetHeight } = await getClusteringWidgetLocation(stickyIds);
     let backgroundColor = randomBrightColor();
+    var tags = await getTags();
 
     if (cluster) {
         await miro.board.widgets.update({
@@ -127,7 +128,7 @@ async function locateOnFrame(stickyIds, clusterName, cluster = null) {
         });
     }
 
-    await miro.board.widgets.create(
+    var newWidgets = await miro.board.widgets.create(
         clusteringWidgets.map((widget, index) => {
             newWidget = {
                 ...widget,
@@ -149,5 +150,14 @@ async function locateOnFrame(stickyIds, clusterName, cluster = null) {
             return newWidget;
         })
     );
+
+    tags.forEach((tag) => {
+        stickyIds.forEach((id, index) => {
+            if (tag.widgetIds.indexOf(id) > -1) {
+                tag.widgetIds.push(newWidgets[index].id);
+            }
+        });
+    });
+    await miro.board.tags.update(tags);
     await miro.board.widgets.deleteById(stickyIds);
 }
