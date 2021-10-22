@@ -347,4 +347,3 @@ $('#countWordApply').on('click', (e) => {
     listWords();
 });
 // Arrage tags exported from google sheet
-}
