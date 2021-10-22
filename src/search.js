@@ -26,10 +26,6 @@ $('#searchApply').on('click', async function () {
     var keywords = text.split(',').filter((word) => word !== '');
 
     var stickies = await getStickies();
-    var left = Infinity,
-        top = Infinity,
-        right = -Infinity,
-        bottom = -Infinity;
 
     var selectedWidgets = stickies.filter((sticky) => {
         return keywords.some((word) => sticky.plainText.indexOf(word) > -1);
