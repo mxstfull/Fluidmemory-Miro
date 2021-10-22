@@ -1,12 +1,12 @@
 function addClusterList(cluster) {
     $('#clusterList').append(`
         <li class="menu-item" title="${cluster.title}">
-            <a href="#" onclick='moveToCluster("${cluster.id})"'>
+            <a href="#" onclick='moveToCluster("${cluster.id}")'>
                 <div class="word-name">${cluster.title}</div>
                 &nbsp;
             </a>
             <div class="action">
-                <button class="btn button-icon button-icon-small icon-tile" title="Update with current view" onclick='updateCluster("${cluster.id})"'></button>
+                <button class="btn button-icon button-icon-small icon-tile" title="Update with current view" onclick='updateCluster("${cluster.id}")'></button>
                 <button class="btn button-icon button-icon-small icon-trash" title="Remove" onclick='removeCluster("${cluster.id}")'></button>
             </div>
         </li>
@@ -120,5 +120,7 @@ $('#createClusterApply').on('click', async () => {
                 toggleLoading(false);
             });
         });
+    } else {
+        toggleLoading(false);
     }
 });
