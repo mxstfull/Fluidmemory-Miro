@@ -179,7 +179,7 @@ async function clusterWidgets(widgetIds, update = true) {
     if (widgetIds) {
         toggleLoading(true);
 
-        var { widgetLocations, clusteringWidgets, widgetWidth, widgetHeight } = getClusteringWidgetLocation(widgetIds);
+        var { widgetLocations, clusteringWidgets, widgetWidth, widgetHeight } = await getClusteringWidgetLocation(widgetIds);
         let newWidgets = [];
         let backgroundColor = randomBrightColor();
 
