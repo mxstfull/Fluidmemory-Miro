@@ -151,7 +151,14 @@ async function locateOnFrame(stickyIds, clusterName, cluster = null) {
             return newWidget;
         })
     );
-    newWidgets = await miro.board.widgets.update(newWidgets);
+    newWidgets = await miro.board.widgets.update(newWidgets.map(widget => {
+        return {
+            ...newWidgets,
+            style: {
+                stickerBackgroundColor: backgroundColor,
+            }
+        }
+    }));
 
     tags.forEach((tag) => {
         stickyIds.forEach((id, index) => {
