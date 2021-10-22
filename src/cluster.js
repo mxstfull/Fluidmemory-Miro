@@ -140,7 +140,6 @@ async function locateOnFrame(stickyIds, clusterName, cluster = null) {
                     height: widgetHeight,
                 },
                 style: {
-                    ...widget.style,
                     stickerBackgroundColor: backgroundColor,
                 },
                 x: widgetLocations[index].x,

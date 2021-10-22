@@ -194,7 +194,6 @@ async function clusterWidgets(widgetIds, update = true) {
                             height: widgetHeight,
                         },
                         style: {
-                            ...widget.style,
                             stickerBackgroundColor: backgroundColor,
                         },
                         x: widgetLocations[index].x,
@@ -213,7 +212,6 @@ async function clusterWidgets(widgetIds, update = true) {
                             height: widgetHeight,
                         },
                         style: {
-                            ...widget.style,
                             stickerBackgroundColor: backgroundColor,
                         },
                         x: widgetLocations[index].x,
