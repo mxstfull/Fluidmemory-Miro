@@ -153,7 +153,7 @@ async function locateOnFrame(stickyIds, clusterName, cluster = null) {
     );
     newWidgets = await miro.board.widgets.update(newWidgets.map(widget => {
         return {
-            ...newWidgets,
+            ...widget,
             style: {
                 stickerBackgroundColor: backgroundColor,
             }
