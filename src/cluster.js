@@ -50,6 +50,8 @@ async function moveToCluster(clusterId) {
         height: bottom - top,
     });
 
+    await miro.board.selection.selectWidgets([clusterId]);
+
     toggleLoading(false);
 }
 
