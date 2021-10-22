@@ -151,6 +151,7 @@ async function locateOnFrame(stickyIds, clusterName, cluster = null) {
             return newWidget;
         })
     );
+    newWidgets = await miro.board.widgets.update(newWidgets);
 
     tags.forEach((tag) => {
         stickyIds.forEach((id, index) => {
