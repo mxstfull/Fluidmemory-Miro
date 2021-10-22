@@ -15,7 +15,7 @@ function addClusterList(cluster) {
 
 async function getClusters() {
     return await miro.board.widgets.get({
-        type: 'FRAME'
+        type: 'FRAME',
     });
 }
 function loadClustersToList() {
@@ -32,7 +32,7 @@ function loadClustersToList() {
 async function getClusterById(clusterId) {
     clusters = await miro.board.widgets.get({
         type: 'FRAME',
-        id: clusterId
+        id: clusterId,
     });
     return clusters.length ? clusters[0] : null;
 }
@@ -41,7 +41,7 @@ async function moveToCluster(clusterId) {
     toggleLoading(true);
 
     var cluster = await getClusterById(clusterId);
-    var {left, right, top, bottom} = cluster.bounds;
+    var { left, right, top, bottom } = cluster.bounds;
 
     await miro.board.viewport.set({
         x: left,
@@ -58,19 +58,19 @@ async function updateCluster(clusterId) {
 
     var cluster = await getClusterById(clusterId);
     var selectedStickies = await miro.board.selection.get();
-    var selectedStickyIds = selectedStickies.map(widget => widget.id);
-
-    var updatedWidgets = await clusterWidgets(selectedStickyIds);
-
-    var widgetsDimention = getDimensionOfWidget(updatedWidgets);
-
+    var selectedStickyIds = selectedStickies.map((widget) => widget.id);
+    var {clusterLocation} = getClusteringWidgetLocation(selectedStickyIds);
+                    
     await miro.board.widgets.update({
         ...cluster,
-        width: widgetsDimention.right - widgetsDimention.left,
-        height: widgetsDimention.bottom - widgetsDimention.top,
-        x: (widgetsDimention.right + widgetsDimention.left) / 2,
-        y: (widgetsDimention.bottom + widgetsDimention.top) / 2,
-    })
+        width: clusterLocation.endX - clusterLocation.startX,
+        height: clusterLocation.endY - clusterLocation.startY,
+        x: (clusterLocation.endX + clusterLocation.startX) / 2,
+        y: (clusterLocation.endY + clusterLocation.startY) / 2,
+    });
+    
+    await clusterWidgets(selectedStickyIds, false);
+    await miro.board.widgets.deleteById(selectedStickyIds)
 
     loadClustersToList();
     toggleLoading(false);
@@ -95,25 +95,26 @@ $('#createClusterApply').on('click', async () => {
     });
 
     var selectedStickies = await miro.board.selection.get();
-    var selectedStickyIds = selectedStickies.map(widget => widget.id);
+    var selectedStickyIds = selectedStickies.map((widget) => widget.id);
 
     if (selectedStickies.length) {
         miro.board.ui.openModal('setClusterNameModal.html', { width: 400, height: 300 }).then(() => {
             miro.board.metadata.get().then(async (metadata) => {
                 if (metadata[appId].focusedClusterName) {
-                    var updatedWidgets = await clusterWidgets(selectedStickyIds);
-                    var widgetsDimention = getDimensionOfWidget(updatedWidgets);
-
+                    var {clusterLocation} = getClusteringWidgetLocation(selectedStickyIds);
+                    
                     await miro.board.widgets.create({
                         type: 'FRAME',
                         title: metadata[appId].focusedClusterName,
-                        childrenIds: selectedStickyIds,
                         clientVisible: true,
-                        width: widgetsDimention.right - widgetsDimention.left,
-                        height: widgetsDimention.bottom - widgetsDimention.top,
-                        x: (widgetsDimention.right + widgetsDimention.left) / 2,
-                        y: (widgetsDimention.bottom + widgetsDimention.top) / 2,
-                    })
+                        width: clusterLocation.endX - clusterLocation.startX,
+                        height: clusterLocation.endY - clusterLocation.startY,
+                        x: (clusterLocation.endX + clusterLocation.startX) / 2,
+                        y: (clusterLocation.endY + clusterLocation.startY) / 2,
+                    });
+                    
+                    await clusterWidgets(selectedStickyIds, false);
+                    await miro.board.widgets.deleteById(selectedStickyIds)
 
                     loadClustersToList();
                 }

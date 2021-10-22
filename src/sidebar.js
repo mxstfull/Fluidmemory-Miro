@@ -4,7 +4,17 @@ var defaultWidgetWidth = 199,
     defaultMargin = 30;
 
 function randomColor() {
-    return '#' + Math.floor(Math.random() * 16777215).toString(16);
+    const red = Math.floor((Math.random() * 256) / 2);
+    const green = Math.floor((Math.random() * 256) / 2);
+    const blue = Math.floor((Math.random() * 256) / 2);
+    return '#' + red.toString(16) + green.toString(16) + blue.toString(16);
+}
+function randomBrightColor() {
+    const red = Math.floor(((1 + Math.random()) * 256) / 2);
+    const green = Math.floor(((1 + Math.random()) * 256) / 2);
+    const blue = Math.floor(((1 + Math.random()) * 256) / 2);
+
+    return '#' + red.toString(16) + green.toString(16) + blue.toString(16);
 }
 function randomId() {
     return Date.now().toString() + Math.floor(Math.random() * 10000);
@@ -18,7 +28,7 @@ function getStickies() {
     });
 }
 function getStickyById(widgets, id) {
-    index = widgets.findIndex(widget => widget.id == id)
+    index = widgets.findIndex((widget) => widget.id == id);
 
     return index > -1 ? widgets[index] : null;
 }
@@ -37,14 +47,13 @@ async function getBookmarks() {
 }
 async function formatMetadata() {
     await miro.board.metadata.update({
-        [appId]: {}
+        [appId]: {},
     });
 }
 
 function toggleLoading(show = true) {
     $('.loading-wrapper').css({ visibility: show ? 'visible' : '' });
 }
-
 
 function getClusterDimensions(widgetCount, widgetWidth = defaultWidgetWidth, widgetHeight = defaultWidgetHeight, margin = defaultMargin) {
     const clusterDimension = Math.ceil(Math.sqrt(widgetCount)); // eg if length 22, 5*5
@@ -148,24 +157,31 @@ function getWidgetLocations(clusterLocation, clusterDimension, numNewWidgets, wi
     return locations;
 }
 
+async function getClusteringWidgetLocation(widgetIds) {
+    var widgets = await getStickies();
+    var widgetWidth = defaultWidgetWidth,
+        widgetHeight = defaultWidgetHeight,
+        margin = defaultMargin;
+    var clusteringWidgets = widgets.filter((widget) => {
+        widgetWidth = widget.bounds.width;
+        widgetHeight = widget.bounds.height;
+        return widgetIds.includes(widget.id);
+    });
+    var clusterDimensions = getClusterDimensions(clusteringWidgets.length, widgetWidth, widgetHeight, margin);
+    var { clusterDimension } = clusterDimensions;
+    var clusterLocation = getClusterLocation(widgets, clusterDimensions);
+    let widgetLocations = getWidgetLocations(clusterLocation, clusterDimension, clusteringWidgets.length, widgetWidth, widgetHeight, margin);
+
+    return { clusterLocation, clusteringWidgets, widgetLocations, widgetWidth, widgetHeight };
+}
+
 async function clusterWidgets(widgetIds, update = true) {
     if (widgetIds) {
         toggleLoading(true);
 
-        var widgets = await getStickies();
-        var widgetWidth = defaultWidgetWidth,
-            widgetHeight = defaultWidgetHeight,
-            margin = defaultMargin;
-        var clusteringWidgets = widgets.filter((widget) => {
-            widgetWidth = widget.bounds.width;
-            widgetHeight = widget.bounds.height;
-            return widgetIds.includes(widget.id);
-        });
-        var clusterDimensions = getClusterDimensions(clusteringWidgets.length, widgetWidth, widgetHeight, margin);
-        var { clusterDimension } = clusterDimensions;
-        var clusterLocation = getClusterLocation(widgets, clusterDimensions);
-        let widgetLocations = getWidgetLocations(clusterLocation, clusterDimension, clusteringWidgets.length, widgetWidth, widgetHeight, margin);
+        var { widgetLocations, clusteringWidgets, widgetWidth, widgetHeight } = getClusteringWidgetLocation(widgetIds);
         let newWidgets = [];
+        let backgroundColor = randomBrightColor();
 
         if (update == true) {
             newWidgets = await miro.board.widgets.update(
@@ -176,6 +192,10 @@ async function clusterWidgets(widgetIds, update = true) {
                             ...widget.bounds,
                             width: widgetWidth,
                             height: widgetHeight,
+                        },
+                        style: {
+                            ...widget.style,
+                            stickerBackgroundColor: backgroundColor,
                         },
                         x: widgetLocations[index].x,
                         y: widgetLocations[index].y,
@@ -191,6 +211,10 @@ async function clusterWidgets(widgetIds, update = true) {
                             ...widget.bounds,
                             width: widgetWidth,
                             height: widgetHeight,
+                        },
+                        style: {
+                            ...widget.style,
+                            stickerBackgroundColor: backgroundColor,
                         },
                         x: widgetLocations[index].x,
                         y: widgetLocations[index].y,
@@ -223,11 +247,11 @@ function getDimensionOfWidget(widgets) {
         bottom = Math.max(bottom, sticky.bounds.bottom);
     });
 
-    return {left, top, right, bottom};
+    return { left, top, right, bottom };
 }
 
 async function focusOnWidgets(widgets) {
-    var {left, right, top, bottom} = getDimensionOfWidget(widgets);
+    var { left, right, top, bottom } = getDimensionOfWidget(widgets);
 
     await miro.board.viewport.set({
         x: left,
@@ -260,4 +284,3 @@ async function focusOnWidgets(widgets) {
 
 //     console.log(metadata);
 // }
-
