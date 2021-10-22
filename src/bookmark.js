@@ -1,55 +1,55 @@
-function addBookmarkList(bookmark) {
-    $('#bookmarkList').append(`
-        <li class="menu-item" title="${bookmark.name}">
-            <a href="#" onclick='moveToBookmark(${bookmark.id})'>
-                <div class="word-name">${bookmark.name}</div>
+function addSnapshotList(snapshot) {
+    $('#snapshotList').append(`
+        <li class="menu-item" title="${snapshot.name}">
+            <a href="#" onclick='moveToSnapshot(${snapshot.id})'>
+                <div class="word-name">${snapshot.name}</div>
                 &nbsp;
             </a>
             <div class="action">
-                <button class="btn button-icon button-icon-small icon-photo" title="Update with current view" onclick='updateBookmark(${bookmark.id})'></button>
-                <button class="btn button-icon button-icon-small icon-trash" title="Remove" onclick='removeBookmark(${bookmark.id})'></button>
+                <button class="btn button-icon button-icon-small icon-photo" title="Update with current view" onclick='updateSnapshot(${snapshot.id})'></button>
+                <button class="btn button-icon button-icon-small icon-trash" title="Remove" onclick='removeSnapshot(${snapshot.id})'></button>
             </div>
         </li>
     `);
 }
 
-function loadBookmarksToList() {
+function loadSnapshotsToList() {
     toggleLoading();
-    getBookmarks().then((bookmarks) => {
-        $('#bookmarkList').html('');
-        if (bookmarks && bookmarks.length) {
-            bookmarks.forEach((bookmark) => {
-                addBookmarkList(bookmark);
+    getSnapshots().then((snapshots) => {
+        $('#snapshotList').html('');
+        if (snapshots && snapshots.length) {
+            snapshots.forEach((snapshot) => {
+                addSnapshotList(snapshot);
             });
         }        
         toggleLoading(false);
     });
 }
 
-async function getBookmarkById(bookmarkId) {
-    var bookmarks = await getBookmarks();
-    var bookmarkIndex = bookmarks.findIndex((item) => item.id == bookmarkId);
-    return bookmarks[bookmarkIndex];
+async function getSnapshotById(snapshotId) {
+    var snapshots = await getSnapshots();
+    var snapshotIndex = snapshots.findIndex((item) => item.id == snapshotId);
+    return snapshots[snapshotIndex];
 }
 
-async function moveToBookmark(bookmarkId) {
+async function moveToSnapshot(snapshotId) {
     toggleLoading(true);
 
-    var bookmark = await getBookmarkById(bookmarkId);
+    var snapshot = await getSnapshotById(snapshotId);
     var oldTags = await getTags();
     var oldStickies = await getStickies();
 
     await miro.board.tags.delete(oldTags.map((item) => item.id));
     await miro.board.widgets.deleteById(oldStickies.map((item) => item.id));
 
-    var newWidgets = await miro.board.widgets.create(bookmark.stickies);
-    var newTags = bookmark.tags.map(tag => {
+    var newWidgets = await miro.board.widgets.create(snapshot.stickies);
+    var newTags = snapshot.tags.map(tag => {
         tag.widgetIds = [];
         return tag;
     });
 
     newWidgets.forEach((widget, index) => {
-        oldWidget = bookmark.stickies[index];
+        oldWidget = snapshot.stickies[index];
         oldWidget.tags.forEach(widgetTag => {
             index = newTags.findIndex((item) => item.id == widgetTag.id)
             if (index > -1) {
@@ -62,19 +62,19 @@ async function moveToBookmark(bookmarkId) {
     toggleLoading(false);
 }
 
-async function updateBookmark(bookmarkId) {
+async function updateSnapshot(snapshotId) {
     toggleLoading(true);
 
     var stickies = await getStickies();
     var tags = await getTags();
-    var bookmark = await getBookmarkById(bookmarkId);
+    var snapshot = await getSnapshotById(snapshotId);
 
     miro.board.metadata.get().then(async (metadata) => {
-        var index = metadata[appId].bookmarks.findIndex((item) => item.id == bookmark.id);
+        var index = metadata[appId].snapshots.findIndex((item) => item.id == snapshot.id);
 
         if (index > -1) {
-            metadata[appId].bookmarks[index].stickies = stickies;
-            metadata[appId].bookmarks[index].tags = tags;
+            metadata[appId].snapshots[index].stickies = stickies;
+            metadata[appId].snapshots[index].tags = tags;
         }
 
         await miro.board.metadata.update({
@@ -84,18 +84,18 @@ async function updateBookmark(bookmarkId) {
         });
 
         toggleLoading(false);
-        loadBookmarksToList();
+        loadSnapshotsToList();
     });
 }
 
-function removeBookmark(bookmarkId) {
+function removeSnapshot(snapshotId) {
     toggleLoading(true);
 
     miro.board.metadata.get().then(async (metadata) => {
-        var index = metadata[appId].bookmarks.findIndex((item) => item.id == bookmarkId);
+        var index = metadata[appId].snapshots.findIndex((item) => item.id == snapshotId);
 
         if (index > -1) {
-            metadata[appId].bookmarks.splice(index, 1);
+            metadata[appId].snapshots.splice(index, 1);
         }
 
         await miro.board.metadata.update({
@@ -105,30 +105,30 @@ function removeBookmark(bookmarkId) {
         });
 
         toggleLoading(false);
-        loadBookmarksToList();
+        loadSnapshotsToList();
     });
 }
 
-$('#addBookmark').on('click', async () => {
+$('#addSnapshot').on('click', async () => {
     toggleLoading(true);
 
     await miro.board.metadata.update({
         [appId]: {
-            focusedBookmarkName: 'Bookmark',
+            focusedSnapshotName: 'Snapshot',
         },
     });
 
     var stickies = await getStickies();
     var tags = await getTags();
 
-    miro.board.ui.openModal('setBookmarkNameModal.html', { width: 400, height: 300 }).then(() => {
+    miro.board.ui.openModal('setSnapshotNameModal.html', { width: 400, height: 300 }).then(() => {
         miro.board.metadata.get().then(async (metadata) => {
-            if (metadata[appId].focusedBookmarkName) {
-                if (!metadata[appId].bookmarks) metadata[appId].bookmarks = [];
+            if (metadata[appId].focusedSnapshotName) {
+                if (!metadata[appId].snapshots) metadata[appId].snapshots = [];
 
-                metadata[appId].bookmarks.push({
+                metadata[appId].snapshots.push({
                     id: randomId(),
-                    name: metadata[appId].focusedBookmarkName,
+                    name: metadata[appId].focusedSnapshotName,
                     stickies,
                     tags,
                 });
@@ -139,7 +139,7 @@ $('#addBookmark').on('click', async () => {
                     },
                 });
 
-                loadBookmarksToList();
+                loadSnapshotsToList();
             }
             toggleLoading(false);
         });

@@ -38,10 +38,10 @@ function getStickyById(stickies, id) {
 function getTags() {
     return miro.board.tags.get();
 }
-async function getBookmarks() {
+async function getSnapshots() {
     var data = await miro.board.metadata.get();
     if (data[appId]) {
-        return data[appId].bookmarks ? data[appId].bookmarks : [];
+        return data[appId].snapshots ? data[appId].snapshots : [];
     }
     return [];
 }

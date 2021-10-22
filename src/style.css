@@ -129,7 +129,7 @@ select {
     align-items: center;
     gap: 5px;
 }
-.stat-list #bookmarkList .action, .stat-list #tagList .action, .stat-list #clusterList .action {
+.stat-list #snapshotList .action, .stat-list #tagList .action, .stat-list #clusterList .action {
     right: 10px;
 }
 .stat-list .menu-wrapper {
@@ -140,7 +140,7 @@ select {
 .metisMenu #tagList {
     margin-left: 10px;
 }
-.stat-list #bookmarkList {
+.stat-list #snapshotList {
     max-height: calc(100% - 300px);
     height: 100%;
 }

@@ -7,8 +7,8 @@
     <body style="padding: 30px; box-sizing: border-box">
         <h1>Modal view</h1>
         <div class="form-group">
-            <label>Bookmark</label>
-            <input class="input" type="text" placeholder="Bookmark Name" id="bookmarkName" />
+            <label>Snapshot</label>
+            <input class="input" type="text" placeholder="Snapshot Name" id="snapshotName" />
             <div style="display: flex; justify-content: space-between">
                 <button class="button button-primary" style="margin: 10px; margin-left: 0" type="button" onclick="confirm()">OK</button>
                 <button class="button button-danger" style="margin: 10px; margin-right: 0" type="button" onclick="cancel()">CANCEL</button>
@@ -24,13 +24,13 @@
                     console.log(data);
 
                     if (data[appId]) {
-                        $('#bookmarkName').val(data[appId].focusedBookmarkName);
-                        defaultValue = data[appId].focusedBookmarkName;
+                        $('#snapshotName').val(data[appId].focusedSnapshotName);
+                        defaultValue = data[appId].focusedSnapshotName;
 
                         miro.board.metadata
                             .update({
                                 [appId]: {
-                                    focusedBookmarkName: null,
+                                    focusedSnapshotName: null,
                                 },
                             });
                     }
@@ -38,14 +38,14 @@
             });
 
             function confirm() {
-                value = $('#bookmarkName').val();
-                if ($('#bookmarkName').val() == '') {
+                value = $('#snapshotName').val();
+                if ($('#snapshotName').val() == '') {
                     value = defaultValue;
                 }
                 miro.board.metadata
                     .update({
                         [appId]: {
-                            focusedBookmarkName: value,
+                            focusedSnapshotName: value,
                         },
                     })
                     .then(() => {
@@ -56,7 +56,7 @@
                 miro.board.metadata
                     .update({
                         [appId]: {
-                            focusedBookmarkName: null,
+                            focusedSnapshotName: null,
                         },
                     })
                     .then(() => {

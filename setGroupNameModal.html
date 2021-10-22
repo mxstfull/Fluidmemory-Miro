@@ -7,8 +7,8 @@
     <body style="padding: 30px; box-sizing: border-box">
         <h1>Modal view</h1>
         <div class="form-group">
-            <label>Cluster Name</label>
-            <input class="input" type="text" placeholder="Cluster Name" id="clusterName" />
+            <label>Group Name</label>
+            <input class="input" type="text" placeholder="Group Name" id="groupName" />
             <div style="display: flex; justify-content: space-between">
                 <button class="button button-primary" style="margin: 10px; margin-left: 0" type="button" onclick="confirm()">OK</button>
                 <button class="button button-danger" style="margin: 10px; margin-right: 0" type="button" onclick="cancel()">CANCEL</button>
@@ -24,13 +24,13 @@
                     console.log(data);
 
                     if (data[appId]) {
-                        $('#clusterName').val(data[appId].focusedClusterName);
-                        defaultValue = data[appId].focusedClusterName;
+                        $('#groupName').val(data[appId].focusedGroupName);
+                        defaultValue = data[appId].focusedGroupName;
 
                         miro.board.metadata
                             .update({
                                 [appId]: {
-                                    focusedClusterName: null,
+                                    focusedGroupName: null,
                                 },
                             });
                     }
@@ -38,14 +38,14 @@
             });
 
             function confirm() {
-                value = $('#clusterName').val();
-                if ($('#clusterName').val() == '') {
+                value = $('#groupName').val();
+                if ($('#groupName').val() == '') {
                     value = defaultValue;
                 }
                 miro.board.metadata
                     .update({
                         [appId]: {
-                            focusedClusterName: value,
+                            focusedGroupName: value,
                         },
                     })
                     .then(() => {
@@ -56,7 +56,7 @@
                 miro.board.metadata
                     .update({
                         [appId]: {
-                            focusedClusterName: null,
+                            focusedGroupName: null,
                         },
                     })
                     .then(() => {

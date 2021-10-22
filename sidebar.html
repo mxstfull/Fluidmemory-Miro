@@ -12,7 +12,7 @@
                 <div class="tabs">
                     <div class="tabs-header-list">
                         <div tabindex="0" class="tab tab-active" data-tabbtn="tab-cluster">
-                            <div class="tab-text tab-cluster">Cluster</div>
+                            <div class="tab-text tab-cluster">Group</div>
                         </div>
                         <div tabindex="1" class="tab" data-tabbtn="tab-count">
                             <div class="tab-text tab-count">Count</div>
@@ -20,18 +20,18 @@
                         <div tabindex="2" class="tab" data-tabbtn="tab-search">
                             <div class="tab-text tab-search">Search</div>
                         </div>
-                        <div tabindex="3" class="tab" data-tabbtn="tab-bookmarks">
-                            <div class="tab-text tab-bookmarks">Bookmarks</div>
+                        <div tabindex="3" class="tab" data-tabbtn="tab-snapshots">
+                            <div class="tab-text tab-snapshots">Snapshot</div>
                         </div>
                     </div>
                 </div>
                 <div class="tab-panel active" id="tab-cluster">
                     <div class="menu-wrapper">
-                        <label>Clusters</label>
+                        <label>Group</label>
                         <ul class="metisMenu" id="clusterList"></ul>
                     </div>
                     <div class="action">
-                        <button class="button button-primary" id="createClusterApply">Create cluster</button>
+                        <button class="button button-primary" id="createGroupApply">Create Group</button>
                     </div>
                 </div>
                 <div class="tab-panel" id="tab-count">
@@ -69,11 +69,11 @@
                         <button class="button button-primary" id="createTagApply">Create tag</button>
                     </div>
                 </div>
-                <div class="tab-panel" id="tab-bookmarks">
+                <div class="tab-panel" id="tab-snapshots">
                     <div class="action">
-                        <button class="button button-primary" id="addBookmark">Apply</button>
+                        <button class="button button-primary" id="addSnapshot">Apply</button>
                     </div>
-                    <ul class="metisMenu" id="bookmarkList"></ul>
+                    <ul class="metisMenu" id="snapshotList"></ul>
                 </div>
             </div>
         </div>
@@ -86,7 +86,7 @@
         <script src="https://miro.com/app/static/sdk.1.1.js"></script>
         <script src="src/sidebar.js"></script>
         <script src="src/counter.js"></script>
-        <script src="src/bookmark.js"></script>
+        <script src="src/snapshot.js"></script>
         <script src="src/search.js"></script>
         <script src="src/cluster.js"></script>
         <script>
@@ -113,8 +113,8 @@
 
                 if (tabId == 'tab-count') {
                     loadTagSelectOptions();
-                } else if (tabId == 'tab-bookmarks') {
-                    loadBookmarksToList();
+                } else if (tabId == 'tab-snapshots') {
+                    loadSnapshotsToList();
                 } else if (tabId == 'tab-search') {
                     loadTagList();
                 } else if (tabId == 'tab-cluster') {

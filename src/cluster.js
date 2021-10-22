@@ -1,47 +1,47 @@
-function addClusterList(cluster) {
+function addGroupList(group) {
     $('#clusterList').append(`
-        <li class="menu-item" title="${cluster.title}">
-            <a href="#" onclick='moveToCluster("${cluster.id}")'>
-                <div class="word-name">${cluster.title}</div>
+        <li class="menu-item" title="${group.title}">
+            <a href="#" onclick='moveToGroup("${group.id}")'>
+                <div class="word-name">${group.title}</div>
                 &nbsp;
             </a>
             <div class="action">
-                <button class="btn button-icon button-icon-small icon-tile" title="Update with current view" onclick='updateCluster("${cluster.id}")'></button>
-                <button class="btn button-icon button-icon-small icon-trash" title="Remove" onclick='removeCluster("${cluster.id}")'></button>
+                <button class="btn button-icon button-icon-small icon-tile" title="Update with current view" onclick='updateGroup("${group.id}")'></button>
+                <button class="btn button-icon button-icon-small icon-trash" title="Remove" onclick='removeGroup("${group.id}")'></button>
             </div>
         </li>
     `);
 }
 
-async function getClusters() {
+async function getGroups() {
     return await miro.board.widgets.get({
         type: 'FRAME',
     });
 }
-function loadClustersToList() {
+function loadGroupsToList() {
     toggleLoading();
-    getClusters().then((clusters) => {
+    getGroups().then((groups) => {
         $('#clusterList').html('');
-        clusters.forEach((cluster) => {
-            addClusterList(cluster);
+        groups.forEach((cluster) => {
+            addGroupList(cluster);
         });
         toggleLoading(false);
     });
 }
 
-async function getClusterById(clusterId) {
-    clusters = await miro.board.widgets.get({
+async function getGroupById(clusterId) {
+    var groups = await miro.board.widgets.get({
         type: 'FRAME',
         id: clusterId,
     });
-    return clusters.length ? clusters[0] : null;
+    return groups.length ? groups[0] : null;
 }
 
-async function moveToCluster(clusterId) {
+async function moveToGroup(groupId) {
     toggleLoading(true);
 
-    var cluster = await getClusterById(clusterId);
-    var { left, right, top, bottom } = cluster.bounds;
+    var group = await getGroupById(groupId);
+    var { left, right, top, bottom } = group.bounds;
 
     await miro.board.viewport.set({
         x: left,
@@ -50,39 +50,39 @@ async function moveToCluster(clusterId) {
         height: bottom - top,
     });
 
-    await miro.board.selection.selectWidgets([clusterId]);
+    await miro.board.selection.selectWidgets([groupId]);
 
     toggleLoading(false);
 }
 
-async function updateCluster(clusterId) {
+async function updateGroup(groupId) {
     toggleLoading(true);
 
-    var cluster = await getClusterById(clusterId);
+    var cluster = await getGroupById(groupId);
     var selectedStickies = await miro.board.selection.get();
     var selectedStickyIds = selectedStickies.map((widget) => widget.id);
     
     await locateOnFrame(selectedStickyIds, cluster.title, cluster);
 
-    loadClustersToList();
+    loadGroupsToList();
     toggleLoading(false);
 }
 
-async function removeCluster(clusterId) {
+async function removeGroup(groupId) {
     toggleLoading(true);
 
-    await miro.board.widgets.deleteById(clusterId);
+    await miro.board.widgets.deleteById(groupId);
 
-    loadClustersToList();
+    loadGroupsToList();
     toggleLoading(false);
 }
 
-$('#createClusterApply').on('click', async () => {
+$('#createGroupApply').on('click', async () => {
     toggleLoading(true);
 
     await miro.board.metadata.update({
         [appId]: {
-            focusedClusterName: 'Cluster',
+            focusedGroupName: 'Group',
         },
     });
 
@@ -90,12 +90,12 @@ $('#createClusterApply').on('click', async () => {
     var selectedStickyIds = selectedStickies.map((widget) => widget.id);
 
     if (selectedStickies.length) {
-        miro.board.ui.openModal('setClusterNameModal.html', { width: 400, height: 300 }).then(() => {
+        miro.board.ui.openModal('setGroupNameModal.html', { width: 400, height: 300 }).then(() => {
             miro.board.metadata.get().then(async (metadata) => {
-                if (metadata[appId].focusedClusterName) {
-                    await locateOnFrame(selectedStickyIds, metadata[appId].focusedClusterName);
+                if (metadata[appId].focusedGroupName) {
+                    await locateOnFrame(selectedStickyIds, metadata[appId].focusedGroupName);
 
-                    loadClustersToList();
+                    loadGroupsToList();
                 }
                 toggleLoading(false);
             });
@@ -105,14 +105,14 @@ $('#createClusterApply').on('click', async () => {
     }
 });
 
-async function locateOnFrame(stickyIds, clusterName, cluster = null) {
+async function locateOnFrame(stickyIds, groupName, group = null) {
     var { clusterLocation, widgetLocations, clusteringWidgets, widgetWidth, widgetHeight } = await getClusteringWidgetLocation(stickyIds);
     let backgroundColor = randomBrightColor();
     var tags = await getTags();
 
-    if (cluster) {
+    if (group) {
         await miro.board.widgets.update({
-            ...cluster,
+            ...group,
             width: clusterLocation.endX - clusterLocation.startX,
             height: clusterLocation.endY - clusterLocation.startY,
             x: (clusterLocation.endX + clusterLocation.startX) / 2,
@@ -121,7 +121,7 @@ async function locateOnFrame(stickyIds, clusterName, cluster = null) {
     } else {
         await miro.board.widgets.create({
             type: 'FRAME',
-            title: clusterName,
+            title: groupName,
             clientVisible: true,
             width: clusterLocation.endX - clusterLocation.startX,
             height: clusterLocation.endY - clusterLocation.startY,
