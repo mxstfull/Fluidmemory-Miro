@@ -98,7 +98,7 @@
                     await miro.board.metadata.update(metaData);
                 }
 
-                loadClustersToList();
+                loadGroupsToList();
 
                 // loadTags().then(() => {
                 // });
@@ -118,7 +118,7 @@
                 } else if (tabId == 'tab-search') {
                     loadTagList();
                 } else if (tabId == 'tab-cluster') {
-                    loadClustersToList();
+                    loadGroupsToList();
                 }
             });
         </script>
