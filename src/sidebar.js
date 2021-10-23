@@ -186,7 +186,7 @@ async function clusterWidgets(widgetIds, update = true) {
         if (update == true) {
             newWidgets = await miro.board.widgets.update(
                 clusteringWidgets.map((widget, index) => {
-                    return {
+                    var updatedData = {
                         ...widget,
                         bounds: {
                             ...widget.bounds,
@@ -199,6 +199,8 @@ async function clusterWidgets(widgetIds, update = true) {
                         x: widgetLocations[index].x,
                         y: widgetLocations[index].y,
                     };
+                    delete updatedData.metadata;
+                    return updatedData;
                 })
             );
         } else {
@@ -220,6 +222,7 @@ async function clusterWidgets(widgetIds, update = true) {
                     delete newWidget.id;
                     delete newWidget.createdUserId;
                     delete newWidget.lastModifiedUserId;
+                    delete newWidget.metadata;
                     return newWidget;
                 })
             );
