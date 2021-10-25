@@ -227,6 +227,16 @@ async function clusterWidgets(widgetIds, update = true) {
                 })
             );
         }
+        
+        newWidgets = await miro.board.widgets.update(newWidgets.map(widget => {
+            return {
+                ...widget,
+                metadata: undefined,
+                style: {
+                    stickerBackgroundColor: backgroundColor,
+                }
+            }
+        }));
 
         await focusOnWidgets(newWidgets);
 

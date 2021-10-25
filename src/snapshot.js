@@ -124,7 +124,7 @@ $('#addSnapshot').on('click', async () => {
     miro.board.ui.openModal('setSnapshotNameModal.html', { width: 400, height: 300 }).then(() => {
         miro.board.metadata.get().then(async (metadata) => {
             if (metadata[appId].focusedSnapshotName) {
-                if (!metadata[appId].snapshots) metadata[appId].snapshots = [];
+                if (!metadata[appId].snapshots || !metadata[appId].snapshots.length) metadata[appId].snapshots = [];
 
                 metadata[appId].snapshots.push({
                     id: randomId(),

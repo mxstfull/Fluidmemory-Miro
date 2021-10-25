@@ -22,9 +22,11 @@ function loadGroupsToList() {
     toggleLoading();
     getGroups().then((groups) => {
         $('#clusterList').html('');
-        groups.forEach((cluster) => {
-            addGroupList(cluster);
-        });
+        if (groups && groups.length) {
+            groups.forEach((cluster) => {
+                addGroupList(cluster);
+            });
+        }
         toggleLoading(false);
     });
 }
@@ -155,7 +157,7 @@ async function locateOnFrame(stickyIds, groupName, group = null) {
     newWidgets = await miro.board.widgets.update(newWidgets.map(widget => {
         return {
             ...widget,
-            metadata: null,
+            metadata: undefined,
             style: {
                 stickerBackgroundColor: backgroundColor,
             }
