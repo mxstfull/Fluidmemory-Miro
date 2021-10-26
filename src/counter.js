@@ -313,6 +313,7 @@ async function duplicateSelection(data) {
 
     if (oldWidgetIds.length) {
         var newWidgets = await clusterWidgets(oldWidgetIds, false);
+        var copyTagIndex = tags.findIndex((tag) => tag.title == 'copy')
 
         tags.forEach((tag) => {
             oldWidgetIds.forEach((id, index) => {
@@ -321,6 +322,17 @@ async function duplicateSelection(data) {
                 }
             });
         });
+
+        if (copyTagIndex == -1) {
+            await miro.board.tags.create({
+                color: randomColor(),
+                title: 'Copy',
+                widgetIds: newWidgets.map(widget => widget.id)
+            })
+        } else {
+            tags[copyTagIndex].widgetIds.concat(newWidgets.map(widget => widget.id))
+        }
+
         await miro.board.tags.update(tags);
     }
     toggleLoading(false);

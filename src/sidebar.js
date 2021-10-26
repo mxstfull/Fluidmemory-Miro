@@ -2,6 +2,7 @@ var appId = '3074457365447061755';
 var defaultWidgetWidth = 199,
     defaultWidgetHeight = 228,
     defaultMargin = 30;
+var duplicationColor = '#ff3333';
 
 function randomColor() {
     const red = Math.floor((Math.random() * 256) / 2);
@@ -193,13 +194,12 @@ async function clusterWidgets(widgetIds, update = true) {
                             width: widgetWidth,
                             height: widgetHeight,
                         },
-                        style: {
-                            stickerBackgroundColor: backgroundColor,
+                        metadata: {
+                            [appId]: widget.metadata[appId]
                         },
                         x: widgetLocations[index].x,
                         y: widgetLocations[index].y,
                     };
-                    delete updatedData.metadata;
                     return updatedData;
                 })
             );
@@ -213,8 +213,8 @@ async function clusterWidgets(widgetIds, update = true) {
                             width: widgetWidth,
                             height: widgetHeight,
                         },
-                        style: {
-                            stickerBackgroundColor: backgroundColor,
+                        metadata: {
+                            [appId]: widget.metadata[appId]
                         },
                         x: widgetLocations[index].x,
                         y: widgetLocations[index].y,
@@ -222,7 +222,6 @@ async function clusterWidgets(widgetIds, update = true) {
                     delete newWidget.id;
                     delete newWidget.createdUserId;
                     delete newWidget.lastModifiedUserId;
-                    delete newWidget.metadata;
                     return newWidget;
                 })
             );
@@ -231,9 +230,13 @@ async function clusterWidgets(widgetIds, update = true) {
         newWidgets = await miro.board.widgets.update(newWidgets.map(widget => {
             return {
                 ...widget,
-                metadata: undefined,
+                metadata: update ? undefined : {
+                    [appId]: {
+                        duplicated: true
+                    }
+                },
                 style: {
-                    stickerBackgroundColor: backgroundColor,
+                    stickerBackgroundColor: ((!widget.metadata[appId]?.duplicated && update) ? backgroundColor : duplicationColor),
                 }
             }
         }));
