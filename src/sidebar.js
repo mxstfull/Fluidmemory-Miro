@@ -197,6 +197,9 @@ async function clusterWidgets(widgetIds, update = true) {
                         metadata: {
                             [appId]: widget.metadata[appId],
                         },
+                        style: {
+                            stickerBackgroundColor: !widget.metadata[appId]?.duplicated ? backgroundColor : duplicationColor,
+                        },
                         x: widgetLocations[index].x,
                         y: widgetLocations[index].y,
                     };
@@ -214,39 +217,32 @@ async function clusterWidgets(widgetIds, update = true) {
                             height: widgetHeight,
                         },
                         metadata: {
-                            [appId]: widget.metadata[appId],
+                            [appId]: {
+                                ...widget.metadata[appId],
+                                duplicated: true,
+                            }
                         },
                         x: widgetLocations[index].x,
                         y: widgetLocations[index].y,
                     };
-                    delete newWidget.id;
-                    delete newWidget.createdUserId;
-                    delete newWidget.lastModifiedUserId;
                     return newWidget;
                 })
             );
-        }
 
-        newWidgets = await miro.board.widgets.update(
-            newWidgets.map((widget) => {
-                return {
-                    ...widget,
-                    metadata: update
-                        ? {
-                              [appId]: widget.metadata[appId],
-                          }
-                        : {
-                              [appId]: {
-                                  ...widget.metadata[appId],
-                                  duplicated: true,
-                              },
-                          },
-                    style: {
-                        stickerBackgroundColor: !widget.metadata[appId]?.duplicated && update ? backgroundColor : duplicationColor,
-                    },
-                };
-            })
-        );
+            newWidgets = await miro.board.widgets.update(
+                newWidgets.map((widget) => {
+                    return {
+                        ...widget,
+                        metadata: {
+                            [appId]: widget.metadata[appId],
+                        },
+                        style: {
+                            stickerBackgroundColor: duplicationColor,
+                        },
+                    };
+                })
+            );
+        }
 
         await focusOnWidgets(newWidgets);
 
