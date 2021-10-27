@@ -7,8 +7,10 @@
     <body style="padding: 30px; box-sizing: border-box">
         <h1>Modal view</h1>
         <div class="form-group">
-            <label>Tag Name</label>
+            <label>Tag Name (Name "Copy" is not allowed.)</label>
             <input class="input" type="text" placeholder="Tag Name" id="tagName" />
+            <div class="status-text copy-error" style='display: none;'>Name "Copy" is not allowed</div>
+            <div class="status-text duplicate-error" style='display: none;'>The tag name is duplicated or blank</div>
             <div style="display: flex; justify-content: space-between">
                 <button class="button button-primary" style="margin: 10px; margin-left: 0" type="button" onclick="confirm()">OK</button>
                 <button class="button button-danger" style="margin: 10px; margin-right: 0" type="button" onclick="cancel()">CANCEL</button>
@@ -39,9 +41,22 @@
 
             function confirm() {
                 value = $('#tagName').val();
-                if ($('#tagName').val() == '') {
-                    value = defaultValue;
+
+                if (value.toLowerCase() == 'copy') {
+                    $('.status-text').hide();
+                    $('.form-group').addClass('error');
+                    $('.copy-error').show();
+                    return;
                 }
+
+                tags =  await miro.board.tags.get();
+                if (value == '' || (tags.findIndex(tag => tag.title == value) > -1)) {
+                    $('.status-text').hide();
+                    $('.form-group').addClass('error');
+                    $('.duplicate-error').show();
+                    return;
+                }              
+
                 miro.board.metadata
                     .update({
                         [appId]: {

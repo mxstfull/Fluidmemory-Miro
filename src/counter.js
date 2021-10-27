@@ -20,12 +20,13 @@ function getSelectedTag() {
     return $('#tag-select').val();
 }
 
-function loadTagSelectOptions() {
+function loadTgaSelectOptions() {
     toggleLoading();
     getTags().then((tags) => {
         $('#tag-select').html('<option value="all"> All </option>');
         tags.forEach((tag) => {
-            $('#tag-select').append(`<option value='${tag.title}'>${tag.title}</option>`);
+            if (tag.title.toLowerCase() != 'copy')
+                $('#tag-select').append(`<option value='${tag.title}'>${tag.title}</option>`);
         });
         toggleLoading(false);
     });
@@ -118,6 +119,12 @@ function menuItem(data, shorten = false, expandable = true) {
     </li>`);
 }
 
+function filterCopies(widgets) {
+    return widgets.filter(widget => {
+        return !widget.tags.some(tag => tag.title.toLowerCase() == 'copy');
+    })
+}
+
 async function listWords() {
     toggleLoading();
 
@@ -144,6 +151,8 @@ async function listWords() {
         // filter stickied by selectedTag
         stickies = stickies.filter((widget) => widget.tags.findIndex((tag) => tag.title == selectedTag) != -1);
     }
+    
+    stickies = filterCopies(stickies);
 
     for (widget of stickies) {
         var text = widget.plainText

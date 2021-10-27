@@ -195,7 +195,7 @@ async function clusterWidgets(widgetIds, update = true) {
                             height: widgetHeight,
                         },
                         metadata: {
-                            [appId]: widget.metadata[appId]
+                            [appId]: widget.metadata[appId],
                         },
                         x: widgetLocations[index].x,
                         y: widgetLocations[index].y,
@@ -214,7 +214,7 @@ async function clusterWidgets(widgetIds, update = true) {
                             height: widgetHeight,
                         },
                         metadata: {
-                            [appId]: widget.metadata[appId]
+                            [appId]: widget.metadata[appId],
                         },
                         x: widgetLocations[index].x,
                         y: widgetLocations[index].y,
@@ -226,20 +226,27 @@ async function clusterWidgets(widgetIds, update = true) {
                 })
             );
         }
-        
-        newWidgets = await miro.board.widgets.update(newWidgets.map(widget => {
-            return {
-                ...widget,
-                metadata: update ? undefined : {
-                    [appId]: {
-                        duplicated: true
-                    }
-                },
-                style: {
-                    stickerBackgroundColor: ((!widget.metadata[appId]?.duplicated && update) ? backgroundColor : duplicationColor),
-                }
-            }
-        }));
+
+        newWidgets = await miro.board.widgets.update(
+            newWidgets.map((widget) => {
+                return {
+                    ...widget,
+                    metadata: update
+                        ? {
+                              [appId]: widget.metadata[appId],
+                          }
+                        : {
+                              [appId]: {
+                                  ...widget.metadata[appId],
+                                  duplicated: true,
+                              },
+                          },
+                    style: {
+                        stickerBackgroundColor: !widget.metadata[appId]?.duplicated && update ? backgroundColor : duplicationColor,
+                    },
+                };
+            })
+        );
 
         await focusOnWidgets(newWidgets);
 

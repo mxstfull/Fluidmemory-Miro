@@ -28,6 +28,9 @@ $('#searchApply').on('click', async function () {
     var stickies = await getStickies();
 
     var selectedWidgets = stickies.filter((sticky) => {
+        if (sticky.tags.findIndex(tag => tag.title == 'Copy') > -1) {
+            return false;
+        }
         return keywords.some((word) => sticky.plainText.indexOf(word) > -1);
     });
     var selectedIds = selectedWidgets.map((sticky) => sticky.id);

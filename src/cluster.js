@@ -141,6 +141,9 @@ async function locateOnFrame(stickyIds, groupName, group = null) {
                     width: widgetWidth,
                     height: widgetHeight,
                 },
+                metadata: {
+                    [appId]: widget.metadata[appId]
+                },
                 style: {
                     stickerBackgroundColor: backgroundColor,
                 },
@@ -150,14 +153,15 @@ async function locateOnFrame(stickyIds, groupName, group = null) {
             delete newWidget.id;
             delete newWidget.createdUserId;
             delete newWidget.lastModifiedUserId;
-            delete newWidget.metadata;
             return newWidget;
         })
     );
     newWidgets = await miro.board.widgets.update(newWidgets.map(widget => {
         return {
             ...widget,
-            metadata: undefined,
+            metadata: {
+                [appId]: widget.metadata[appId]
+            },
             style: {
                 stickerBackgroundColor: backgroundColor,
             }

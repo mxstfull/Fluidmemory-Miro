@@ -21,7 +21,7 @@ function loadSnapshotsToList() {
             snapshots.forEach((snapshot) => {
                 addSnapshotList(snapshot);
             });
-        }        
+        }
         toggleLoading(false);
     });
 }
@@ -42,21 +42,30 @@ async function moveToSnapshot(snapshotId) {
     await miro.board.tags.delete(oldTags.map((item) => item.id));
     await miro.board.widgets.deleteById(oldStickies.map((item) => item.id));
 
-    var newWidgets = await miro.board.widgets.create(snapshot.stickies);
-    var newTags = snapshot.tags.map(tag => {
+    var newWidgets = await miro.board.widgets.create(
+        snapshot.stickies.map((sticky) => {
+            return {
+                ...sticky,
+                metadata: {
+                    [appId]: sticky.metadata[appId],
+                },
+            };
+        })
+    );
+    var newTags = snapshot.tags.map((tag) => {
         tag.widgetIds = [];
         return tag;
     });
 
     newWidgets.forEach((widget, index) => {
         oldWidget = snapshot.stickies[index];
-        oldWidget.tags.forEach(widgetTag => {
-            index = newTags.findIndex((item) => item.id == widgetTag.id)
+        oldWidget.tags.forEach((widgetTag) => {
+            index = newTags.findIndex((item) => item.id == widgetTag.id);
             if (index > -1) {
                 newTags[index].widgetIds.push(widget.id);
             }
-        })
-    })
+        });
+    });
     await miro.board.tags.create(newTags);
 
     toggleLoading(false);
