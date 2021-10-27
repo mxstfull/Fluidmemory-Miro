@@ -44,11 +44,17 @@ function getWordTagTotalCount(words) {
 
 function getWordTotalCount(wordTags) {
     var sum = 0;
+    var duplicated = [];
 
-    for (index in wordTags) {
-        sum += getWordTagTotalCount(wordTags[index]);
+    for (tagName in wordTags) {
+        for (widgetId in wordTags[tagName]) {
+            if (!duplicated[widgetId]) {
+                sum += wordTags[tagName][widgetId];
+                duplicated[widgetId] = true;
+            }
+        }
     }
-
+    
     return sum;
 }
 
