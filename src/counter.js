@@ -20,7 +20,7 @@ function getSelectedTag() {
     return $('#tag-select').val();
 }
 
-function loadTgaSelectOptions() {
+function loadTagSelectOptions() {
     toggleLoading();
     getTags().then((tags) => {
         $('#tag-select').html('<option value="all"> All </option>');
@@ -151,7 +151,7 @@ async function listWords() {
         // filter stickied by selectedTag
         stickies = stickies.filter((widget) => widget.tags.findIndex((tag) => tag.title == selectedTag) != -1);
     }
-    
+
     stickies = filterCopies(stickies);
 
     for (widget of stickies) {
