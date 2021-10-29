@@ -98,7 +98,7 @@ function menuItem(data, shorten = false, expandable = true) {
     var id = randomId();
 
     return $(`
-    <li class="menu-item-${data.type}" title="${capitalizeFirstLetter(data.showName) + ' (' + data.count + ')'}" id="${id}">
+    <li class="menu-item-${data.type}" title="${capitalizeFirstLetter(data.showName) + ' (' + data.count + ')'}" id="${id}" onclick="selectWidgets(${JSON.stringify(data)})">
         <a href="#" ${expandable ? 'class="has-arrow" aria-expanded="false"' : ''}>
             <span class="word-name">${data.showName}</span> &nbsp;
             <span class="item-badge">(${data.count})</span>
@@ -303,6 +303,14 @@ function getWidgetIdsFromData(data) {
 
 function clusterItemsFromData(data) {
     clusterWidgets(getWidgetIdsFromData(data));
+}
+
+async function selectWidgets(data) {
+    var widgetIds = getWidgetIdsFromData(data);
+
+    if (widgetIds.length) {
+        await miro.board.selection.selectWidgets(widgetIds);
+    }
 }
 
 // Add a tag based on words
