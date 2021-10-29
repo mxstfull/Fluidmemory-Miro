@@ -126,9 +126,24 @@ function menuItem(data, shorten = false, expandable = true) {
 }
 
 function filterCopies(widgets) {
+    var repeated = [];
     return widgets.filter(widget => {
-        return !widget.tags.some(tag => tag.title.toLowerCase() == 'copy');
+        var hasCopyTag = widget.tags.some(tag => tag.title.toLowerCase() == 'copy');
+        var hasSameSecretId = false;
+        if (hasCopyTag) {
+            return false;
+        }
+        if (widget.metadata[cleanUpAppId] && widget.metadata[cleanUpAppId].secretId) {
+            if (repeated[widget.metadata[cleanUpAppId].secretId]) {
+                hasSameSecretId = true;
+            } else {
+                repeated[widget.metadata[cleanUpAppId].secretId] = true;
+                hasSameSecretId = false;
+            }
+        }
+        return !hasSameSecretId;
     })
+
 }
 
 async function listWords() {

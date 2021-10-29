@@ -1,4 +1,5 @@
 var appId = '3074457365447061755';
+var cleanUpAppId = '3074457366242160150';
 var defaultWidgetWidth = 199,
     defaultWidgetHeight = 228,
     defaultMargin = 30;
