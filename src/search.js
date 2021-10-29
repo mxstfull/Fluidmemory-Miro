@@ -29,12 +29,14 @@ $('#searchApply').on('click', async function () {
 
     var selectedWidgets = filterCopies(stickies)
     var selectedWidgets = selectedWidgets.filter((sticky) => {
-        return keywords.some((word) => sticky.plainText.indexOf(word) > -1);
+        return keywords.some((word) => sticky.plainText.toLowerCase().indexOf(word.toLowerCase()) > -1);
     });
     var selectedIds = selectedWidgets.map((sticky) => sticky.id);
 
-    await miro.board.selection.selectWidgets(selectedIds);
-    await focusOnWidgets(selectedWidgets);
+    if (selectedIds.length) {
+        await miro.board.selection.selectWidgets(selectedIds);
+        await focusOnWidgets(selectedWidgets);
+    }
 
     toggleLoading(false);
 });
