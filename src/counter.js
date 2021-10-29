@@ -126,27 +126,6 @@ function menuItem(data, shorten = false, expandable = true) {
     </li>`);
 }
 
-function filterCopies(widgets) {
-    var repeated = [];
-    return widgets.filter(widget => {
-        var hasCopyTag = widget.tags.some(tag => tag.title.toLowerCase() == 'copy');
-        var hasSameSecretId = false;
-        if (hasCopyTag) {
-            return false;
-        }
-        if (widget.metadata[cleanUpAppId] && widget.metadata[cleanUpAppId].secretId) {
-            if (repeated[widget.metadata[cleanUpAppId].secretId]) {
-                hasSameSecretId = true;
-            } else {
-                repeated[widget.metadata[cleanUpAppId].secretId] = true;
-                hasSameSecretId = false;
-            }
-        }
-        return !hasSameSecretId;
-    })
-
-}
-
 async function listWords() {
     toggleLoading();
 
@@ -308,10 +287,13 @@ function clusterItemsFromData(data) {
 
 async function selectWidgets(data) {
     var widgetIds = getWidgetIdsFromData(data);
+    var stickies = await getStickies();
 
     if (widgetIds.length) {
         await miro.board.selection.selectWidgets(widgetIds);
     }
+    
+    await focusOnWidgets(stickies.filter(sticky => widgetIds.includes(sticky.id)));
 }
 
 // Add a tag based on words

@@ -40,6 +40,26 @@ function getStickyById(stickies, id) {
 function getTags() {
     return miro.board.tags.get();
 }
+
+function filterCopies(widgets) {
+    var repeated = [];
+    return widgets.filter(widget => {
+        var hasCopyTag = widget.tags.some(tag => tag.title.toLowerCase() == 'copy');
+        var hasSameSecretId = false;
+        if (hasCopyTag) {
+            return false;
+        }
+        if (widget.metadata[cleanUpAppId] && widget.metadata[cleanUpAppId].secretId) {
+            if (repeated[widget.metadata[cleanUpAppId].secretId]) {
+                hasSameSecretId = true;
+            } else {
+                repeated[widget.metadata[cleanUpAppId].secretId] = true;
+                hasSameSecretId = false;
+            }
+        }
+        return !hasSameSecretId;
+    })
+}
 async function getSnapshots() {
     var data = await miro.board.metadata.get();
     if (data[appId]) {
