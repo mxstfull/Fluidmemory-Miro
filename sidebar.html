@@ -14,7 +14,7 @@
                         <!-- <div tabindex="0" class="tab tab-active" data-tabbtn="tab-cluster">
                             <div class="tab-text tab-cluster">Group</div>
                         </div> -->
-                        <div tabindex="1" class="tab" data-tabbtn="tab-count">
+                        <div tabindex="1" class="tab tab-active" data-tabbtn="tab-count">
                             <div class="tab-text tab-count">Count</div>
                         </div>
                         <div tabindex="2" class="tab" data-tabbtn="tab-search">
@@ -34,7 +34,7 @@
                         <button class="button button-primary" id="createGroupApply">Create Group</button>
                     </div>
                 </div> -->
-                <div class="tab-panel" id="tab-count">
+                <div class="tab-panel active" id="tab-count">
                     <div class="form-group">
                         <label>Tag</label>
                         <select class="select" id="tag-select">
@@ -99,9 +99,8 @@
                 }
 
                 // loadGroupsToList();
-
-                // loadTags().then(() => {
-                // });
+                
+                loadTagSelectOptions();
             });
 
             $('[data-tabbtn]').on('click', (e) => {
