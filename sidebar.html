@@ -11,9 +11,9 @@
                 <div class="stat-list__header">FluidMemory</div>
                 <div class="tabs">
                     <div class="tabs-header-list">
-                        <div tabindex="0" class="tab tab-active" data-tabbtn="tab-cluster">
+                        <!-- <div tabindex="0" class="tab tab-active" data-tabbtn="tab-cluster">
                             <div class="tab-text tab-cluster">Group</div>
-                        </div>
+                        </div> -->
                         <div tabindex="1" class="tab" data-tabbtn="tab-count">
                             <div class="tab-text tab-count">Count</div>
                         </div>
@@ -25,7 +25,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-panel active" id="tab-cluster">
+                <!-- <div class="tab-panel active" id="tab-cluster">
                     <div class="menu-wrapper">
                         <label>Group</label>
                         <ul class="metisMenu" id="clusterList"></ul>
@@ -33,7 +33,7 @@
                     <div class="action">
                         <button class="button button-primary" id="createGroupApply">Create Group</button>
                     </div>
-                </div>
+                </div> -->
                 <div class="tab-panel" id="tab-count">
                     <div class="form-group">
                         <label>Tag</label>
@@ -88,7 +88,7 @@
         <script src="src/counter.js"></script>
         <script src="src/snapshot.js"></script>
         <script src="src/search.js"></script>
-        <script src="src/cluster.js"></script>
+        <!-- <script src="src/cluster.js"></script> -->
         <script>
             miro.onReady(async () => {
                 metaData = await miro.board.metadata.get();
