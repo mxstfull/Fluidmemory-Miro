@@ -98,7 +98,7 @@ function menuItem(data, shorten = false, expandable = true) {
     var id = randomId();
 
     return $(`
-    <li class="menu-item-${data.type}" title="${capitalizeFirstLetter(data.showName) + ' (' + data.count + ')'}" id="${id}" onclick="selectWidgets(${JSON.stringify(data)})">
+    <li class="menu-item-${data.type}" title="${capitalizeFirstLetter(data.showName) + ' (' + data.count + ')'}" id="${id}" onClick='selectWidgets(${JSON.stringify(data)})'>
         <a href="#" ${expandable ? 'class="has-arrow" aria-expanded="false"' : ''}>
             <span class="word-name">${data.showName}</span> &nbsp;
             <span class="item-badge">(${data.count})</span>
