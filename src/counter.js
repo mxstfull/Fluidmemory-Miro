@@ -5,6 +5,7 @@ var defaultStopList;
 
 $.getJSON('src/nltk_stoplist.json', (data) => {
     defaultStopList = data;
+    $('#stopList').val(defaultStopList.join(', '));
 });
 
 //////////////// Count Tab ///////////////////////
