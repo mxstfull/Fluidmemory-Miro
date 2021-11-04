@@ -198,7 +198,7 @@ async function getClusteringWidgetLocation(widgetIds) {
 }
 
 async function clusterWidgets(widgetIds, update = true) {
-    if (widgetIds) {
+    if (widgetIds && widgetIds.length) {
         toggleLoading(true);
 
         var { widgetLocations, clusteringWidgets, widgetWidth, widgetHeight } = await getClusteringWidgetLocation(widgetIds);
