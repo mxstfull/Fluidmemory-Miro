@@ -50,12 +50,12 @@
                 }
 
                 tags =  await miro.board.tags.get();
-                if (value == '' || (tags.findIndex(tag => tag.title == value) > -1)) {
+                if (value == '' || (tags.findIndex(tag => tag.title.toLowerCase() == value.toLowerCase()) > -1)) {
                     $('.status-text').hide();
                     $('.form-group').addClass('error');
                     $('.duplicate-error').show();
                     return;
-                }              
+                }
 
                 miro.board.metadata
                     .update({

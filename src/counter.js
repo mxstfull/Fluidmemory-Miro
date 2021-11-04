@@ -99,8 +99,8 @@ function menuItem(data, shorten = false, expandable = true) {
     var id = randomId();
 
     return $(`
-    <li class="menu-item-${data.type}" title="${capitalizeFirstLetter(data.showName) + ' (' + data.count + ')'}" id="${id}" onClick='selectWidgets(${JSON.stringify(data)})'>
-        <a href="#" ${expandable ? 'class="has-arrow" aria-expanded="false"' : ''}>
+    <li class="menu-item-${data.type}" title="${capitalizeFirstLetter(data.showName) + ' (' + data.count + ')'}" id="${id}">
+        <a href="#" ${expandable ? 'class="has-arrow" aria-expanded="false"' : ''} onClick='selectWidgets(${JSON.stringify(data)})'>
             <span class="word-name">${data.showName}</span> &nbsp;
             <span class="item-badge">(${data.count})</span>
         </a>
@@ -330,31 +330,9 @@ async function addTagSelectedItem(data) {
 async function duplicateSelection(data) {
     toggleLoading(true);
     var oldWidgetIds = getWidgetIdsFromData(data);
-    var tags = await getTags();
 
     if (oldWidgetIds.length) {
-        var newWidgets = await clusterWidgets(oldWidgetIds, false);
-        var copyTagIndex = tags.findIndex((tag) => tag.title == 'copy')
-
-        tags.forEach((tag) => {
-            oldWidgetIds.forEach((id, index) => {
-                if (tag.widgetIds.indexOf(id) > -1) {
-                    tag.widgetIds.push(newWidgets[index].id);
-                }
-            });
-        });
-
-        if (copyTagIndex == -1) {
-            await miro.board.tags.create({
-                color: randomColor(),
-                title: 'Copy',
-                widgetIds: newWidgets.map(widget => widget.id)
-            })
-        } else {
-            tags[copyTagIndex].widgetIds.concat(newWidgets.map(widget => widget.id))
-        }
-
-        await miro.board.tags.update(tags);
+        await clusterWidgets(oldWidgetIds, false);
     }
     toggleLoading(false);
     loadTagSelectOptions();

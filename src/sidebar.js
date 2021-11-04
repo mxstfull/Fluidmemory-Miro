@@ -263,6 +263,29 @@ async function clusterWidgets(widgetIds, update = true) {
                     };
                 })
             );
+
+            var tags = await getTags();
+            var copyTagIndex = tags.findIndex((tag) => tag.title == 'Copy')
+
+            tags.forEach((tag) => {
+                clusteringWidgets.forEach((widget, index) => {
+                    if (tag.widgetIds.indexOf(widget.id) > -1) {
+                        tag.widgetIds.push(newWidgets[index].id);
+                    }
+                });
+            });
+
+            if (copyTagIndex == -1) {
+                await miro.board.tags.create({
+                    color: randomColor(),
+                    title: 'Copy',
+                    widgetIds: newWidgets.map(widget => widget.id)
+                })
+            } else {
+                tags[copyTagIndex].widgetIds.concat(newWidgets.map(widget => widget.id))
+            }
+
+            await miro.board.tags.update(tags);
         }
 
         await focusOnWidgets(newWidgets);
