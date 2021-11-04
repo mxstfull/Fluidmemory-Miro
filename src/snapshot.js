@@ -33,42 +33,44 @@ async function getSnapshotById(snapshotId) {
 }
 
 async function moveToSnapshot(snapshotId) {
-    toggleLoading(true);
+    if (confirm("You will lose all of the current stickies and you'd better take a new snapshot of the current board. Do you want to reset and load this snapshot?")) {
+        toggleLoading(true);
 
-    var snapshot = await getSnapshotById(snapshotId);
-    var oldTags = await getTags();
-    var oldStickies = await getStickies();
+        var snapshot = await getSnapshotById(snapshotId);
+        var oldTags = await getTags();
+        var oldStickies = await getStickies();
 
-    await miro.board.tags.delete(oldTags.map((item) => item.id));
-    await miro.board.widgets.deleteById(oldStickies.map((item) => item.id));
+        await miro.board.tags.delete(oldTags.map((item) => item.id));
+        await miro.board.widgets.deleteById(oldStickies.map((item) => item.id));
 
-    var newWidgets = await miro.board.widgets.create(
-        snapshot.stickies.map((sticky) => {
-            return {
-                ...sticky,
-                metadata: {
-                    [appId]: sticky.metadata[appId],
-                },
-            };
-        })
-    );
-    var newTags = snapshot.tags.map((tag) => {
-        tag.widgetIds = [];
-        return tag;
-    });
-
-    newWidgets.forEach((widget, index) => {
-        oldWidget = snapshot.stickies[index];
-        oldWidget.tags.forEach((widgetTag) => {
-            index = newTags.findIndex((item) => item.id == widgetTag.id);
-            if (index > -1) {
-                newTags[index].widgetIds.push(widget.id);
-            }
+        var newWidgets = await miro.board.widgets.create(
+            snapshot.stickies.map((sticky) => {
+                return {
+                    ...sticky,
+                    metadata: {
+                        [appId]: sticky.metadata[appId],
+                    },
+                };
+            })
+        );
+        var newTags = snapshot.tags.map((tag) => {
+            tag.widgetIds = [];
+            return tag;
         });
-    });
-    await miro.board.tags.create(newTags);
 
-    toggleLoading(false);
+        newWidgets.forEach((widget, index) => {
+            oldWidget = snapshot.stickies[index];
+            oldWidget.tags.forEach((widgetTag) => {
+                index = newTags.findIndex((item) => item.id == widgetTag.id);
+                if (index > -1) {
+                    newTags[index].widgetIds.push(widget.id);
+                }
+            });
+        });
+        await miro.board.tags.create(newTags);
+
+        toggleLoading(false);
+    }
 }
 
 async function updateSnapshot(snapshotId) {
