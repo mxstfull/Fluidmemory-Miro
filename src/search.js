@@ -48,6 +48,7 @@ $('#clusterSearchedResultButton').on('click', async function () {
 
     if (await checkValidatationOfTagName(newTagName)) {
         var selectedStickies = await miro.board.selection.get();
+        selectedStickies = filterCopies(selectedStickies)
 
         await miro.board.tags.create({
             color: randomColor(),
@@ -68,6 +69,7 @@ $('#duplicateSearchedResultButton').on('click', async function () {
 
     if (await checkValidatationOfTagName(newTagName)) {
         var selectedStickies = await miro.board.selection.get();
+        selectedStickies = filterCopies(selectedStickies)
         var newWidgets = await clusterWidgets(
             selectedStickies.map((widget) => widget.id),
             false
@@ -106,6 +108,7 @@ async function addTagToSelectedStickies(tagId) {
 
     if (index > -1) {
         var selectedStickies = await miro.board.selection.get();
+        selectedStickies = filterCopies(selectedStickies);
 
         tags[index].widgetIds = tags[index].widgetIds.concat(selectedStickies.map((widget) => widget.id));
         await miro.board.tags.update(tags[index]);
@@ -118,6 +121,7 @@ async function clusterStickiesOfTag(tagId) {
     toggleLoading(true);
 
     stickies = await getStickies();
+    stickies = filterCopies(stickies);
     await clusterWidgets(stickies.filter((widget) => widget.tags.some((tag) => tag.id == tagId)).map((widget) => widget.id));
 
     toggleLoading(false);
