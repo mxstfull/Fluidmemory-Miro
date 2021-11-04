@@ -61,15 +61,15 @@
                         <label>Select keywords (comma-separated)</label>
                         <textarea class="textarea" placeholder="Write keywords" id="searchKeywords" spellcheck="true" rows="4"></textarea>
                     </div>
-                    <div class="form-group">
-                        <input class="input" type="text" placeholder="New tag" id="newTagNameForSearch"/>
-                        <div class="action">
+                    <div class="action">
+                        <button class="button button-primary" id="searchApply">Search</button>
+                    </div>
+                    <div class="form-group" style="display: flex; justify-content: space-around; gap: 10px;">
+                        <input class="input" type="text" placeholder="New tag" id="newTagNameForSearch" />
+                        <div class="action" style="display: flex; align-items: center; gap: 3px;">
                             <button class="btn button-icon button-icon-small icon-tile" title="Cluster stickies and add this new tag" id="clusterSearchedResultButton"></button>
                             <button class="btn button-icon button-icon-small icon-duplicate" title="Duplicate stickies and add this new tag" id="duplicateSearchedResultButton"></button>
                         </div>
-                    </div>
-                    <div class="action">
-                        <button class="button button-primary" id="searchApply">Search</button>
                     </div>
                     <div class="menu-wrapper">
                         <label>Tags</label>
@@ -85,15 +85,17 @@
                     </div>
                     <ul class="metisMenu" id="snapshotList"></ul>
                 </div>
-                <div class="tab-panel" id="tab-about" style="padding: 15px; padding-top: 15px;">
-                    <p style="text-align: center; margin-bottom: 15px;">
-                        <img src="./src/logo.svg"/>
+                <div class="tab-panel" id="tab-about" style="padding: 15px; padding-top: 15px">
+                    <p style="text-align: center; margin-bottom: 15px">
+                        <img src="./src/logo.svg" />
                     </p>
                     <p>
-                        <a class="link link-primary" target="_parent" href="https://eightarms.bit.ai/docs/view/33zXPjGB7W6AXCGI">FluidMemory</a> is a user-friendly qualitative data analysis solution that enables teams to collect and analyze written content, including notes, analyst reports, and presentations, across multiple tools including Miro, Mural, Google Sheets, Google Docs, and Google Slides
+                        <a class="link link-primary" target="_parent" href="https://eightarms.bit.ai/docs/view/33zXPjGB7W6AXCGI">FluidMemory</a> is a user-friendly qualitative data analysis solution that enables teams to collect and analyze written content, including notes, analyst reports, and
+                        presentations, across multiple tools including Miro, Mural, Google Sheets, Google Docs, and Google Slides
                     </p>
                     <p>
-                        FluidMemory was designed to be intuitive and easy to use. However, sometimes we all run into a challenge here and there. Click on the button to go to our <a class="link link-primary" href="https://eightarms.bit.ai/docs/view/33zXPjGB7W6AXCGI" target="_parent">support site</a> and find resources to help you get the most out of our application.
+                        FluidMemory was designed to be intuitive and easy to use. However, sometimes we all run into a challenge here and there. Click on the button to go to our
+                        <a class="link link-primary" href="https://eightarms.bit.ai/docs/view/33zXPjGB7W6AXCGI" target="_parent">support site</a> and find resources to help you get the most out of our application.
                     </p>
                 </div>
             </div>
@@ -120,7 +122,7 @@
                 }
 
                 // loadGroupsToList();
-                
+
                 loadTagSelectOptions();
             });
 
