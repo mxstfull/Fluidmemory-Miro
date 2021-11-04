@@ -46,7 +46,7 @@ $('#clusterSearchedResultButton').on('click', async function () {
 
     var newTagName = $('#newTagNameForSearch').val();
 
-    if (checkValidatationOfTagName(newTagName)) {
+    if (await checkValidatationOfTagName(newTagName)) {
         var selectedStickies = await miro.board.selection.get();
 
         await miro.board.tags.create({
@@ -66,7 +66,7 @@ $('#duplicateSearchedResultButton').on('click', async function () {
 
     var newTagName = $('#newTagNameForSearch').val();
 
-    if (checkValidatationOfTagName(newTagName)) {
+    if (await checkValidatationOfTagName(newTagName)) {
         var selectedStickies = await miro.board.selection.get();
         var newWidgets = await clusterWidgets(
             selectedStickies.map((widget) => widget.id),
