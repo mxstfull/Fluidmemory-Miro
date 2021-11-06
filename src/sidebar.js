@@ -1,5 +1,4 @@
 var appId = '3074457365447061755';
-var cleanUpAppId = '3074457366242160150';
 var addOnAppId = '3074457360238945885';
 var defaultWidgetWidth = 199,
     defaultWidgetHeight = 228,
@@ -50,11 +49,11 @@ function filterCopies(widgets) {
         if (hasCopyTag) {
             return false;
         }
-        if (widget.metadata[cleanUpAppId] && widget.metadata[cleanUpAppId].secretId) {
-            if (repeated[widget.metadata[cleanUpAppId].secretId]) {
+        if (widget.metadata[appId] && widget.metadata[appId].secretId) {
+            if (repeated[widget.metadata[appId].secretId]) {
                 hasSameSecretId = true;
             } else {
-                repeated[widget.metadata[cleanUpAppId].secretId] = true;
+                repeated[widget.metadata[appId].secretId] = true;
                 hasSameSecretId = false;
             }
         }
