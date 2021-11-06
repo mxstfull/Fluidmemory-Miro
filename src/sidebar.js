@@ -337,7 +337,7 @@ async function checkDataForFluidMemory() {
             var registerdIndex = registeredTags.findIndex((item) => item.title == tagName);
             // tags.add(widget.metadata[addOnAppId].tag.tagName);
 
-            if (registerdIndex == -1) {
+            if (registerdIndex != -1) {
                 // If the tag is registered, update it. Unless, create a new tag.
                 registeredTags[registerdIndex].widgetIds.push(widget.id);
             } else {
