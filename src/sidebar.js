@@ -1,5 +1,6 @@
 var appId = '3074457365447061755';
 var cleanUpAppId = '3074457366242160150';
+var addOnAppId = '3074457360238945885';
 var defaultWidgetWidth = 199,
     defaultWidgetHeight = 228,
     defaultMargin = 30;
@@ -320,6 +321,54 @@ async function focusOnWidgets(widgets) {
         width: right - left,
         height: bottom - top,
     });
+}
+
+async function checkDataForFluidMemory() {
+    toggleLoading(true);
+    var widgets = await getStickies();
+    var registeredTags = await getTags(); // get existed tags in board
+
+    for (widgetIndex in widgets) {
+        var text = widget.text;
+        var widget = widgets[widgetIndex];
+
+        if (widget.metadata[addOnAppId] && widget.metadata[addOnAppId].tag) {
+            var tagName = widget.metadata[addOnAppId].tag.tagName;
+            var registerdIndex = registeredTags.findIndex((item) => item.title == tagName);
+            // tags.add(widget.metadata[addOnAppId].tag.tagName);
+
+            if (registerdIndex == -1) {
+                // If the tag is registered, update it. Unless, create a new tag.
+                registeredTags[registerdIndex].widgetIds.push(widget.id);
+            } else {
+                const newTag = await miro.board.tags.create({
+                    color: randomColor(),
+                    title: tag,
+                    widgetIds: [widget.id],
+                });
+                registeredTags.push(newTag);
+            }            
+
+            splitArray = widget.text.split('Tag: ');
+            if (splitArray.length > 1) {
+                splitArray.pop();
+                text = splitArray.join('Tag: '); // Split Tag: part from the text
+            }
+        }
+
+        widget.text = text;
+        widget.metadata = {
+            [appId]: {
+                secretId: randomId()
+            }
+        }
+
+        widgets[widgetIndex] = widget;
+    }
+
+    await miro.board.tags.update(registeredTags);
+    await miro.board.widgets.update(widgets);
+    toggleLoading(false);
 }
 
 // async function registerCluster(widgets, clusterName, clusterId) {
