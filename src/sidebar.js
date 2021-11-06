@@ -335,7 +335,6 @@ async function checkDataForFluidMemory() {
         if (widget.metadata[addOnAppId] && widget.metadata[addOnAppId].tag) {
             var tagName = widget.metadata[addOnAppId].tag.tagName;
             var registerdIndex = registeredTags.findIndex((item) => item.title == tagName);
-            // tags.add(widget.metadata[addOnAppId].tag.tagName);
 
             if (registerdIndex != -1) {
                 // If the tag is registered, update it. Unless, create a new tag.
@@ -343,7 +342,7 @@ async function checkDataForFluidMemory() {
             } else {
                 const newTag = await miro.board.tags.create({
                     color: randomColor(),
-                    title: tag,
+                    title: tagName,
                     widgetIds: [widget.id],
                 });
                 registeredTags.push(newTag);
