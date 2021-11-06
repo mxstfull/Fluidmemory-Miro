@@ -329,8 +329,8 @@ async function checkDataForFluidMemory() {
     var registeredTags = await getTags(); // get existed tags in board
 
     for (widgetIndex in widgets) {
-        var text = widget.text;
         var widget = widgets[widgetIndex];
+        var text = widget.text;
 
         if (widget.metadata[addOnAppId] && widget.metadata[addOnAppId].tag) {
             var tagName = widget.metadata[addOnAppId].tag.tagName;
