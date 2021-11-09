@@ -41,64 +41,70 @@ $('#searchApply').on('click', async function () {
     toggleLoading(false);
 });
 
-$('#clusterSearchedResultButton').on('click', async function () {
+$('#createTagApply').on('click', async function () {
     toggleLoading(true);
+    await miro.board.metadata.update({
+        [appId]: {
+            focusedTagName: 'Tag',
+        },
+    });
 
-    var newTagName = $('#newTagNameForSearch').val();
+    miro.board.ui.openModal('setTagNameModal.html', { width: 400, height: 300 }).then(() => {
+        miro.board.metadata.get().then(async (metadata) => {
+            if (metadata[appId].focusedTagName) {
+                var selectedStickies = await miro.board.selection.get();
+                selectedStickies = filterCopies(selectedStickies)
 
-    if (await checkValidatationOfTagName(newTagName)) {
-        var selectedStickies = await miro.board.selection.get();
-        selectedStickies = filterCopies(selectedStickies)
+                await miro.board.tags.create({
+                    color: randomColor(),
+                    title: metadata[appId].focusedTagName,
+                    widgetIds: selectedStickies.map((widget) => widget.id),
+                });
 
-        await miro.board.tags.create({
-            color: randomColor(),
-            title: newTagName,
-            widgetIds: selectedStickies.map((widget) => widget.id),
+                loadTagList();
+            }
         });
-        await clusterWidgets(selectedStickies);
-    }
-
-    loadTagList();
+    });
     toggleLoading(false);
 });
 
-$('#duplicateSearchedResultButton').on('click', async function () {
-    toggleLoading(true);
+// $('#duplicateSearchedResultButton').on('click', async function () {
+//     toggleLoading(true);
 
-    var newTagName = $('#newTagNameForSearch').val();
+//     var newTagName = $('#newTagNameForSearch').val();
 
-    if (await checkValidatationOfTagName(newTagName)) {
-        var selectedStickies = await miro.board.selection.get();
-        selectedStickies = filterCopies(selectedStickies)
-        var newWidgets = await clusterWidgets(
-            selectedStickies.map((widget) => widget.id),
-            false
-        );
-        await miro.board.tags.create({
-            color: randomColor(),
-            title: newTagName,
-            widgetIds: newWidgets.map((widget) => widget.id),
-        });
-    }
+//     if (await checkValidatationOfTagName(newTagName)) {
+//         var selectedStickies = await miro.board.selection.get();
+//         selectedStickies = filterCopies(selectedStickies)
+//         var newWidgets = await clusterWidgets(
+//             selectedStickies.map((widget) => widget.id),
+//             false
+//         );
+//         await miro.board.tags.create({
+//             color: randomColor(),
+//             title: newTagName,
+//             widgetIds: newWidgets.map((widget) => widget.id),
+//         });
+//     }
 
-    loadTagList();
-    toggleLoading(false);
-});
+//     loadTagList();
+//     toggleLoading(false);
+// });
 
-async function checkValidatationOfTagName(name) {
-    name = name.toLowerCase();
-    if (name != '') {
-        var tags = await getTags();
-        if (tags.findIndex((tag) => tag.title.toLowerCase() == name) == -1 && name != 'tag') {
-            return true;
-        } else {
-            miro.showErrorNotification('Your new tag name is existed already.');
-        }
-    } else {
-        miro.showErrorNotification('Please enter your new tag name.');
-    }
-    return false;
-}
+// async function checkValidatationOfTagName(name) {
+//     name = name.toLowerCase();
+//     if (name != '') {
+//         var tags = await getTags();
+//         if (tags.findIndex((tag) => tag.title.toLowerCase() == name) == -1 && name != 'tag') {
+//             return true;
+//         } else {
+//             miro.showErrorNotification('Your new tag name is existed already.');
+//         }
+//     } else {
+//         miro.showErrorNotification('Please enter your new tag name.');
+//     }
+//     return false;
+// }
 
 async function addTagToSelectedStickies(tagId) {
     toggleLoading(true);
