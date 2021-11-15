@@ -344,7 +344,7 @@ async function checkDataForFluidMemory() {
                     title: tagName,
                     widgetIds: [widget.id],
                 });
-                registeredTags.push(newTag);
+                registeredTags.push(newTag[0]);
             }            
 
             splitArray = widget.text.split('Tag: ');
