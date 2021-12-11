@@ -42,9 +42,10 @@ miro.onReady(() => {
   
     miro.initialize({
       extensionPoints: {
-        bottomBar: {
+        toolbar: {
           title: 'FluidMemory',
-          svgIcon: icon24,
+          toolbarSvgIcon: icon24,
+          librarySvgIcon: icon24,
           onClick: () => {
             miro.board.ui.openLeftSidebar('sidebar.html')
           },
