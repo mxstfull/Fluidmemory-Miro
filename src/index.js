@@ -77,6 +77,22 @@ miro.onReady(() => {
       </g>
     </g>`;
 
+  async function onToolbarAppButtonClicked() {
+    const isAuthorized = await miro.isAuthorized()
+
+    if (!isAuthorized) {
+      // Ask the user to authorize the app.
+      await miro.requestAuthorization()
+    }
+  
+    // Once authorized, open the app.
+    openMyApp()
+  }
+
+  function openMyApp() {
+    miro.board.ui.openLeftSidebar('sidebar.html');
+  }
+
   miro.initialize({
     extensionPoints: {
       toolbar: {
@@ -84,7 +100,7 @@ miro.onReady(() => {
         toolbarSvgIcon: icon24,
         librarySvgIcon: icon48,
         onClick: () => {
-          miro.board.ui.openLeftSidebar('sidebar.html');
+          onToolbarAppButtonClicked();
         },
       },
     },
