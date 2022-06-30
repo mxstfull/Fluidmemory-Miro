@@ -5,6 +5,12 @@ var defaultWidgetWidth = 199,
     defaultMargin = 30;
 var duplicationColor = '#ff3333';
 
+document.addEventListener("keydown", function(event) {
+    if (event.ctrlKey && event.code === "KeyQ") {
+        console.log("Ctrl+Q")
+    }
+})
+
 function randomColor() {
     const red = Math.floor((Math.random() * 256) / 2);
     const green = Math.floor((Math.random() * 256) / 2);
