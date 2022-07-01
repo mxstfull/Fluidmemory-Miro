@@ -358,7 +358,8 @@ $('#countWordApply').on('click', (e) => {
     listWords();
 });
 
-$("#paste-extension").on('click', (e) => {
+async function createStickyNote() {
+    debugger
     const stickyNote = await miro.board.createStickyNote({
         content: '<p>This is a sticky note. It looks just like the actual paper one.</p>',
         style: {
@@ -371,5 +372,9 @@ $("#paste-extension").on('click', (e) => {
         shape: 'square',
         width: 200, // Set either 'width', or 'height'
       });
+}
+
+$("#paste-extension").on('click', (e) => {
+    createStickyNote()
 })
 // Arrage tags exported from google sheet
