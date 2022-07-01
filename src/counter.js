@@ -357,4 +357,19 @@ function moreButtonClicked(e) {
 $('#countWordApply').on('click', (e) => {
     listWords();
 });
+
+$("#paste-extension").on('click', (e) => {
+    const stickyNote = await miro.board.createStickyNote({
+        content: '<p>This is a sticky note. It looks just like the actual paper one.</p>',
+        style: {
+          fillColor: 'light_yellow', // Default value: light yellow
+          textAlign: 'center', // Default alignment: center
+          textAlignVertical: 'middle', // Default alignment: middle
+        },
+        x: 0, // Default value: horizontal center of the board
+        y: 0, // Default value: vertical center of the board
+        shape: 'square',
+        width: 200, // Set either 'width', or 'height'
+      });
+})
 // Arrage tags exported from google sheet
