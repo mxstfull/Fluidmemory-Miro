@@ -360,7 +360,7 @@ $('#countWordApply').on('click', (e) => {
 
 async function createStickyNote() {
     debugger
-    const stickyNote = await miro.board.createStickyNote({
+    const stickyNote = await miro.board.widget.createStickyNote({
         content: '<p>This is a sticky note. It looks just like the actual paper one.</p>',
         style: {
           fillColor: 'light_yellow', // Default value: light yellow
