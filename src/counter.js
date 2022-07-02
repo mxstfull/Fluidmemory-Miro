@@ -360,18 +360,15 @@ $('#countWordApply').on('click', (e) => {
 
 async function createStickyNote() {
     debugger
-    const stickyNote = await miro.board.widget.createStickyNote({
-        content: '<p>This is a sticky note. It looks just like the actual paper one.</p>',
-        style: {
-          fillColor: 'light_yellow', // Default value: light yellow
-          textAlign: 'center', // Default alignment: center
-          textAlignVertical: 'middle', // Default alignment: middle
+    await miro.board.widgets.create({
+          type: 'shape',
+          text: "asefiasfi osaenfoiasen fiosenfoi",
+          x: 200,
+          y: 200,
+          width: 300,
+          height: 300,
         },
-        x: 0, // Default value: horizontal center of the board
-        y: 0, // Default value: vertical center of the board
-        shape: 'square',
-        width: 200, // Set either 'width', or 'height'
-      });
+      )
 }
 
 $("#paste-extension").on('click', (e) => {
