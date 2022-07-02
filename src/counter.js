@@ -362,7 +362,7 @@ async function createStickyNote() {
     debugger
     await miro.board.widgets.create({
           type: 'sticker',
-          text: "asefiasfi osaenfoiasen fiosenfoi",
+          text: 'asefiasfi osaenfoiasen fiosenfoi <a href="https://stackoverflow.com/questions/37315266/google-sheets-api-v4-receives-http-401-responses-for-public-feeds">Source</a>',
           x: 200,
           y: 200,
           width: 300,
