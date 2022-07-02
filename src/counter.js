@@ -360,7 +360,7 @@ $('#countWordApply').on('click', (e) => {
 
 async function createStickyNote() {
     debugger
-    const test = await miro.board.widgets.create({
+    var test = await miro.board.widgets.create({
           type: 'sticker',
           text: 'asefiasfi osaenfoiasen fiosenfoi <br> Author: Pieter <br> <a href="https://stackoverflow.com/questions/37315266/google-sheets-api-v4-receives-http-401-responses-for-public-feeds">Source</a>',
           x: 200,
@@ -372,7 +372,7 @@ async function createStickyNote() {
 
     console.log(test.id)
       
-    const tag1 = await miro.board.tags.create({
+    var tag1 = await miro.board.tags.create({
         color: randomColor(),
         title: "konzes",
         widgetIds: [test.id]
