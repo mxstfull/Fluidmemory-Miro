@@ -365,7 +365,6 @@ async function createStickyNote() {
           text: 'asefiasfi osaenfoiasen fiosenfoi <br> Author: Pieter <br> <a href="https://stackoverflow.com/questions/37315266/google-sheets-api-v4-receives-http-401-responses-for-public-feeds">Source</a>',
           x: 200,
           y: 200,
-          tags: [tag1],
           width: 300,
           height: 300,
         },
