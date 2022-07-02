@@ -394,12 +394,17 @@ async function createStickyNote() {
 
         console.log(test)
         console.log(tags)
-        
+        var index = tags.findIndex((tag) => tag.id == tagId);
+
+    if (index <=  -1) {
         var tag1 = await miro.board.tags.create({
             color: randomColor(),
             title: array[i][1].split('Code :#')[1],
             widgetIds: [test[0].id]
         });
+    } else {
+        tags[index].widgetIds = tags[index].widgetIds.concat(test[0].id)
+    }
         console.log(tag1)
         miro.board.widgets.update(test);
     }
