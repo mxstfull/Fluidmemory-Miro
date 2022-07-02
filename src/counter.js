@@ -394,7 +394,7 @@ async function createStickyNote() {
 
         console.log(test)
         console.log(tags)
-        var index = tags.findIndex((tag) => tag.id == tagId);
+        var index = 1;
 
     if (index <=  -1) {
         var tag1 = await miro.board.tags.create({
