@@ -361,7 +361,7 @@ $('#countWordApply').on('click', (e) => {
 async function createStickyNote() {
     debugger
     await miro.board.widgets.create({
-          type: 'shape',
+          type: 'sticker',
           text: "asefiasfi osaenfoiasen fiosenfoi",
           x: 200,
           y: 200,
