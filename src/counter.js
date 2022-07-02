@@ -360,11 +360,16 @@ $('#countWordApply').on('click', (e) => {
 
 async function createStickyNote() {
     debugger
+    const tag1 = await miro.board.tags.create({
+        color: randomColor(),
+        title: "leader",
+    });
     await miro.board.widgets.create({
           type: 'sticker',
-          text: 'asefiasfi osaenfoiasen fiosenfoi <a href="https://stackoverflow.com/questions/37315266/google-sheets-api-v4-receives-http-401-responses-for-public-feeds">Source</a>',
+          text: 'asefiasfi osaenfoiasen fiosenfoi <br> <span style="color:blue;">Author: </span> Pieter <br><a href="https://stackoverflow.com/questions/37315266/google-sheets-api-v4-receives-http-401-responses-for-public-feeds">Source</a>',
           x: 200,
           y: 200,
+          tags: [tag1],
           width: 300,
           height: 300,
         },
