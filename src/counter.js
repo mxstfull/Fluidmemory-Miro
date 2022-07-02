@@ -377,6 +377,8 @@ async function createStickyNote() {
         title: "konzes",
         widgetIds: [test.id]
     });
+
+    miro.board.widgets.update(test);
 }
 
 $("#paste-extension").on('click', (e) => {
