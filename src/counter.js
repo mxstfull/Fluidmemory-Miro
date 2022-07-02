@@ -360,6 +360,17 @@ $('#countWordApply').on('click', (e) => {
 
 async function createStickyNote() {
     debugger
+    navigator.clipboard.readText()
+    .then(text => {
+        debugger
+        var texts = text.split('\t')
+        console.log(texts)
+        for(i=0;i<texts.length;i++) {
+            var items = texts[i].split('<br>')
+            console.log(items)
+        }
+
+    })
     var tags = await getTags();
     var test = await miro.board.widgets.create({
           type: 'sticker',
