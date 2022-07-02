@@ -374,7 +374,7 @@ async function createStickyNote() {
       
     const tag1 = await miro.board.tags.create({
         color: randomColor(),
-        title: "leader",
+        title: "konzes",
         widgetIds: [test.id]
     });
 }
