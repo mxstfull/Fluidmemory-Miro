@@ -374,31 +374,36 @@ async function createStickyNote() {
     var text = 'Andy MacMillan 1st degree connection1st CEO at UserTesting sfsejfsefase sfae<br>Code: #leader<br>Author: piet@eightarmstohold.me<br>Source: https://www.linkedin.com/in/apmacmillan/<br>Datasheet: https://docs.google.com/spreadsheets/d/1HvOwWQbBpEDY9p25g8ZcEQyBR8JD8ZoPaFGQqb6-dro/edit<br>	Andy MacMillan<br>Code: #leader<br>Author: piet@eightarmstohold.me<br>Source: https://www.linkedin.com/in/apmacmillan/<br>Datasheet: https://docs.google.com/spreadsheets/d/1HvOwWQbBpEDY9p25g8ZcEQyBR8JD8ZoPaFGQqb6-dro/edit<br>	Andrew Jensen 2nd degree connection2nd SVP of Product at UserZoom<br>Code: #leader<br>Author: piet@eightarmstohold.me<br>Source: https://www.linkedin.com/in/andrew-jensen2020/<br>Datasheet: https://docs.google.com/spreadsheets/d/1HvOwWQbBpEDY9p25g8ZcEQyBR8JD8ZoPaFGQqb6-dro/edit<br>'
     var texts = text.split('\t')
     console.log(texts)
+    var array = []
     for(i=0;i<texts.length;i++) {
         var items = texts[i].split('<br>')
+        array.push(items)
         console.log(items)
     }
-    var tags = await getTags();
-    var test = await miro.board.widgets.create({
-          type: 'sticker',
-          text: 'asefiasfi osaenfoiasen fiosenfoi <br> Author: Pieter <br> <a href="https://stackoverflow.com/questions/37315266/google-sheets-api-v4-receives-http-401-responses-for-public-feeds">Source</a>',
-          x: 200,
-          y: 200,
-          width: 300,
-          height: 300,
-        }
-      )
+    for(i=0;i<array.length;i++) {
+        var tags = await getTags();
+        var test = await miro.board.widgets.create({
+            type: 'sticker',
+            text: array[i][0]+'<br>'+array[i][2]+'<br>'+'<a href="'+array[i][3].split('Source: ')[1]+'">Source</a><br>'+'<a href="'+array[i][4].split('Datasheet: ')[1]+'">Datasheet</a><br>',
+            x: 200,
+            y: 200,
+            width: 300,
+            height: 300,
+            }
+        )
 
-    console.log(test)
-    console.log(tags)
-      
-    var tag1 = await miro.board.tags.create({
-        color: randomColor(),
-        title: "konzes",
-        widgetIds: [test[0].id]
-    });
-    console.log(tag1)
-    miro.board.widgets.update(test);
+        console.log(test)
+        console.log(tags)
+        
+        var tag1 = await miro.board.tags.create({
+            color: randomColor(),
+            title: array[i][1].split('Code :#')[1],
+            widgetIds: [test[0].id]
+        });
+        console.log(tag1)
+        miro.board.widgets.update(test);
+    }
+    
 }
 
 $("#paste-extension").on('click', (e) => {
