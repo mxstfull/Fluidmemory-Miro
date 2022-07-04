@@ -358,6 +358,14 @@ $('#countWordApply').on('click', (e) => {
     listWords();
 });
 
+document.addEventListener('paste', event => pastedata(event))
+
+function pastedata(e) {
+    var pastedText = e.clipboardData.getData('Text');
+    console.log(pastedText)
+    debugger
+}
+
 async function createStickyNote() {
     debugger
     // navigator.clipboard.readText()
