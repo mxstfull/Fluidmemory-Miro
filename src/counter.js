@@ -420,6 +420,8 @@ async function createStickyNote() {
 }
 
 $("#paste-extension").on('click', (e) => {
+    var pastedText = e.clipboardData.getData('Text');
+    console.log(pastedText)
     createStickyNote()
 })
 // Arrage tags exported from google sheet
