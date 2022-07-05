@@ -358,7 +358,7 @@ $('#countWordApply').on('click', (e) => {
     listWords();
 });
 
-document.addEventListener('paste', event => pastedata(event))
+document.addEventListener('paste', event => createStickyNote(event))
 
 function pastedata(e) {
     var pastedText = e.clipboardData.getData('Text');
@@ -366,7 +366,7 @@ function pastedata(e) {
     debugger
 }
 
-async function createStickyNote() {
+async function createStickyNote(e) {
     debugger
     // navigator.clipboard.readText()
     // .then(text => {
@@ -379,7 +379,7 @@ async function createStickyNote() {
     //     }
 
     // })
-    var text = 'Andy MacMillan 1st degree connection1st CEO at UserTesting sfsejfsefase sfae<br>Code: #leader<br>Author: piet@eightarmstohold.me<br>Source: https://www.linkedin.com/in/apmacmillan/<br>Datasheet: https://docs.google.com/spreadsheets/d/1HvOwWQbBpEDY9p25g8ZcEQyBR8JD8ZoPaFGQqb6-dro/edit<br>	Andy MacMillan<br>Code: #leader<br>Author: piet@eightarmstohold.me<br>Source: https://www.linkedin.com/in/apmacmillan/<br>Datasheet: https://docs.google.com/spreadsheets/d/1HvOwWQbBpEDY9p25g8ZcEQyBR8JD8ZoPaFGQqb6-dro/edit<br>	Andrew Jensen 2nd degree connection2nd SVP of Product at UserZoom<br>Code: #leader<br>Author: piet@eightarmstohold.me<br>Source: https://www.linkedin.com/in/andrew-jensen2020/<br>Datasheet: https://docs.google.com/spreadsheets/d/1HvOwWQbBpEDY9p25g8ZcEQyBR8JD8ZoPaFGQqb6-dro/edit<br>'
+    var text = e.clipboardData.getData('Text');
     var texts = text.split('\t')
     console.log(texts)
     var array = []
