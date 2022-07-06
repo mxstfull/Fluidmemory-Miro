@@ -407,7 +407,7 @@ async function createStickyNote(e) {
     if (index <=  -1) {
         var tag1 = await miro.board.tags.create({
             color: randomColor(),
-            title: array[i][1].split('Code :#')[1],
+            title: array[i][1].split('Code: #')[1],
             widgetIds: [test[0].id]
         });
         await miro.board.tags.update(tag1);
