@@ -402,7 +402,7 @@ async function createStickyNote(e) {
 
         console.log(test)
         console.log(tags)
-        var index = 1;
+        var index = tags.findIndex((tag) => tag.title == array[i][1].split("Code: #")[1])
 
     if (index <=  -1) {
         var tag1 = await miro.board.tags.create({
@@ -410,13 +410,14 @@ async function createStickyNote(e) {
             title: array[i][1].split('Code :#')[1],
             widgetIds: [test[0].id]
         });
+        await miro.board.tags.update(tags1);
     } else {
         console.log(tags[index].widgetIds)
         tags[index].widgetIds = tags[index].widgetIds.concat(test[0].id)
         console.log(tags[index].widgetIds)
+        await miro.board.tags.update(tags[index]);
     }
         console.log(tag1)
-        await miro.board.tags.update(tags[index]);
     }
     
 }
