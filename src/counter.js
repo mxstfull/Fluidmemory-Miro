@@ -410,7 +410,7 @@ async function createStickyNote(e) {
             title: array[i][1].split('Code :#')[1],
             widgetIds: [test[0].id]
         });
-        await miro.board.tags.update(tags1);
+        await miro.board.tags.update(tag1);
     } else {
         console.log(tags[index].widgetIds)
         tags[index].widgetIds = tags[index].widgetIds.concat(test[0].id)
@@ -421,10 +421,4 @@ async function createStickyNote(e) {
     }
     
 }
-
-$("#paste-extension").on('click', (e) => {
-    var pastedText = e.clipboardData.getData('Text');
-    console.log(pastedText)
-    createStickyNote()
-})
 // Arrage tags exported from google sheet
