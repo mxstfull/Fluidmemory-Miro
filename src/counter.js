@@ -411,10 +411,12 @@ async function createStickyNote(e) {
             widgetIds: [test[0].id]
         });
     } else {
+        console.log(tags[index].widgetIds)
         tags[index].widgetIds = tags[index].widgetIds.concat(test[0].id)
+        console.log(tags[index].widgetIds)
     }
         console.log(tag1)
-        miro.board.widgets.update(test);
+        await miro.board.tags.update(tags[index]);
     }
     
 }
