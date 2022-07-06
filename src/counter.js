@@ -392,12 +392,12 @@ async function createStickyNote(e) {
     console.log(viewport)
     for(i=0;i<array.length;i++) {
         var tags = await getTags();
-        var x = 320*(i%3), y = 320*(i/3)
+        var x = 320*(i%3), y = 320*(Math.ceil(i/3)-1)
         var test = await miro.board.widgets.create({
             type: 'sticker',
             text: array[i][0]+'<br>'+array[i][2]+'<br>'+'<a href="'+array[i][3].split('Source: ')[1]+'">Source</a><br>'+'<a href="'+array[i][4].split('Datasheet: ')[1]+'">Datasheet</a><br>',
-            x: x,
-            y: y,
+            x: viewport.x + x,
+            y: viewport.y + y,
             width: 300,
             height: 300,
             }
