@@ -388,6 +388,8 @@ async function createStickyNote(e) {
         array.push(items)
         console.log(items)
     }
+    var viewport = await miro.board.viewport.get()
+    console.log(viewport)
     for(i=0;i<array.length;i++) {
         var tags = await getTags();
         var x = 320*(i%3), y = 320*(i/3)
