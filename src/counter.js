@@ -381,19 +381,15 @@ async function createStickyNote(e) {
     // })
     var text = e.clipboardData.getData('Text');
     var texts = text.split('\t')
-    console.log(texts)
     var array = []
     for(i=0;i<texts.length;i++) {
         var items = texts[i].split('<br>')
         array.push(items)
-        console.log(items)
     }
     var viewport = await miro.board.viewport.get()
-    console.log(viewport)
     for(i=0;i<array.length;i++) {
         var tags = await getTags();
-        var x = 320*((i+1)%3), y = 320*(Math.ceil((i+1)/3)-1)
-        console.log(x,y)
+        var x = 320*(i%3), y = 320*(Math.ceil((i+1)/3)-1)
         var test = await miro.board.widgets.create({
             type: 'sticker',
             text: array[i][0]+'<br>'+array[i][2]+'<br>'+'<a href="'+array[i][3].split('Source: ')[1]+'">Source</a><br>'+'<a href="'+array[i][4].split('Datasheet: ')[1]+'">Datasheet</a><br>',
@@ -404,8 +400,6 @@ async function createStickyNote(e) {
             }
         )
 
-        console.log(test)
-        console.log(tags)
         var index = tags.findIndex((tag) => tag.title == array[i][1].split("Code: #")[1])
 
         if (index <=  -1) {
@@ -416,12 +410,9 @@ async function createStickyNote(e) {
             });
             await miro.board.tags.update(tag1);
         } else {
-            console.log(tags[index].widgetIds)
             tags[index].widgetIds = tags[index].widgetIds.concat(test[0].id)
-            console.log(tags[index].widgetIds)
             await miro.board.tags.update(tags[index]);
         }
-        console.log(tag1)
     } 
     
 }
