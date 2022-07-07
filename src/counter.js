@@ -363,11 +363,9 @@ document.addEventListener('paste', event => createStickyNote(event))
 function pastedata(e) {
     var pastedText = e.clipboardData.getData('Text');
     console.log(pastedText)
-    debugger
 }
 
 async function createStickyNote(e) {
-    debugger
     // navigator.clipboard.readText()
     // .then(text => {
     //     debugger
