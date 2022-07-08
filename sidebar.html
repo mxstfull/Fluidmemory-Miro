@@ -125,14 +125,14 @@
             });
 
             var pastebtn = $("#paste_btn")
-            pastebtn.on('click', function() {
+            pastebtn.click(function() {
                 document.execCommand('paste')
                 let keydown = new KeyboardEvent('keydown', {key: 'v', code: 'KeyV', keyCode: 86, ctrlKey: true})
                 document.dispatchEvent(keydown)
             })
-            pastebtn.bind("click", function(e) {
-                createStickyNote(e)
-            })
+            // pastebtn.bind("click", function(e) {
+            //     createStickyNote(e)
+            // })
             $('[data-tabbtn]').on('click', (e) => {
                 tabId = $(e.currentTarget).attr('data-tabbtn');
                 $('.tab-panel').removeClass('active');
