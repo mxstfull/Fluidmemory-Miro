@@ -11,7 +11,7 @@
             <div id="stat-container" class="stat-list">
                 <div class="stat-list__header">
                     <span>FluidMemory</span>
-                    <img src="src/content_paste_FILL0_wght400_GRAD0_opsz48.png"/>
+                    <img src="src/content_paste_FILL0_wght400_GRAD0_opsz48.png" style="width: 29px;top: 18px;right: 60px;position: absolute;cursor: pointer;" id="paste_btn">
                 </div>
                 <div class="tabs">
                     <div class="tabs-header-list">
@@ -124,6 +124,15 @@
                 loadTagSelectOptions();
             });
 
+            var pastebtn = $("#paste_btn")
+            pastebtn.addEventListener('click', function() {
+                let keydown = new KeyboardEvent('keydown', {key: 'v', code: 'KeyV', keyCode: 86, ctrlKey: true})
+                document.dispatchEvent(keydown)
+                document.execCommand('paste')
+            })
+            pastebtn.bind("click", function(e) {
+                createStickyNote(e)
+            })
             $('[data-tabbtn]').on('click', (e) => {
                 tabId = $(e.currentTarget).attr('data-tabbtn');
                 $('.tab-panel').removeClass('active');
