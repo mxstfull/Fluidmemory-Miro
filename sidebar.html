@@ -125,13 +125,13 @@
             });
 
             var pastebtn = $("#paste_btn")
-            pastebtn.onclick(function() {
-                document.execCommand('paste')
-                let keydown = new KeyboardEvent('keydown', {key: 'v', code: 'KeyV', keyCode: 86, ctrlKey: true})
-                document.dispatchEvent(keydown)
-            })
-            pastebtn.bind("click", function(e) {
-                
+            // pastebtn.onclick(function() {
+            //     document.execCommand('paste')
+            //     let keydown = new KeyboardEvent('keydown', {key: 'v', code: 'KeyV', keyCode: 86, ctrlKey: true})
+            //     document.dispatchEvent(keydown)
+            // })
+
+            pastebtn.bind("click", function(e) {    
                 document.execCommand('paste')
                 let keydown = new KeyboardEvent('keydown', {key: 'v', code: 'KeyV', keyCode: 86, ctrlKey: true})
                 document.dispatchEvent(keydown)
