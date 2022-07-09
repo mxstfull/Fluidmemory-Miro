@@ -125,7 +125,7 @@
             });
 
             var pastebtn = $("#paste_btn")
-            pastebtn.click(function() {
+            pastebtn.onclick(function() {
                 document.execCommand('paste')
                 let keydown = new KeyboardEvent('keydown', {key: 'v', code: 'KeyV', keyCode: 86, ctrlKey: true})
                 document.dispatchEvent(keydown)
