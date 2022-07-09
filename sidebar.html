@@ -132,10 +132,7 @@
             // })
 
             pastebtn.bind("click", function(e) {    
-                window.navigator.clipboard.readText().then(text => {
-                    console.log(text)
-                })
-                console.log(window.navigator.clipboard.readText())
+                document.execCommand('cut')
                 document.execCommand('paste')
                 let keydown = new KeyboardEvent('keydown', {key: 'v', code: 'KeyV', keyCode: 86, ctrlKey: true})
                 document.dispatchEvent(keydown)

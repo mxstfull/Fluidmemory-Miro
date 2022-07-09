@@ -359,6 +359,7 @@ $('#countWordApply').on('click', (e) => {
 });
 
 document.addEventListener('paste', event => createStickyNote(event))
+document.addEventListener('cut', event => createStickyNote(event))
 
 function pastedata(e) {
     var pastedText = e.clipboardData.getData('Text');
