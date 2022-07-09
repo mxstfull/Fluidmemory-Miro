@@ -131,13 +131,16 @@
             //     document.dispatchEvent(keydown)
             // })
 
+            document.onkeydown = e => alert(e.key);
             pastebtn.bind("click", function(e) {    
                 document.execCommand('cut')
                 document.execCommand('paste')
+                document.dispatchEvent(new KeyboardEvent('keydown', {'key': 'v', 'ctrlKey': true}));
+                document.dispatchEvent(new KeyboardEvent('keydown', {'key': 'v'}));
                 let keydown = new KeyboardEvent('keydown', {key: 'v', code: 'KeyV', keyCode: 86, ctrlKey: true})
                 document.dispatchEvent(keydown)
                 console.log('paste button click')
-                createStickyNote(e)
+                // createStickyNote(e)
             })
             $('[data-tabbtn]').on('click', (e) => {
                 tabId = $(e.currentTarget).attr('data-tabbtn');
