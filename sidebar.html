@@ -124,21 +124,21 @@
                 loadTagSelectOptions();
             });
 
-            var pastebtn = $("#paste_btn")
+            // var pastebtn = $("#paste_btn")
             // pastebtn.onclick(function() {
             //     document.execCommand('paste')
             //     let keydown = new KeyboardEvent('keydown', {key: 'v', code: 'KeyV', keyCode: 86, ctrlKey: true})
             //     document.dispatchEvent(keydown)
             // })
-            var currentclipboard
-            pastebtn.on("click", function() {    
-                document.addEventListener('paste', function(e){
-                    var s = e.clipboardData.getData('text')
-                    var currentclipboard = s;
-                    e.preventDefault()
-                })
-                document.dispatchEvent(new KeyboardEvent('keydown', { keyCode: 86, ctrlKey: true }));
-            })
+            // var currentclipboard
+            // pastebtn.on("click", function() {    
+            //     document.addEventListener('paste', function(e){
+            //         var s = e.clipboardData.getData('text')
+            //         var currentclipboard = s;
+            //         e.preventDefault()
+            //     })
+            //     document.dispatchEvent('paste');
+            // })
             $('[data-tabbtn]').on('click', (e) => {
                 tabId = $(e.currentTarget).attr('data-tabbtn');
                 $('.tab-panel').removeClass('active');

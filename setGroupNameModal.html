@@ -15,11 +15,13 @@
             </div>
         </div>
         <script src="https://unpkg.com/jquery"></script>
-        <script src="https://miro.com/app/static/sdk.1.1.js"></script>
+        <!-- <script src="https://miro.com/app/static/sdk.1.1.js"></script> -->
+        <script src="https://miro.com/app/static/sdk/v2/miro.js"></script>
         <script>
             var appId = '3074457365447061755';
             var defaultValue = '';
             miro.onReady(() => {
+                debugger
                 miro.board.metadata.get().then((data) => {
                     console.log(data);
 
