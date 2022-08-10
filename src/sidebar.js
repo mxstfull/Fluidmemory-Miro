@@ -91,7 +91,8 @@ function getClusterDimensions(widgetCount, widgetWidth = defaultWidgetWidth, wid
 }
 
 function getWidgetLocation(widget) {
-    return { startX: widget.bounds.left, startY: widget.bounds.top, endX: widget.bounds.right, endY: widget.bounds.bottom };
+    return { startX: widget.x, startY: widget.y, endX: widget.x + widget.width, endY: widget.y + widget.height };
+    // return { startX: widget.bounds.left, startY: widget.bounds.top, endX: widget.bounds.right, endY: widget.bounds.bottom };
     // x: occupied from startX to endX
     // y: occupied from startY to endY
 }
@@ -191,8 +192,8 @@ async function getClusteringWidgetLocation(widgetIds) {
         widgetHeight = defaultWidgetHeight,
         margin = defaultMargin;
     var clusteringWidgets = widgets.filter((widget) => {
-        widgetWidth = widget.bounds.width;
-        widgetHeight = widget.bounds.height;
+        widgetWidth = widget.width;
+        widgetHeight = widget.height;
         return widgetIds.includes(widget.id);
     });
     var clusterDimensions = getClusterDimensions(clusteringWidgets.length, widgetWidth, widgetHeight, margin);
@@ -212,27 +213,12 @@ async function clusterWidgets(widgetIds, update = true) {
         let backgroundColor = randomBrightColor();
 
         if (update == true) {
-            newWidgets = await miro.board.widgets.update(
-                clusteringWidgets.map((widget, index) => {
-                    var updatedData = {
-                        ...widget,
-                        bounds: {
-                            ...widget.bounds,
-                            width: widgetWidth,
-                            height: widgetHeight,
-                        },
-                        metadata: {
-                            [appId]: widget.metadata[appId],
-                        },
-                        style: {
-                            stickerBackgroundColor: !widget.metadata[appId]?.duplicated ? backgroundColor : duplicationColor,
-                        },
-                        x: widgetLocations[index].x,
-                        y: widgetLocations[index].y,
-                    };
-                    return updatedData;
-                })
-            );
+            clusteringWidgets.map((widget, index) => {
+                widget.style.fillColor = "light_pink"
+                widget.x = widgetLocations[index].x
+                widget.y = widgetLocations[index].y
+                widget.sync()
+            })
         } else {
             newWidgets = await miro.board.widgets.create(
                 clusteringWidgets.map((widget, index) => {
@@ -294,7 +280,7 @@ async function clusterWidgets(widgetIds, update = true) {
             await miro.board.tags.update(tags);
         }
 
-        await focusOnWidgets(newWidgets);
+        await miro.board.viewport.zoomTo(clusteringWidgets)
 
         toggleLoading(false);
         return newWidgets;
@@ -318,14 +304,16 @@ function getDimensionOfWidget(widgets) {
 }
 
 async function focusOnWidgets(widgets) {
-    var { left, right, top, bottom } = getDimensionOfWidget(widgets);
+    // var { left, right, top, bottom } = getDimensionOfWidget(widgets);
 
-    await miro.board.viewport.set({
-        x: left,
-        y: top,
-        width: right - left,
-        height: bottom - top,
-    });
+    // await miro.board.viewport.set({
+    //     x: left,
+    //     y: top,
+    //     width: right - left,
+    //     height: bottom - top,
+    // });
+
+    await miro.board.viewport.zoomTo(widgets)
 }
 
 async function checkDataForFluidMemory() {

@@ -289,9 +289,9 @@ async function selectWidgets(data) {
     var widgetIds = getWidgetIdsFromData(data);
     var stickies = await getStickies();
 
-    if (widgetIds.length) {
-        await miro.board.selection.selectWidgets(widgetIds);
-    }
+    // if (widgetIds.length) {
+    //     await miro.board.selection.selectWidgets(widgetIds);
+    // }
     
     await focusOnWidgets(stickies.filter(sticky => widgetIds.includes(sticky.id)));
 }
